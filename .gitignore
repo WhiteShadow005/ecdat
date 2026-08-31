@@ -1,0 +1,60 @@
+# ECDAT — .gitignore
+
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.so
+*.egg
+*.egg-info/
+dist/
+build/
+.eggs/
+venv/
+.venv/
+env/
+.env
+
+# Node / Next.js
+node_modules/
+.next/
+out/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
+
+# Environment secrets — NEVER commit these
+.env
+.env.local
+.env.*.local
+backend/.env
+
+# Binaries
+backend/bin/cryptoscan
+backend/bin/cryptoscan.exe
+
+# Temp upload directory
+backend/tmp/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# IDE configs
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Test artifacts
+.pytest_cache/
+htmlcov/
+.coverage
+coverage.xml
+
+# Generated exports (don't commit scan results)
+*.cbom.json
+*.pdf
+exports/

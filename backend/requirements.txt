@@ -1,0 +1,12 @@
+fastapi
+uvicorn[standard]
+python-multipart
+aiofiles
+cryptography
+cyclonedx-python-lib
+WeasyPrint
+Jinja2
+google-generativeai
+python-dotenv
+jsonschema
+requests
