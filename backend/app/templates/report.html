@@ -1,1 +1,189 @@
-<!-- ECDAT Executive Audit Report Template -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<title>ECDAT — Quantum Risk Audit Report</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Segoe UI', Arial, sans-serif; font-size: 11pt; color: #1a1a2e; background: #fff; }
+  .cover { page-break-after: always; background: #0f0f2e; color: white; min-height: 100vh; display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 60px; text-align: center; }
+  .cover h1 { font-size: 32pt; font-weight: 700; color: #60a5fa; margin-bottom: 8px; }
+  .cover h2 { font-size: 18pt; color: #a5b4fc; margin-bottom: 24px; }
+  .cover .meta { font-size: 11pt; color: #94a3b8; line-height: 1.8; }
+  .cover .badge { display: inline-block; background: #7c3aed; color: white; padding: 6px 20px; border-radius: 20px; font-size: 10pt; margin-top: 20px; }
+
+  .section { padding: 30px 40px; }
+  .section h2 { font-size: 16pt; color: #0f0f2e; border-bottom: 3px solid #7c3aed; padding-bottom: 8px; margin-bottom: 20px; }
+  .section h3 { font-size: 12pt; color: #4c1d95; margin: 16px 0 8px; }
+
+  .summary-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-bottom: 24px; }
+  .stat-card { background: #f1f5f9; border-radius: 8px; padding: 16px; text-align: center; border-left: 4px solid #7c3aed; }
+  .stat-card .num { font-size: 28pt; font-weight: 700; color: #7c3aed; }
+  .stat-card .label { font-size: 9pt; color: #64748b; margin-top: 4px; }
+  .stat-card.critical { border-color: #ef4444; }
+  .stat-card.critical .num { color: #ef4444; }
+  .stat-card.safe { border-color: #22c55e; }
+  .stat-card.safe .num { color: #22c55e; }
+
+  .mosca-box { background: #fef2f2; border: 2px solid #ef4444; border-radius: 8px; padding: 20px; margin: 16px 0; }
+  .mosca-box.safe { background: #f0fdf4; border-color: #22c55e; }
+  .mosca-box.high { background: #fefce8; border-color: #eab308; }
+  .mosca-box h3 { color: #ef4444; }
+  .mosca-box.safe h3 { color: #15803d; }
+  .mosca-box.high h3 { color: #854d0e; }
+
+  table { width: 100%; border-collapse: collapse; font-size: 9pt; margin-top: 12px; }
+  th { background: #1e1b4b; color: white; padding: 8px 10px; text-align: left; font-weight: 600; }
+  td { padding: 7px 10px; border-bottom: 1px solid #e2e8f0; }
+  tr:nth-child(even) td { background: #f8fafc; }
+  .badge-broken { background: #fee2e2; color: #dc2626; padding: 2px 8px; border-radius: 4px; font-size: 8pt; font-weight: 700; }
+  .badge-weakened { background: #fef9c3; color: #854d0e; padding: 2px 8px; border-radius: 4px; font-size: 8pt; font-weight: 700; }
+  .badge-safe { background: #dcfce7; color: #166534; padding: 2px 8px; border-radius: 4px; font-size: 8pt; font-weight: 700; }
+  .badge-unknown { background: #f1f5f9; color: #475569; padding: 2px 8px; border-radius: 4px; font-size: 8pt; }
+
+  .footer { background: #0f0f2e; color: #64748b; padding: 20px 40px; font-size: 9pt; text-align: center; }
+  code { font-family: 'Courier New', monospace; font-size: 8pt; background: #f1f5f9; padding: 1px 4px; border-radius: 3px; }
+  .page-break { page-break-before: always; }
+
+  .nist-box { background: #eff6ff; border: 1px solid #bfdbfe; border-radius: 8px; padding: 16px; margin: 12px 0; font-size: 10pt; }
+  .recommendation-row td:first-child { font-weight: 600; color: #1e1b4b; }
+</style>
+</head>
+<body>
+
+<!-- COVER PAGE -->
+<div class="cover">
+  <h1>🔐 ECDAT</h1>
+  <h2>Enterprise Cryptographic Discovery &amp; Analysis Report</h2>
+  <div class="meta">
+    <div><strong>Target:</strong> {{ target_name }}</div>
+    <div><strong>Scan ID:</strong> {{ scan_id }}</div>
+    <div><strong>Generated:</strong> {{ timestamp }}</div>
+    <div><strong>Tool:</strong> ECDAT v1.0.0 | NTRO SIH26164</div>
+    <div><strong>Standards:</strong> NIST FIPS 203/204/205 (August 2024) | CycloneDX 1.6</div>
+  </div>
+  <div class="badge">🇮🇳 CONFIDENTIAL — FOR NTRO USE ONLY</div>
+</div>
+
+<!-- EXECUTIVE SUMMARY -->
+<div class="section">
+  <h2>1. Executive Summary</h2>
+
+  <div class="summary-grid">
+    <div class="stat-card">
+      <div class="num">{{ summary.total_assets }}</div>
+      <div class="label">Total Cryptographic Assets</div>
+    </div>
+    <div class="stat-card critical">
+      <div class="num">{{ summary.critical }}</div>
+      <div class="label">CRITICAL Risk Assets</div>
+    </div>
+    <div class="stat-card safe">
+      <div class="num">{{ summary.quantum_readiness_pct }}%</div>
+      <div class="label">Quantum Readiness</div>
+    </div>
+    <div class="stat-card">
+      <div class="num">{{ summary.high }}</div>
+      <div class="label">HIGH Risk Assets</div>
+    </div>
+    <div class="stat-card">
+      <div class="num">{{ summary.medium }}</div>
+      <div class="label">MEDIUM Risk Assets</div>
+    </div>
+    <div class="stat-card">
+      <div class="num">{{ summary.safe }}</div>
+      <div class="label">Quantum-Safe Assets</div>
+    </div>
+  </div>
+
+  <p style="color:#475569; line-height:1.7;">
+    This report identifies all cryptographic artefacts in the scanned system, assesses their vulnerability
+    to quantum computer attacks (Shor's Algorithm, Grover's Algorithm), and provides prioritized
+    migration recommendations aligned with NIST FIPS 203, 204, and 205 (August 2024).
+  </p>
+</div>
+
+<!-- MOSCA ANALYSIS -->
+<div class="section page-break">
+  <h2>2. Mosca Theorem Analysis</h2>
+  <p style="color:#475569; margin-bottom:16px; line-height:1.7;">
+    Mosca's Theorem states: if <strong>X + Y &gt; Z</strong>, there is an active "Harvest Now, Decrypt Later" (HNDL) threat.
+    Nation-states are intercepting encrypted data today to decrypt it once quantum computers become available (~2033).
+  </p>
+
+  <div class="mosca-box {% if mosca.status == 'SAFE' %}safe{% elif mosca.status == 'HIGH' %}high{% endif %}">
+    <h3>Mosca Status: {{ mosca.status }}</h3>
+    <p style="margin: 8px 0; color: #374151;">{{ mosca.message }}</p>
+    <table style="margin-top: 12px; width: auto;">
+      <tr><th>Parameter</th><th>Value</th><th>Meaning</th></tr>
+      <tr><td><strong>X</strong> — Data Shelf Life</td><td>{{ mosca.x_shelf_life_years }} years</td><td>How long this data must remain confidential</td></tr>
+      <tr><td><strong>Y</strong> — Migration Time</td><td>{{ mosca.y_migration_years }} years</td><td>Estimated time to complete PQC migration</td></tr>
+      <tr><td><strong>Z</strong> — Q-Day Estimate</td><td>{{ mosca.z_qday_years }} years (~2033)</td><td>Estimated years until CRQC arrives</td></tr>
+      <tr><td><strong>X + Y</strong></td><td>{{ mosca.x_plus_y }} years</td><td>Total exposure window</td></tr>
+    </table>
+  </div>
+</div>
+
+<!-- FULL ASSET INVENTORY -->
+<div class="section page-break">
+  <h2>3. Complete Cryptographic Asset Inventory</h2>
+  <table>
+    <thead>
+      <tr>
+        <th>#</th><th>Algorithm</th><th>Quantum Status</th><th>QARS</th>
+        <th>Criticality</th><th>Location</th><th>Replacement</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for asset in assets %}
+      <tr>
+        <td>{{ loop.index }}</td>
+        <td><strong>{{ asset.algorithm }}</strong>{% if asset.key_size %} ({{ asset.key_size }}-bit){% endif %}</td>
+        <td>
+          {% if asset.quantum_status == 'BROKEN' %}<span class="badge-broken">BROKEN</span>
+          {% elif asset.quantum_status == 'WEAKENED' %}<span class="badge-weakened">WEAKENED</span>
+          {% elif asset.quantum_status == 'SAFE' %}<span class="badge-safe">SAFE</span>
+          {% else %}<span class="badge-unknown">UNKNOWN</span>{% endif %}
+        </td>
+        <td><strong>{{ asset.qars_score }}/100</strong></td>
+        <td style="text-transform: capitalize;">{{ asset.criticality }}</td>
+        <td>
+          {% if asset.file_path %}<code>{{ asset.file_path|truncate(40) }}{% if asset.line_number %}:{{ asset.line_number }}{% endif %}</code>{% else %}N/A{% endif %}
+        </td>
+        <td style="font-size: 8pt;">{{ asset.recommended_replacement or 'See NIST guidance' }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+
+<!-- NIST PQC STANDARDS -->
+<div class="section page-break">
+  <h2>4. NIST Post-Quantum Standards Reference</h2>
+  <div class="nist-box">
+    <strong>FIPS 203 (August 2024):</strong> ML-KEM (Module-Lattice Key Encapsulation Mechanism) — based on CRYSTALS-Kyber.
+    Use for TLS key exchange, VPN, SSH, encrypted storage.
+  </div>
+  <div class="nist-box">
+    <strong>FIPS 204 (August 2024):</strong> ML-DSA (Module-Lattice Digital Signature Algorithm) — based on CRYSTALS-Dilithium.
+    Use for digital signatures, PKI certificates, code signing.
+  </div>
+  <div class="nist-box">
+    <strong>FIPS 205 (August 2024):</strong> SLH-DSA (Stateless Hash-Based Digital Signature Algorithm) — based on SPHINCS+.
+    Use for firmware signing, long-term archive signatures.
+  </div>
+  <p style="margin-top:16px; color:#475569; font-size:10pt;">
+    Recommended migration strategy: Begin with critical BROKEN assets immediately.
+    Use hybrid (classical + PQC) during the transition window for backward compatibility.
+  </p>
+</div>
+
+<!-- FOOTER -->
+<div class="footer">
+  <p>Generated by ECDAT v1.0.0 | NTRO SIH26164 | Smart India Hackathon 2026</p>
+  <p>Standards: NIST FIPS 203/204/205 | CycloneDX 1.6 (ECMA-424) | Mosca's Theorem</p>
+  <p style="margin-top: 4px;">🔐 This report is confidential. Handle as per your organization's data classification policy.</p>
+</div>
+
+</body>
+</html>
