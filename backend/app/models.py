@@ -5,7 +5,7 @@ Shared across all modules: scanners, engines, exporters, API
 
 from pydantic import BaseModel, Field
 from typing import Optional, List, Literal
-from datetime import datetime
+from datetime import datetime, timezone
 import uuid
 
 
@@ -86,7 +86,7 @@ class ScanSummary(BaseModel):
 class ScanResult(BaseModel):
     """Complete result of a single ECDAT scan."""
     scan_id: str = Field(default_factory=lambda: f"scan-{uuid.uuid4().hex[:12]}")
-    timestamp: str = Field(default_factory=lambda: datetime.utcnow().isoformat() + "Z")
+    timestamp: str = Field(default_factory=lambda: datetime.now(timezone.utc).isoformat())
     target_name: str = ""
     summary: ScanSummary = ScanSummary()
     mosca: Optional[MoscaResult] = None
