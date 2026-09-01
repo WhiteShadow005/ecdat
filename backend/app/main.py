@@ -176,6 +176,13 @@ async def scan_upload(
             assets=inventory,
         )
 
+        # Register in scan cache for exports and AI remediation
+        try:
+            from .ai.code_remediator import register_scan
+            register_scan(result.scan_id, result.assets)
+        except Exception:
+            pass
+
         return result
 
     finally:

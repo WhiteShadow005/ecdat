@@ -6,7 +6,7 @@ Owner: Ojasya Rajput
 
 import uuid
 import json
-from datetime import datetime
+from datetime import datetime, timezone
 from typing import List
 from ..models import CryptoAsset, ScanResult
 
@@ -108,7 +108,7 @@ def build_cbom_json(assets: List[CryptoAsset], target_name: str = "", scan_id: s
         "serialNumber": f"urn:uuid:{uuid.uuid4()}",
         "version": 1,
         "metadata": {
-            "timestamp": datetime.utcnow().isoformat() + "Z",
+            "timestamp": datetime.now(timezone.utc).isoformat(),
             "tools": [
                 {
                     "vendor": "NTRO-ECDAT",
