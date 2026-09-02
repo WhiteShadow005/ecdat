@@ -21,15 +21,6 @@ export default function ScanPage() {
     }
   };
 
-  const handleDemoSelect = async () => {
-    setIsScanning(true);
-    try {
-      await runScan();
-    } catch (e) {
-      console.error("Demo scan error:", e);
-    }
-  };
-
   const handleScanDone = () => {
     setTimeout(() => {
       router.push("/dashboard");
@@ -57,7 +48,6 @@ export default function ScanPage() {
         <div className="space-y-5">
           <UploadZone
             onFileSelect={handleFileSelect}
-            onDemoSelect={handleDemoSelect}
             isScanning={isScanning}
           />
 

@@ -5,13 +5,12 @@ import { Upload, FileArchive, Zap, Shield, CheckCircle2, ArrowRight } from "luci
 
 interface UploadZoneProps {
   onFileSelect: (file: File) => void;
-  onDemoSelect: () => void;
+  onDemoSelect?: () => void;
   isScanning: boolean;
 }
 
 export const UploadZone: React.FC<UploadZoneProps> = ({
   onFileSelect,
-  onDemoSelect,
   isScanning,
 }) => {
   const [dragActive, setDragActive] = useState(false);
@@ -145,35 +144,6 @@ export const UploadZone: React.FC<UploadZoneProps> = ({
             </>
           )}
         </div>
-      </div>
-
-      {/* Demo Repository Quick-Scan Card */}
-      <div className="nexus-card p-5 bg-white border-[#E8E2D5] flex flex-col sm:flex-row items-center justify-between gap-4 shadow-2xs">
-        <div className="flex items-center gap-3.5 text-left">
-          <div className="w-10 h-10 rounded-full bg-[#FAF7F2] border border-[#E8E2D5] flex items-center justify-center text-[#1C1917] shrink-0">
-            <Shield className="w-5 h-5 stroke-[1.75]" />
-          </div>
-          <div>
-            <h4 className="text-sm font-bold text-[#1C1917] flex items-center gap-2">
-              Instant Hackathon Demo:
-              <span className="text-xs text-[#8B5E34] font-mono font-bold">demo_enterprise_repo</span>
-            </h4>
-            <p className="text-xs text-[#57534E] mt-0.5">
-              Scan pre-configured vulnerable enterprise suite (JWT RSA-2048, Java Payments, MD5, Nginx TLS, X.509).
-            </p>
-          </div>
-        </div>
-
-        <button
-          type="button"
-          onClick={onDemoSelect}
-          disabled={isScanning}
-          className="btn-primary shrink-0"
-        >
-          <Zap className="w-4 h-4" />
-          Scan Demo Repo
-          <ArrowRight className="w-3.5 h-3.5" />
-        </button>
       </div>
     </div>
   );
