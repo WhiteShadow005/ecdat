@@ -1,5 +1,105 @@
-// Asset detail card component: algorithm name, file path, QARS score, Mosca status, recommended replacement.
-// Owner: Arnav Gupta
-// Status: TODO
+import React from "react";
+import { CryptoAsset } from "@/lib/types";
+import { StatusBadge } from "./StatusBadge";
+import { FileCode, ShieldAlert, ArrowRight, Sparkles } from "lucide-react";
+import Link from "next/link";
 
-export {};
+interface AssetCardProps {
+  asset: CryptoAsset;
+  onSelect?: (asset: CryptoAsset) => void;
+  selected?: boolean;
+}
+
+export const AssetCard: React.FC<AssetCardProps> = ({
+  asset,
+  onSelect,
+  selected = false,
+}) => {
+  const getQarsColor = (score: number) => {
+    if (score >= 80) return "bg-red-500 text-red-400";
+    if (score >= 50) return "bg-yellow-500 text-yellow-400";
+    return "bg-emerald-500 text-emerald-400";
+  };
+
+  return (
+    <div
+      onClick={() => onSelect && onSelect(asset)}
+      className={`rounded-2xl p-4 transition-all duration-200 cursor-pointer border ${
+        selected
+          ? "bg-[#FAF7F2] border-[#C28E58] shadow-md"
+          : "bg-white border-[#E8E2D5] hover:border-[#D5CBB9] shadow-2xs"
+      }`}
+    >
+      <div className="flex items-start justify-between gap-3 mb-2">
+        <div>
+          <div className="flex items-center gap-2 flex-wrap">
+            <h4 className="font-mono font-bold text-[#1C1917] text-base">
+              {asset.algorithm}
+            </h4>
+            <span className="text-[11px] font-mono px-2 py-0.5 rounded-full bg-[#FAF7F2] text-[#57534E] border border-[#E8E2D5] uppercase">
+              {asset.type}
+            </span>
+          </div>
+          <p className="text-xs font-mono text-[#78716C] flex items-center gap-1 mt-1 truncate max-w-md">
+            <FileCode className="w-3.5 h-3.5 text-[#A8A29E] shrink-0" />
+            <span className="text-[#1C1917]">{asset.file}</span>
+            {asset.line > 0 && <span className="text-[#78716C]">:L{asset.line}</span>}
+          </p>
+        </div>
+        <StatusBadge status={asset.quantum_status} size="sm" />
+      </div>
+
+      {/* QARS Risk Score bar */}
+      <div className="my-3 bg-[#FAF7F2] p-2.5 rounded-xl border border-[#E8E2D5]">
+        <div className="flex justify-between items-center text-xs mb-1.5 font-mono">
+          <span className="text-[#78716C] flex items-center gap-1 font-semibold">
+            <ShieldAlert className="w-3.5 h-3.5 text-[#78716C]" />
+            QARS Risk Score:
+          </span>
+          <span className="font-bold text-[#1C1917]">
+            {asset.qars_score}/100
+          </span>
+        </div>
+        <div className="w-full bg-[#E8E2D5] rounded-full h-1.5 overflow-hidden">
+          <div
+            className={`h-full rounded-full transition-all duration-500 ${
+              asset.qars_score >= 80 ? "bg-[#DC2626]" : asset.qars_score >= 50 ? "bg-[#D97706]" : "bg-[#15803D]"
+            }`}
+            style={{ width: `${asset.qars_score}%` }}
+          />
+        </div>
+      </div>
+
+      {/* Replacement info & Attack vector */}
+      <div className="text-xs space-y-1.5 pt-1 font-mono">
+        <div className="text-[#57534E] flex items-center justify-between">
+          <span className="text-[#78716C]">NIST PQC Fix:</span>
+          <span className="text-[#166534] font-bold text-right truncate ml-2">
+            {asset.replacement}
+          </span>
+        </div>
+        <div className="text-[#78716C] flex items-center justify-between text-[11px]">
+          <span className="text-[#A8A29E]">Threat:</span>
+          <span className="text-[#991B1B] font-semibold text-right truncate ml-2">
+            {asset.attack_vector}
+          </span>
+        </div>
+      </div>
+
+      {/* Remediation Action Link */}
+      <div className="mt-3 pt-2.5 border-t border-[#E8E2D5] flex items-center justify-between">
+        <span className="text-[11px] font-mono text-[#8B5E34] flex items-center gap-1 font-bold">
+          <Sparkles className="w-3 h-3 text-[#C28E58]" />
+          AI Fix Ready
+        </span>
+        <Link
+          href={`/remediation?asset_id=${asset.id}`}
+          onClick={(e) => e.stopPropagation()}
+          className="text-xs text-[#1C1917] hover:text-[#8B5E34] font-mono font-bold flex items-center gap-1 hover:underline"
+        >
+          View Diff <ArrowRight className="w-3 h-3" />
+        </Link>
+      </div>
+    </div>
+  );
+};

@@ -53,6 +53,7 @@ Thumbs.db
 htmlcov/
 .coverage
 coverage.xml
+*.tsbuildinfo
 
 # Generated exports (don't commit scan results)
 *.cbom.json
