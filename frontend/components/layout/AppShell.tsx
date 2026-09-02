@@ -112,11 +112,6 @@ export function AppShell({ children }: { children: React.ReactNode }) {
             <span>Public Site</span>
             <ExternalLink className="w-3 h-3 text-[#A8A29E]" />
           </Link>
-
-          {/* User Profile Avatar */}
-          <div className="w-8 h-8 rounded-full bg-white border border-[#E8E2D5] text-[#1C1917] flex items-center justify-center font-bold text-xs ml-1 shadow-2xs">
-            AG
-          </div>
         </div>
       </header>
 
