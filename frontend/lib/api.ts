@@ -16,6 +16,33 @@ export async function checkBackendHealth(): Promise<boolean> {
   }
 }
 
+function normalizeScanResult(raw: any): ScanResult {
+  if (!raw) return mockScanResult;
+  const assets = (raw.assets || []).map((a: any) => ({
+    ...a,
+    file: a.file || a.file_path || "Unknown",
+    line: a.line ?? a.line_number ?? 0,
+    replacement: a.replacement || a.recommended_replacement || "NIST PQC Replacement",
+    attack_vector: a.attack_vector || (a.quantum_status === "BROKEN" ? "Shor's Algorithm" : a.quantum_status === "WEAKENED" ? "Grover's Algorithm" : "None"),
+    nist_standard: a.nist_standard || "NIST FIPS 203/204",
+    language: a.language || "code",
+  }));
+  const mosca = raw.mosca ? {
+    ...raw.mosca,
+    x: raw.mosca.x ?? raw.mosca.x_shelf_life_years ?? 10,
+    y: raw.mosca.y ?? raw.mosca.y_migration_years ?? 4,
+    z: raw.mosca.z ?? raw.mosca.z_qday_years ?? 7,
+    status: raw.mosca.status || "CRITICAL",
+    message: raw.mosca.message || "",
+  } : mockScanResult.mosca;
+  return {
+    ...raw,
+    repo_name: raw.repo_name || raw.target_name || "enterprise_repo",
+    assets,
+    mosca,
+  };
+}
+
 // Upload a ZIP archive for cryptographic scanning
 export async function uploadScanZip(file: File): Promise<ScanResult> {
   try {
@@ -31,10 +58,10 @@ export async function uploadScanZip(file: File): Promise<ScanResult> {
       throw new Error(`Scan failed with status: ${res.status}`);
     }
 
-    const data: ScanResult = await res.json();
-    return data;
+    const data = await res.json();
+    return normalizeScanResult(data);
   } catch (err) {
-    console.warn("Backend unavailable, returning high-fidelity mock scan result:", err);
+    console.warn("Backend unavailable or scan error, returning high-fidelity mock scan result:", err);
     // Simulate slight processing delay for realistic UX
     await new Promise((resolve) => setTimeout(resolve, 800));
     return {
@@ -58,7 +85,8 @@ export async function getScanResult(scanId?: string): Promise<ScanResult> {
       throw new Error(`Failed to fetch scan results: ${res.status}`);
     }
 
-    return await res.json();
+    const data = await res.json();
+    return normalizeScanResult(data);
   } catch {
     return mockScanResult;
   }
