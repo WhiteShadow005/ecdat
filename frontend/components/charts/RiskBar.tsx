@@ -55,26 +55,26 @@ export const RiskBar: React.FC<RiskBarProps> = ({ assets }) => {
             data={chartData}
             margin={{ top: 10, right: 20, left: -10, bottom: 20 }}
           >
-            <CartesianGrid strokeDasharray="3 3" stroke="rgba(56, 189, 248, 0.05)" vertical={false} />
+            <CartesianGrid strokeDasharray="3 3" stroke="rgba(255, 255, 255, 0.04)" vertical={false} />
             <XAxis
               dataKey="language"
-              stroke="#64748b"
+              stroke="#71717A"
               fontSize={12}
               tickLine={false}
-              axisLine={{ stroke: "rgba(56, 189, 248, 0.12)" }}
+              axisLine={{ stroke: "rgba(255, 255, 255, 0.08)" }}
             />
             <YAxis
-              stroke="#64748b"
+              stroke="#71717A"
               fontSize={12}
               tickLine={false}
-              axisLine={{ stroke: "rgba(56, 189, 248, 0.12)" }}
+              axisLine={{ stroke: "rgba(255, 255, 255, 0.08)" }}
               allowDecimals={false}
             />
             <Tooltip
               content={({ active, payload, label }) => {
                 if (active && payload && payload.length) {
                   return (
-                    <div className="bg-[#07111F] border border-slate-800 p-3 rounded-xl shadow-xl text-xs font-mono">
+                    <div className="bg-[#0D0D11] border border-white/15 p-3 rounded-xl shadow-2xl text-xs font-mono">
                       <p className="font-bold text-white mb-1.5">{label}</p>
                       {payload.map((p: any) => (
                         <div

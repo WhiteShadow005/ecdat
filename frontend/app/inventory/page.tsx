@@ -55,15 +55,15 @@ export default function InventoryPage() {
   return (
     <div className="space-y-5">
       {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-200 pb-3.5">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-white/[0.06] pb-3.5">
         <div>
           <div className="flex items-center gap-2">
-            <Layers className="w-5 h-5 text-slate-900" />
-            <h1 className="text-lg md:text-xl font-bold text-slate-900 tracking-tight">
+            <Layers className="w-5 h-5 text-white" />
+            <h1 className="text-lg md:text-xl font-bold text-white tracking-tight font-display">
               Cryptographic Inventory (CBOM)
             </h1>
           </div>
-          <p className="text-xs text-slate-500 mt-0.5">
+          <p className="text-xs text-[#A6A6AD] mt-0.5">
             ECMA-424 standardized catalog of discovered algorithms, keys, certificates, and TLS ciphers.
           </p>
         </div>
@@ -84,24 +84,24 @@ export default function InventoryPage() {
         <div className="flex flex-col md:flex-row gap-3 items-center justify-between">
           {/* Search Input */}
           <div className="relative w-full md:w-80">
-            <Search className="w-3.5 h-3.5 text-slate-500 absolute left-3 top-1/2 -translate-y-1/2" />
+            <Search className="w-3.5 h-3.5 text-[#71717A] absolute left-3 top-1/2 -translate-y-1/2" />
             <input
               type="text"
               placeholder="Search algorithm or file..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full bg-[#050B14] border border-slate-800 rounded-lg pl-9 pr-3 py-1.5 text-xs text-slate-200 placeholder-slate-500 focus:outline-none focus:border-sky-500/50 transition-colors font-mono"
+              className="w-full bg-[#0D0D11] border border-white/10 rounded-full pl-9 pr-3 py-1.5 text-xs text-[#F5F5F5] placeholder-[#71717A] focus:outline-none focus:border-white/25 transition-colors font-mono"
             />
           </div>
 
           {/* Filters */}
           <div className="flex items-center gap-2.5 w-full md:w-auto flex-wrap">
             <div className="flex items-center gap-1.5">
-              <span className="text-[11px] text-slate-400 font-medium">Status:</span>
+              <span className="text-[11px] text-[#71717A] font-medium">Status:</span>
               <select
                 value={statusFilter}
                 onChange={(e) => setStatusFilter(e.target.value)}
-                className="bg-[#07111F] border border-slate-800 rounded-lg px-2.5 py-1 text-xs text-slate-200 focus:outline-none focus:border-sky-500/50 font-mono"
+                className="bg-[#0D0D11] border border-white/10 rounded-full px-3 py-1 text-xs text-[#F5F5F5] focus:outline-none focus:border-white/25 font-mono"
               >
                 <option value="ALL">All ({assets.length})</option>
                 <option value="BROKEN">Broken (Shor's)</option>
@@ -111,11 +111,11 @@ export default function InventoryPage() {
             </div>
 
             <div className="flex items-center gap-1.5">
-              <span className="text-[11px] text-slate-400 font-medium">Type:</span>
+              <span className="text-[11px] text-[#71717A] font-medium">Type:</span>
               <select
                 value={typeFilter}
                 onChange={(e) => setTypeFilter(e.target.value)}
-                className="bg-[#07111F] border border-slate-800 rounded-lg px-2.5 py-1 text-xs text-slate-200 focus:outline-none focus:border-sky-500/50 font-mono"
+                className="bg-[#0D0D11] border border-white/10 rounded-full px-3 py-1 text-xs text-[#F5F5F5] focus:outline-none focus:border-white/25 font-mono"
               >
                 <option value="ALL">All Types</option>
                 <option value="algorithm">Algorithm</option>
@@ -128,7 +128,7 @@ export default function InventoryPage() {
         </div>
 
         {/* Results Counter */}
-        <div className="flex items-center justify-between text-[11px] text-slate-400 pt-1.5 border-t border-slate-800/80">
+        <div className="flex items-center justify-between text-[11px] text-[#71717A] pt-1.5 border-t border-white/[0.06]">
           <span>
             Showing <strong className="text-white font-mono">{filteredAssets.length}</strong> of {assets.length} components
           </span>
@@ -139,7 +139,7 @@ export default function InventoryPage() {
                 setTypeFilter("ALL");
                 setSearchQuery("");
               }}
-              className="text-sky-400 hover:text-sky-300 font-semibold"
+              className="text-purple-400 hover:text-purple-300 font-semibold"
             >
               Reset Filters
             </button>
@@ -151,7 +151,7 @@ export default function InventoryPage() {
       <div className="nexus-card overflow-hidden">
         <div className="overflow-x-auto">
           <table className="w-full text-left text-xs">
-            <thead className="bg-[#060e1a]/90 text-slate-400 uppercase text-[10px] font-semibold tracking-wider border-b border-slate-800/80">
+            <thead className="bg-[#08080A]/90 text-[#71717A] uppercase text-[10px] font-semibold tracking-wider border-b border-white/[0.06]">
               <tr>
                 <th className="py-2.5 px-4">Algorithm & Type</th>
                 <th className="py-2.5 px-4">Location</th>
@@ -161,31 +161,31 @@ export default function InventoryPage() {
                 <th className="py-2.5 px-4 text-right">Actions</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-slate-800/60 text-slate-300">
+            <tbody className="divide-y divide-white/[0.04] text-[#A6A6AD]">
               {filteredAssets.map((asset) => {
                 const isExpanded = expandedRow === asset.id;
                 return (
                   <React.Fragment key={asset.id}>
                     <tr
                       onClick={() => setExpandedRow(isExpanded ? null : asset.id)}
-                      className={`hover:bg-slate-800/30 transition-colors cursor-pointer ${
-                        isExpanded ? "bg-slate-800/40" : ""
+                      className={`hover:bg-white/[0.02] transition-colors cursor-pointer ${
+                        isExpanded ? "bg-white/[0.03]" : ""
                       }`}
                     >
                       <td className="py-2.5 px-4">
                         <div className="flex items-center gap-2">
                           <div className="font-bold text-white font-mono">{asset.algorithm}</div>
-                          <span className="text-[10px] px-1.5 py-0.5 rounded-md bg-slate-900 text-slate-400 border border-slate-800 font-mono uppercase">
+                          <span className="text-[10px] px-2 py-0.5 rounded-full bg-[#18181E] text-[#A6A6AD] border border-white/10 font-mono uppercase">
                             {asset.type}
                           </span>
                         </div>
                       </td>
 
-                      <td className="py-2.5 px-4 font-mono text-[11px] text-slate-300">
+                      <td className="py-2.5 px-4 font-mono text-[11px] text-[#A6A6AD]">
                         <div className="flex items-center gap-1.5">
-                          <FileCode className="w-3.5 h-3.5 text-slate-500 shrink-0" />
+                          <FileCode className="w-3.5 h-3.5 text-[#52525B] shrink-0" />
                           <span className="truncate max-w-xs">{asset.file}</span>
-                          {asset.line > 0 && <span className="text-slate-500">:{asset.line}</span>}
+                          {asset.line > 0 && <span className="text-[#52525B]">:{asset.line}</span>}
                         </div>
                       </td>
 
@@ -217,15 +217,15 @@ export default function InventoryPage() {
                             <Link
                               href={`/remediation?asset_id=${asset.id}`}
                               onClick={(e) => e.stopPropagation()}
-                              className="px-2.5 py-1 rounded-md bg-sky-500/15 hover:bg-sky-500/25 border border-sky-500/30 text-sky-300 font-medium text-[11px] inline-flex items-center gap-1 transition-colors font-mono shadow-[0_0_8px_rgba(56,189,248,0.12)]"
+                              className="btn-pill-dark text-[11px] py-1 px-2.5 hover:border-purple-500/40"
                             >
-                              <Sparkles className="w-3 h-3 text-sky-400" />
+                              <Sparkles className="w-3 h-3 text-purple-400" />
                               <span>Fix</span>
                             </Link>
                           )}
                           <button
                             type="button"
-                            className="p-1 text-slate-500 hover:text-slate-300"
+                            className="p-1 text-[#71717A] hover:text-white"
                           >
                             {isExpanded ? (
                               <ChevronUp className="w-3.5 h-3.5" />
@@ -239,29 +239,29 @@ export default function InventoryPage() {
 
                     {/* Expandable Finding Detail Row */}
                     {isExpanded && (
-                      <tr className="bg-[#07111F]/80">
-                        <td colSpan={6} className="p-3.5 border-b border-slate-800">
+                      <tr className="bg-[#0A0A0D]/90">
+                        <td colSpan={6} className="p-3.5 border-b border-white/[0.06]">
                           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
                             <div className="space-y-2">
                               <div>
-                                <span className="text-slate-400 text-[11px] font-medium">Attack Vector:</span>
+                                <span className="text-[#71717A] text-[11px] font-medium">Attack Vector:</span>
                                 <p className="text-rose-400 font-medium text-[11px] mt-0.5 font-mono">{asset.attack_vector}</p>
                               </div>
                               <div>
-                                <span className="text-slate-400 text-[11px] font-medium">NIST Specification:</span>
+                                <span className="text-[#71717A] text-[11px] font-medium">NIST Specification:</span>
                                 <p className="text-emerald-400 font-medium text-[11px] mt-0.5 font-mono">{asset.nist_standard}</p>
                               </div>
                             </div>
 
                             <div className="space-y-1">
                               <div className="flex items-center justify-between">
-                                <span className="text-slate-400 text-[11px] font-medium">Code Snippet:</span>
+                                <span className="text-[#71717A] text-[11px] font-medium">Code Snippet:</span>
                                 <button
                                   onClick={(e) => {
                                     e.stopPropagation();
                                     handleCopyCode(asset.id, asset.code_snippet);
                                   }}
-                                  className="text-[10px] text-sky-400 hover:text-sky-300 flex items-center gap-1 font-semibold"
+                                  className="text-[10px] text-purple-400 hover:text-purple-300 flex items-center gap-1 font-semibold"
                                 >
                                   {copiedId === asset.id ? (
                                     <>
@@ -274,7 +274,7 @@ export default function InventoryPage() {
                                   )}
                                 </button>
                               </div>
-                              <pre className="p-2.5 bg-[#050B14] border border-slate-800 text-slate-200 font-mono text-[11px] rounded-xl overflow-x-auto">
+                              <pre className="p-2.5 bg-[#070709] border border-white/[0.06] text-[#F5F5F5] font-mono text-[11px] rounded-xl overflow-x-auto">
                                 {asset.code_snippet}
                               </pre>
                             </div>

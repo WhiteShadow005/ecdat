@@ -24,59 +24,78 @@ export const ScoreRing: React.FC<ScoreRingProps> = ({
   const clampedPercentage = Math.min(100, Math.max(0, percentage));
   const strokeDashoffset = circumference - (clampedPercentage / 100) * circumference;
 
-  // Color determination for SOC dark palette
-  const getColor = () => {
-    if (clampedPercentage >= 75) return { stroke: "#10b981", text: "text-emerald-400", glow: "rgba(16, 185, 129, 0.4)" };
-    if (clampedPercentage >= 40) return { stroke: "#f59e0b", text: "text-amber-400", glow: "rgba(245, 158, 11, 0.4)" };
-    return { stroke: "#38bdf8", text: "text-sky-400", glow: "rgba(56, 189, 248, 0.4)" };
+  // Color gradient determination for quiet-luxury quantum palette
+  const getGradient = () => {
+    if (clampedPercentage >= 75) return { id: "safeGrad", stroke: "#10b981", glow: "rgba(16, 185, 129, 0.35)" };
+    if (clampedPercentage >= 40) return { id: "warnGrad", stroke: "#f59e0b", glow: "rgba(245, 158, 11, 0.35)" };
+    return { id: "violetGrad", stroke: "#a855f7", glow: "rgba(168, 85, 247, 0.4)" };
   };
 
-  const { stroke, text, glow } = getColor();
+  const { id, stroke, glow } = getGradient();
 
   return (
     <div className={`flex flex-col items-center justify-center relative ${className}`}>
       <div className="relative flex items-center justify-center" style={{ width: size, height: size }}>
         <svg width={size} height={size} className="transform -rotate-90">
+          <defs>
+            <linearGradient id="violetGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stopColor="#a855f7" />
+              <stop offset="50%" stopColor="#c084fc" />
+              <stop offset="100%" stopColor="#ffffff" />
+            </linearGradient>
+            <linearGradient id="safeGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stopColor="#10b981" />
+              <stop offset="100%" stopColor="#6ee7b7" />
+            </linearGradient>
+            <linearGradient id="warnGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stopColor="#f59e0b" />
+              <stop offset="100%" stopColor="#fde68a" />
+            </linearGradient>
+          </defs>
+
+          {/* Background Track */}
           <circle
             cx={size / 2}
             cy={size / 2}
             r={radius}
-            stroke="rgba(56, 189, 248, 0.08)"
+            stroke="rgba(255, 255, 255, 0.06)"
             strokeWidth={strokeWidth}
             fill="transparent"
           />
+
+          {/* Glowing Gradient Progress Arc */}
           <circle
             cx={size / 2}
             cy={size / 2}
             r={radius}
-            stroke={stroke}
+            stroke={`url(#${id})`}
             strokeWidth={strokeWidth}
             strokeDasharray={circumference}
             strokeDashoffset={strokeDashoffset}
             strokeLinecap="round"
             fill="transparent"
             style={{
-              transition: "stroke-dashoffset 1.2s cubic-bezier(0.4, 0, 0.2, 1)",
-              filter: `drop-shadow(0 0 6px ${glow})`,
+              transition: "stroke-dashoffset 1.4s cubic-bezier(0.4, 0, 0.2, 1)",
+              filter: `drop-shadow(0 0 8px ${glow})`,
             }}
           />
         </svg>
 
-        {/* Central percentage reading */}
-        <div className="absolute inset-0 flex flex-col items-center justify-center text-center">
-          <span className={`text-3xl font-bold tracking-tight font-mono ${text}`}>
+        {/* Center Readout */}
+        <div className="absolute inset-0 flex flex-col items-center justify-center text-center select-none">
+          <span className="text-2xl md:text-3xl font-bold tracking-tight text-[#F5F5F5] font-mono">
             {clampedPercentage.toFixed(1)}%
           </span>
-          <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mt-0.5 font-mono">
+          <span className="text-[10px] font-semibold text-[#A6A6AD] tracking-widest uppercase mt-0.5 px-2 py-0.5 rounded-full bg-white/5 border border-white/10">
             PQC Ready
           </span>
         </div>
       </div>
 
-      {(label || sublabel) && (
+      {label && (
         <div className="text-center mt-3">
-          {label && <h4 className="text-xs font-semibold text-slate-200">{label}</h4>}
-          {sublabel && <p className="text-[11px] text-slate-400 mt-0.5">{sublabel}</p>}
+          <p className="text-xs font-semibold text-[#F5F5F5]">{label}</p>
+          {sublabel && <p className="text-[11px] text-[#71717A] mt-0.5">{sublabel}</p>}
         </div>
       )}
     </div>

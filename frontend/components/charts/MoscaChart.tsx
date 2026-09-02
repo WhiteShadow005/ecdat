@@ -91,7 +91,7 @@ export const MoscaChart: React.FC<MoscaChartProps> = ({
         </div>
 
         {/* Timeline Bar Track */}
-        <div className="relative w-full h-8 bg-[#050B14] rounded-lg overflow-hidden flex items-center border border-slate-800">
+        <div className="relative w-full h-8 bg-[#050505] rounded-lg overflow-hidden flex items-center border border-white/10">
           {/* Safe Window */}
           <div
             className="h-full bg-emerald-500/80 flex items-center justify-center text-[10px] text-white font-semibold px-2 font-mono"
@@ -111,7 +111,7 @@ export const MoscaChart: React.FC<MoscaChartProps> = ({
           )}
 
           {/* Remaining timeline track */}
-          <div className="flex-1 h-full bg-[#07111F]" />
+          <div className="flex-1 h-full bg-[#0A0A0D]" />
 
           {/* Marker: Q-Day */}
           <div
@@ -121,30 +121,30 @@ export const MoscaChart: React.FC<MoscaChartProps> = ({
 
           {/* Marker: Migration End */}
           <div
-            className="absolute top-0 bottom-0 w-0.5 bg-sky-400 shadow-[0_0_8px_rgba(56,189,248,0.8)] z-10"
+            className="absolute top-0 bottom-0 w-0.5 bg-purple-400 shadow-[0_0_8px_rgba(168,85,247,0.8)] z-10"
             style={{ left: `${getPct(y)}%` }}
           />
         </div>
 
         {/* Milestone Metric Row */}
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 pt-1 text-xs">
-          <div className="bg-[#07111F]/90 p-2.5 rounded-xl border border-slate-800/80">
-            <span className="text-slate-400 block text-[11px]">Shelf Life (X)</span>
-            <span className="font-bold text-white text-sm font-mono">{x} Years</span>
+          <div className="bg-[#0D0D11] p-2.5 rounded-xl border border-white/[0.06]">
+            <span className="text-[#71717A] block text-[11px]">Shelf Life (X)</span>
+            <span className="font-bold text-[#F5F5F5] text-sm font-mono">{x} Years</span>
           </div>
 
-          <div className="bg-[#07111F]/90 p-2.5 rounded-xl border border-slate-800/80">
-            <span className="text-slate-400 block text-[11px]">Migration Time (Y)</span>
-            <span className="font-bold text-sky-400 text-sm font-mono">{y} Years</span>
+          <div className="bg-[#0D0D11] p-2.5 rounded-xl border border-white/[0.06]">
+            <span className="text-[#71717A] block text-[11px]">Migration Time (Y)</span>
+            <span className="font-bold text-purple-300 text-sm font-mono">{y} Years</span>
           </div>
 
-          <div className="bg-[#07111F]/90 p-2.5 rounded-xl border border-slate-800/80">
-            <span className="text-slate-400 block text-[11px]">Q-Day Horizon (Z)</span>
+          <div className="bg-[#0D0D11] p-2.5 rounded-xl border border-white/[0.06]">
+            <span className="text-[#71717A] block text-[11px]">Q-Day Horizon (Z)</span>
             <span className="font-bold text-rose-400 text-sm font-mono">{z} Years</span>
           </div>
 
-          <div className="bg-[#07111F]/90 p-2.5 rounded-xl border border-slate-800/80">
-            <span className="text-slate-400 block text-[11px]">Breach Window</span>
+          <div className="bg-[#0D0D11] p-2.5 rounded-xl border border-white/[0.06]">
+            <span className="text-[#71717A] block text-[11px]">Breach Window</span>
             <span
               className={`font-bold text-sm font-mono ${
                 isCritical ? "text-rose-400" : "text-emerald-400"

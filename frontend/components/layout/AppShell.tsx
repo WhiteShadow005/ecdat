@@ -61,24 +61,24 @@ export function AppShell({ children }: { children: React.ReactNode }) {
   }
 
   return (
-    <div className="bg-[#050B14] text-slate-100 min-h-screen flex flex-col antialiased relative selection:bg-sky-500/30 selection:text-sky-200">
-      {/* Background Animated Cyber Mesh (GPU-accelerated, non-intrusive) */}
+    <div className="bg-[#050505] text-[#F5F5F5] min-h-screen flex flex-col antialiased relative selection:bg-purple-500/30 selection:text-purple-200">
+      {/* Background Living Quantum Atmosphere & Grain (GPU-accelerated, non-intrusive) */}
       <CyberBackground />
 
-      {/* Top Header Bar: Clean, Dark, Authoritative Command Center */}
-      <header className="h-14 bg-[#07111F]/90 backdrop-blur-md border-b border-slate-800/80 px-5 flex items-center justify-between z-30 sticky top-0 shadow-[0_4px_20px_rgba(0,0,0,0.4)]">
+      {/* Top Header Bar: Clean, Minimalist Quantum Command Bar */}
+      <header className="h-14 bg-[#08080A]/90 backdrop-blur-md border-b border-white/[0.06] px-5 flex items-center justify-between z-30 sticky top-0 shadow-[0_4px_24px_rgba(0,0,0,0.6)]">
         {/* Brand */}
         <div className="flex items-center gap-3">
           <Link href="/dashboard" className="flex items-center gap-2.5 group">
-            <div className="w-8 h-8 rounded-lg bg-sky-500/10 border border-sky-500/30 flex items-center justify-center text-sky-400 shadow-[0_0_12px_rgba(56,189,248,0.2)] group-hover:bg-sky-500/20 group-hover:border-sky-500/50 transition-all">
+            <div className="w-8 h-8 rounded-full bg-white/10 border border-white/15 flex items-center justify-center text-white shadow-[0_0_12px_rgba(255,255,255,0.15)] group-hover:scale-105 transition-all">
               <Shield className="w-4 h-4" />
             </div>
             <div className="flex items-center gap-2">
               <span className="font-bold text-sm text-white tracking-tight">
                 ECDAT
               </span>
-              <span className="text-[11px] font-medium text-slate-600">/</span>
-              <span className="text-xs text-slate-400 font-medium hidden sm:inline">
+              <span className="text-[11px] font-medium text-white/20">/</span>
+              <span className="text-xs text-[#A6A6AD] font-medium hidden sm:inline">
                 Post-Quantum Cryptographic Analysis
               </span>
             </div>
@@ -86,30 +86,30 @@ export function AppShell({ children }: { children: React.ReactNode }) {
         </div>
 
         {/* Right Header Status & Navigation */}
-        <div className="flex items-center gap-3 text-xs">
-          {/* Quick Search Shortcut */}
-          <div className="hidden md:flex items-center gap-2 px-2.5 py-1 rounded-lg bg-[#050B14]/80 border border-slate-800 text-slate-400 text-xs w-60 focus-within:border-sky-500/40 transition-colors">
-            <Search className="w-3.5 h-3.5 text-slate-500" />
-            <span className="flex-1 text-[11px] text-slate-400">Search assets, ciphers...</span>
-            <kbd className="px-1.5 py-0.5 text-[9px] font-mono bg-slate-900 border border-slate-700/80 rounded text-slate-400">
+        <div className="flex items-center gap-2.5 text-xs">
+          {/* Futuristic Command Prompt Search */}
+          <div className="hidden md:flex items-center gap-2 px-3 py-1 rounded-full bg-[#0D0D11] border border-white/10 text-[#A6A6AD] text-xs w-60 focus-within:border-white/25 transition-colors shadow-inner">
+            <Search className="w-3.5 h-3.5 text-[#71717A]" />
+            <span className="flex-1 text-[11px] text-[#A6A6AD]">Search assets, ciphers...</span>
+            <kbd className="px-1.5 py-0.5 text-[9px] font-mono bg-[#18181E] border border-white/10 rounded text-[#A6A6AD]">
               ⌘K
             </kbd>
           </div>
 
-          {/* NTRO Evaluator Mode */}
-          <div className="hidden lg:flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-slate-900/90 border border-slate-800 text-slate-400 font-medium text-[11px]">
+          {/* Evaluator Capsule Pill */}
+          <div className="hidden lg:flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#111115] border border-white/10 text-[#A6A6AD] font-medium text-[11px]">
             <span>Evaluator:</span>
-            <strong className="text-sky-400 font-semibold">NTRO (PMO India)</strong>
+            <strong className="text-white font-semibold">NTRO (PMO India)</strong>
           </div>
 
-          {/* Engine Status */}
-          <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-slate-900/90 border border-slate-800 text-slate-300 text-[11px]">
+          {/* Engine Status Pill */}
+          <div className="flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#111115] border border-white/10 text-[#F5F5F5] text-[11px]">
             <span
               className={`w-1.5 h-1.5 rounded-full ${
-                backendOnline ? "bg-emerald-400 shadow-[0_0_8px_rgba(52,211,153,0.6)]" : "bg-sky-400 shadow-[0_0_8px_rgba(56,189,248,0.6)]"
+                backendOnline ? "bg-emerald-400 shadow-[0_0_8px_rgba(52,211,153,0.8)]" : "bg-purple-400 shadow-[0_0_8px_rgba(168,85,247,0.8)]"
               }`}
             />
-            <span className="font-medium text-slate-300">
+            <span className="font-medium text-[#A6A6AD]">
               {backendOnline ? "API Live" : "Demo Engine"}
             </span>
           </div>
@@ -117,26 +117,26 @@ export function AppShell({ children }: { children: React.ReactNode }) {
           {/* Public Portal Link */}
           <Link
             href="/"
-            className="flex items-center gap-1 px-2.5 py-1 rounded-md hover:bg-slate-800/60 text-slate-400 hover:text-slate-200 transition-colors text-[11px] font-medium"
+            className="flex items-center gap-1 px-3 py-1 rounded-full hover:bg-white/5 border border-transparent hover:border-white/10 text-[#A6A6AD] hover:text-white transition-all text-[11px] font-medium"
           >
             <span>Public Site</span>
-            <ExternalLink className="w-3 h-3 text-slate-500" />
+            <ExternalLink className="w-3 h-3 text-[#71717A]" />
           </Link>
 
-          {/* User Profile Avatar */}
-          <div className="w-7 h-7 rounded-full bg-slate-900 border border-sky-500/30 text-sky-400 flex items-center justify-center font-bold text-[11px] ml-1 shadow-[0_0_8px_rgba(56,189,248,0.2)]">
+          {/* User Profile Avatar Capsule */}
+          <div className="w-7 h-7 rounded-full bg-white/10 border border-white/20 text-white flex items-center justify-center font-bold text-[11px] ml-1 shadow-[0_0_8px_rgba(255,255,255,0.1)]">
             AG
           </div>
         </div>
       </header>
 
       <div className="flex flex-1 overflow-hidden relative z-10">
-        {/* Left Sidebar Navigation */}
-        <aside className="w-60 bg-[#07111F]/95 backdrop-blur-md border-r border-slate-800/80 p-3.5 flex flex-col justify-between hidden md:flex shrink-0 z-20">
-          <div className="space-y-5">
+        {/* Left Sidebar Navigation: Minimal Dark Console */}
+        <aside className="w-60 bg-[#070709]/95 backdrop-blur-md border-r border-white/[0.06] p-3.5 flex flex-col justify-between hidden md:flex shrink-0 z-20">
+          <div className="space-y-6">
             {NAV_GROUPS.map((group) => (
               <div key={group.group} className="space-y-1">
-                <p className="text-[10px] font-semibold text-slate-500 px-2.5 uppercase tracking-wider mb-1.5">
+                <p className="text-[10px] font-semibold text-[#71717A] px-2.5 uppercase tracking-wider mb-1.5">
                   {group.group}
                 </p>
 
@@ -149,15 +149,15 @@ export function AppShell({ children }: { children: React.ReactNode }) {
                       <Link
                         key={item.name}
                         href={item.href}
-                        className={`flex items-center gap-2.5 px-2.5 py-2 text-xs font-medium transition-all ${
+                        className={`flex items-center gap-2.5 px-3 py-2 text-xs font-medium transition-all ${
                           isActive
-                            ? "bg-sky-500/10 text-sky-400 border-l-2 border-sky-400 font-semibold shadow-[0_0_12px_rgba(56,189,248,0.12)] rounded-r-lg"
-                            : "text-slate-400 hover:bg-slate-800/40 hover:text-slate-200 rounded-lg"
+                            ? "bg-[#18181F] text-white border border-white/15 font-semibold shadow-[0_2px_12px_rgba(0,0,0,0.5)] rounded-xl"
+                            : "text-[#A6A6AD] hover:bg-white/[0.04] hover:text-white rounded-xl"
                         }`}
                       >
                         <Icon
                           className={`w-4 h-4 shrink-0 ${
-                            isActive ? "text-sky-400" : "text-slate-500"
+                            isActive ? "text-white" : "text-[#71717A]"
                           }`}
                         />
                         <span className="truncate">{item.name}</span>
@@ -170,14 +170,14 @@ export function AppShell({ children }: { children: React.ReactNode }) {
           </div>
 
           {/* Sidebar Footer Info Card */}
-          <div className="p-3 rounded-xl bg-[#050B14]/90 border border-slate-800/80 space-y-1.5 text-[11px]">
-            <div className="flex items-center justify-between text-slate-400 font-medium">
+          <div className="p-3 rounded-xl bg-[#0D0D11] border border-white/[0.06] space-y-1.5 text-[11px]">
+            <div className="flex items-center justify-between text-[#71717A] font-medium">
               <span>Standard</span>
-              <span className="text-slate-200 font-semibold font-mono">CycloneDX 1.6</span>
+              <span className="text-[#F5F5F5] font-semibold font-mono">CycloneDX 1.6</span>
             </div>
-            <div className="flex items-center justify-between text-slate-400 font-medium">
+            <div className="flex items-center justify-between text-[#71717A] font-medium">
               <span>PQC Baseline</span>
-              <span className="text-slate-200 font-semibold font-mono">NIST FIPS 203/204</span>
+              <span className="text-[#F5F5F5] font-semibold font-mono">NIST FIPS 203/204</span>
             </div>
           </div>
         </aside>

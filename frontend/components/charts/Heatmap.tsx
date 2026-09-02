@@ -58,7 +58,7 @@ export const Heatmap: React.FC<HeatmapProps> = ({ assets, onSelectAsset }) => {
                   <Cell
                     key={`cell-${index}`}
                     fill={entry.color}
-                    stroke="#0A1424"
+                    stroke="#0A0A0D"
                     strokeWidth={2}
                     opacity={activeFilter && activeFilter !== entry.status ? 0.35 : 1}
                   />
@@ -69,7 +69,7 @@ export const Heatmap: React.FC<HeatmapProps> = ({ assets, onSelectAsset }) => {
                   if (active && payload && payload.length) {
                     const item = payload[0].payload;
                     return (
-                      <div className="bg-[#07111F] border border-slate-800 p-2.5 rounded-xl shadow-xl text-xs">
+                      <div className="bg-[#0D0D11] border border-white/15 p-2.5 rounded-xl shadow-2xl text-xs">
                         <p className="font-bold text-white">{item.name}</p>
                         <p style={{ color: item.color }} className="font-semibold mt-0.5 font-mono">
                           {item.value} Assets (
@@ -88,13 +88,13 @@ export const Heatmap: React.FC<HeatmapProps> = ({ assets, onSelectAsset }) => {
         {/* Breakdown Stats & Interactive Filter Pills */}
         <div className="lg:col-span-2 space-y-3">
           <div className="flex items-center justify-between">
-            <h4 className="text-xs font-semibold text-slate-400 uppercase tracking-wider">
+            <h4 className="text-xs font-semibold text-[#71717A] uppercase tracking-wider">
               Cryptographic Threat Distribution (Click to filter)
             </h4>
             {activeFilter && (
               <button
                 onClick={() => setActiveFilter(null)}
-                className="text-xs font-semibold text-sky-400 hover:text-sky-300 underline"
+                className="text-xs font-semibold text-purple-400 hover:text-purple-300 underline"
               >
                 Reset Filter
               </button>
@@ -112,8 +112,8 @@ export const Heatmap: React.FC<HeatmapProps> = ({ assets, onSelectAsset }) => {
                   }
                   className={`p-3.5 rounded-xl border text-left transition-all ${
                     isSelected
-                      ? "bg-sky-500/10 border-sky-400 shadow-[0_0_15px_rgba(56,189,248,0.15)]"
-                      : "bg-[#0A1424]/90 border-slate-800 hover:border-slate-700"
+                      ? "bg-purple-500/10 border-purple-400 shadow-[0_0_15px_rgba(168,85,247,0.2)]"
+                      : "bg-[#0A0A0D] border-white/[0.06] hover:border-white/15"
                   }`}
                 >
                   <div className="flex items-center justify-between mb-1">
@@ -125,10 +125,10 @@ export const Heatmap: React.FC<HeatmapProps> = ({ assets, onSelectAsset }) => {
                       {item.value}
                     </span>
                   </div>
-                  <p className="text-xs font-semibold text-slate-200 truncate">
+                  <p className="text-xs font-semibold text-[#F5F5F5] truncate">
                     {item.name}
                   </p>
-                  <p className="text-[11px] text-slate-400 mt-0.5 font-mono">
+                  <p className="text-[11px] text-[#71717A] mt-0.5 font-mono">
                     {((item.value / assets.length) * 100).toFixed(1)}% of total
                   </p>
                 </button>

@@ -20,37 +20,37 @@ export const ThreatBannerVisual: React.FC = () => {
         preserveAspectRatio="xMidYMid meet"
       >
         <defs>
-          {/* Dual-Tone Cyber Gradient (Crimson Left -> Electric Cyan/Violet Right) */}
+          {/* Dual-Tone Cyber Gradient (Crimson Left -> Dusty Violet/Indigo Right matching Overview) */}
           <linearGradient id="shieldCyberGrad" x1="0%" y1="30%" x2="100%" y2="70%">
             <stop offset="0%" stopColor="#f43f5e" stopOpacity="0.95" />
             <stop offset="35%" stopColor="#fb7185" stopOpacity="0.85" />
-            <stop offset="55%" stopColor="#38bdf8" stopOpacity="0.9" />
+            <stop offset="60%" stopColor="#a855f7" stopOpacity="0.9" />
             <stop offset="85%" stopColor="#818cf8" stopOpacity="0.95" />
-            <stop offset="100%" stopColor="#c084fc" stopOpacity="0.8" />
+            <stop offset="100%" stopColor="#c084fc" stopOpacity="0.85" />
           </linearGradient>
 
           <linearGradient id="faintCircuitGrad" x1="0%" y1="0%" x2="100%" y2="0%">
             <stop offset="0%" stopColor="#f43f5e" stopOpacity="0.35" />
-            <stop offset="50%" stopColor="#38bdf8" stopOpacity="0.4" />
+            <stop offset="50%" stopColor="#a855f7" stopOpacity="0.4" />
             <stop offset="100%" stopColor="#818cf8" stopOpacity="0.2" />
           </linearGradient>
 
           <linearGradient id="scanBeamGrad" x1="0%" y1="0%" x2="0%" y2="100%">
-            <stop offset="0%" stopColor="#38bdf8" stopOpacity="0" />
-            <stop offset="50%" stopColor="#38bdf8" stopOpacity="0.45" />
-            <stop offset="100%" stopColor="#38bdf8" stopOpacity="0" />
+            <stop offset="0%" stopColor="#a855f7" stopOpacity="0" />
+            <stop offset="50%" stopColor="#a855f7" stopOpacity="0.4" />
+            <stop offset="100%" stopColor="#a855f7" stopOpacity="0" />
           </linearGradient>
 
           {/* Radial Ambient Glows */}
           <radialGradient id="redAmbientGlow" cx="40%" cy="52%" r="48%">
-            <stop offset="0%" stopColor="#f43f5e" stopOpacity="0.28" />
-            <stop offset="55%" stopColor="#f43f5e" stopOpacity="0.08" />
+            <stop offset="0%" stopColor="#f43f5e" stopOpacity="0.25" />
+            <stop offset="55%" stopColor="#f43f5e" stopOpacity="0.06" />
             <stop offset="100%" stopColor="#f43f5e" stopOpacity="0" />
           </radialGradient>
 
           <radialGradient id="blueAmbientGlow" cx="62%" cy="46%" r="52%">
-            <stop offset="0%" stopColor="#38bdf8" stopOpacity="0.32" />
-            <stop offset="50%" stopColor="#818cf8" stopOpacity="0.14" />
+            <stop offset="0%" stopColor="#a855f7" stopOpacity="0.3" />
+            <stop offset="50%" stopColor="#818cf8" stopOpacity="0.12" />
             <stop offset="100%" stopColor="#818cf8" stopOpacity="0" />
           </radialGradient>
 

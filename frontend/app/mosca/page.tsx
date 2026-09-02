@@ -25,27 +25,27 @@ export default function MoscaPage() {
   return (
     <div className="space-y-5">
       {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-800/80 pb-3.5">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-white/[0.06] pb-3.5">
         <div>
           <div className="flex items-center gap-2">
-            <Hourglass className="w-5 h-5 text-sky-400" />
-            <h1 className="text-lg md:text-xl font-bold text-white tracking-tight">
+            <Hourglass className="w-5 h-5 text-white" />
+            <h1 className="text-lg md:text-xl font-bold text-white tracking-tight font-display">
               Mosca HNDL Timeline Simulator
             </h1>
           </div>
-          <p className="text-xs text-slate-400 mt-0.5">
+          <p className="text-xs text-[#A6A6AD] mt-0.5">
             Model Harvest Now, Decrypt Later exposure windows based on Michele Mosca's Theorem (X + Y &gt; Z).
           </p>
         </div>
 
-        <div className="text-xs font-mono text-slate-400 bg-[#07111F] px-3 py-1.5 rounded-lg border border-slate-800 shadow-2xs">
-          Formula: <strong className="text-sky-400">X (Shelf Life) + Y (Migration) &gt; Z (Q-Day)</strong>
+        <div className="text-xs font-mono text-[#A6A6AD] bg-[#0D0D11] px-3.5 py-1.5 rounded-full border border-white/10">
+          Formula: <strong className="text-white">X (Shelf Life) + Y (Migration) &gt; Z (Q-Day)</strong>
         </div>
       </div>
 
       {/* Preset Sector Selectors */}
       <div className="space-y-2">
-        <span className="text-[11px] font-semibold text-slate-400 uppercase tracking-wider block">
+        <span className="text-[11px] font-semibold text-[#71717A] uppercase tracking-wider block">
           Industry Sector Profiles:
         </span>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
@@ -58,17 +58,17 @@ export default function MoscaPage() {
                 onClick={() => handleApplyPreset(preset)}
                 className={`p-3.5 rounded-xl border text-left transition-all ${
                   isSelected
-                    ? "bg-sky-500/10 border-sky-400 text-white shadow-[0_0_15px_rgba(56,189,248,0.15)]"
-                    : "bg-[#0A1424]/90 border-slate-800 hover:border-slate-700 text-slate-300"
+                    ? "bg-purple-500/10 border-purple-400 text-white shadow-[0_0_15px_rgba(168,85,247,0.2)]"
+                    : "bg-[#0A0A0D] border-white/[0.06] hover:border-white/15 text-[#A6A6AD]"
                 }`}
               >
                 <div className="flex items-center justify-between text-xs mb-1">
-                  <span className={`font-bold ${isSelected ? "text-white" : "text-slate-200"}`}>
+                  <span className={`font-bold ${isSelected ? "text-white" : "text-[#F5F5F5]"}`}>
                     {preset.label}
                   </span>
                   <span
-                    className={`text-[10px] px-1.5 py-0.5 rounded font-mono ${
-                      isSelected ? "bg-sky-500/20 text-sky-300 border border-sky-500/30" : "bg-slate-900 text-slate-400 border border-slate-800"
+                    className={`text-[10px] px-2 py-0.5 rounded-full font-mono ${
+                      isSelected ? "bg-purple-500/20 text-purple-200 border border-purple-500/30" : "bg-[#18181E] text-[#71717A] border border-white/10"
                     }`}
                   >
                     X:{preset.x}y Y:{preset.y}y
@@ -76,7 +76,7 @@ export default function MoscaPage() {
                 </div>
                 <p
                   className={`text-[11px] line-clamp-1 ${
-                    isSelected ? "text-slate-300" : "text-slate-400"
+                    isSelected ? "text-purple-200/80" : "text-[#71717A]"
                   }`}
                 >
                   {preset.description}
@@ -92,23 +92,23 @@ export default function MoscaPage() {
 
       {/* Sliders & Parameter Tuning */}
       <div className="nexus-card p-5 space-y-4">
-        <div className="flex items-center justify-between border-b border-slate-800/80 pb-2.5">
+        <div className="flex items-center justify-between border-b border-white/[0.06] pb-2.5">
           <div className="flex items-center gap-2">
-            <Sliders className="w-4 h-4 text-sky-400" />
+            <Sliders className="w-4 h-4 text-purple-400" />
             <h3 className="text-xs font-bold text-white uppercase tracking-wider font-mono">
               Custom Variable Simulation
             </h3>
           </div>
-          <span className="text-[11px] text-slate-400 font-medium font-mono">
+          <span className="text-[11px] text-[#71717A] font-medium font-mono">
             Adjust variables to calculate custom breach exposure
           </span>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
           {/* Slider X */}
-          <div className="space-y-1.5 bg-[#050B14] p-3.5 rounded-xl border border-slate-800">
+          <div className="space-y-1.5 bg-[#0D0D11] p-3.5 rounded-xl border border-white/[0.06]">
             <div className="flex justify-between text-xs">
-              <span className="font-semibold text-slate-300">
+              <span className="font-semibold text-[#A6A6AD]">
                 X — Data Shelf Life
               </span>
               <span className="font-bold text-white font-mono">{x} Years</span>
@@ -119,18 +119,18 @@ export default function MoscaPage() {
               max={50}
               value={x}
               onChange={(e) => setX(Number(e.target.value))}
-              className="w-full accent-sky-400 cursor-pointer"
+              className="w-full accent-purple-400 cursor-pointer"
             />
-            <span className="text-[10px] text-slate-500 block font-mono">Required secret confidentiality period</span>
+            <span className="text-[10px] text-[#71717A] block font-mono">Required secret confidentiality period</span>
           </div>
 
           {/* Slider Y */}
-          <div className="space-y-1.5 bg-[#050B14] p-3.5 rounded-xl border border-slate-800">
+          <div className="space-y-1.5 bg-[#0D0D11] p-3.5 rounded-xl border border-white/[0.06]">
             <div className="flex justify-between text-xs">
-              <span className="font-semibold text-slate-300">
+              <span className="font-semibold text-[#A6A6AD]">
                 Y — Migration Time
               </span>
-              <span className="font-bold text-sky-400 font-mono">{y} Years</span>
+              <span className="font-bold text-purple-300 font-mono">{y} Years</span>
             </div>
             <input
               type="range"
@@ -138,15 +138,15 @@ export default function MoscaPage() {
               max={20}
               value={y}
               onChange={(e) => setY(Number(e.target.value))}
-              className="w-full accent-sky-400 cursor-pointer"
+              className="w-full accent-purple-400 cursor-pointer"
             />
-            <span className="text-[10px] text-slate-500 block font-mono">Time to re-engineer to NIST PQC</span>
+            <span className="text-[10px] text-[#71717A] block font-mono">Time to re-engineer to NIST PQC</span>
           </div>
 
           {/* Slider Z */}
-          <div className="space-y-1.5 bg-[#050B14] p-3.5 rounded-xl border border-slate-800">
+          <div className="space-y-1.5 bg-[#0D0D11] p-3.5 rounded-xl border border-white/[0.06]">
             <div className="flex justify-between text-xs">
-              <span className="font-semibold text-slate-300">
+              <span className="font-semibold text-[#A6A6AD]">
                 Z — Q-Day Horizon
               </span>
               <span className="font-bold text-rose-400 font-mono">{z} Years</span>
@@ -159,7 +159,7 @@ export default function MoscaPage() {
               onChange={(e) => setZ(Number(e.target.value))}
               className="w-full accent-rose-500 cursor-pointer"
             />
-            <span className="text-[10px] text-slate-500 block font-mono">Years until adversary deploys CRQC</span>
+            <span className="text-[10px] text-[#71717A] block font-mono">Years until adversary deploys CRQC</span>
           </div>
         </div>
       </div>

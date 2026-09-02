@@ -66,12 +66,12 @@ export const UploadZone: React.FC<UploadZoneProps> = ({
         onDragOver={handleDrag}
         onDrop={handleDrop}
         onClick={() => !selectedFile && fileInputRef.current?.click()}
-        className={`relative rounded-2xl border-2 border-dashed p-8 md:p-12 text-center transition-all duration-200 cursor-pointer overflow-hidden backdrop-blur-md ${
+        className={`relative rounded-3xl border-2 border-dashed p-8 md:p-12 text-center transition-all duration-200 cursor-pointer overflow-hidden backdrop-blur-md ${
           dragActive
-            ? "border-sky-400 bg-sky-950/40 shadow-[0_0_20px_rgba(56,189,248,0.2)]"
+            ? "border-purple-400 bg-purple-950/20 shadow-[0_0_30px_rgba(168,85,247,0.2)]"
             : selectedFile
-            ? "border-emerald-500/80 bg-emerald-950/20 shadow-[0_0_20px_rgba(16,185,129,0.15)]"
-            : "border-slate-800 bg-[#0A1424]/90 hover:border-sky-500/40 hover:bg-[#0c182c]"
+            ? "border-emerald-500/80 bg-emerald-950/20 shadow-[0_0_25px_rgba(16,185,129,0.15)]"
+            : "border-white/15 bg-[#0A0A0D]/90 hover:border-white/30 hover:bg-[#121217]"
         }`}
       >
         <input
@@ -86,14 +86,14 @@ export const UploadZone: React.FC<UploadZoneProps> = ({
         <div className="relative z-10 flex flex-col items-center justify-center space-y-4">
           {selectedFile ? (
             <div className="flex flex-col items-center space-y-3">
-              <div className="w-14 h-14 rounded-2xl bg-emerald-500/10 border border-emerald-500/30 flex items-center justify-center text-emerald-400 shadow-[0_0_12px_rgba(16,185,129,0.25)]">
+              <div className="w-14 h-14 rounded-full bg-emerald-500/10 border border-emerald-500/30 flex items-center justify-center text-emerald-400 shadow-[0_0_12px_rgba(16,185,129,0.25)]">
                 <CheckCircle2 className="w-7 h-7" />
               </div>
               <div>
                 <h3 className="text-base font-bold text-white font-mono">
                   {selectedFile.name}
                 </h3>
-                <p className="text-xs text-slate-400 mt-0.5 font-mono">
+                <p className="text-xs text-[#A6A6AD] mt-0.5 font-mono">
                   {(selectedFile.size / 1024).toFixed(1)} KB • Ready for Quantum Analysis
                 </p>
               </div>
@@ -105,7 +105,7 @@ export const UploadZone: React.FC<UploadZoneProps> = ({
                     e.stopPropagation();
                     setSelectedFile(null);
                   }}
-                  className="px-4 py-2 rounded-xl bg-slate-800/80 hover:bg-slate-700/80 text-slate-300 text-xs font-semibold border border-slate-700 transition-colors"
+                  className="btn-pill-dark"
                 >
                   Choose Different File
                 </button>
@@ -125,7 +125,7 @@ export const UploadZone: React.FC<UploadZoneProps> = ({
             </div>
           ) : (
             <>
-              <div className="w-14 h-14 rounded-2xl bg-sky-500/10 border border-sky-500/30 flex items-center justify-center text-sky-400 shadow-[0_0_15px_rgba(56,189,248,0.2)]">
+              <div className="w-14 h-14 rounded-full bg-white/10 border border-white/15 flex items-center justify-center text-white shadow-[0_0_20px_rgba(255,255,255,0.1)]">
                 <Upload className="w-7 h-7" />
               </div>
 
@@ -133,13 +133,13 @@ export const UploadZone: React.FC<UploadZoneProps> = ({
                 <h3 className="text-base font-bold text-white tracking-tight">
                   Drag & Drop codebase ZIP archive
                 </h3>
-                <p className="text-xs text-slate-400 mt-1 max-w-sm mx-auto leading-relaxed">
+                <p className="text-xs text-[#A6A6AD] mt-1 max-w-sm mx-auto leading-relaxed">
                   Upload source code, X.509 certs, TLS/SSH configs, or container bills for automated CBOM discovery.
                 </p>
               </div>
 
-              <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#050B14] border border-slate-800 text-xs text-slate-400 font-mono">
-                <FileArchive className="w-3.5 h-3.5 text-sky-400" />
+              <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#0D0D11] border border-white/10 text-xs text-[#A6A6AD] font-mono">
+                <FileArchive className="w-3.5 h-3.5 text-purple-400" />
                 Supports .zip packages (Python, Java, Go, Configs, PEM/CRT)
               </div>
             </>
@@ -150,15 +150,15 @@ export const UploadZone: React.FC<UploadZoneProps> = ({
       {/* Demo Repository Quick-Scan Card */}
       <div className="nexus-card p-5 flex flex-col sm:flex-row items-center justify-between gap-4">
         <div className="flex items-center gap-3.5 text-left">
-          <div className="w-10 h-10 rounded-xl bg-sky-500/10 border border-sky-500/30 flex items-center justify-center text-sky-400 shrink-0 shadow-[0_0_10px_rgba(56,189,248,0.15)]">
+          <div className="w-10 h-10 rounded-full bg-white/10 border border-white/15 flex items-center justify-center text-white shrink-0">
             <Shield className="w-5 h-5" />
           </div>
           <div>
             <h4 className="text-sm font-bold text-white flex items-center gap-2">
               Instant Hackathon Demo:
-              <span className="text-xs text-sky-400 font-mono font-semibold">demo_enterprise_repo</span>
+              <span className="text-xs text-purple-400 font-mono font-semibold">demo_enterprise_repo</span>
             </h4>
-            <p className="text-xs text-slate-400 mt-0.5">
+            <p className="text-xs text-[#A6A6AD] mt-0.5">
               Scan pre-configured vulnerable enterprise suite (JWT RSA-2048, Java Payments, MD5, Nginx TLS, X.509).
             </p>
           </div>
