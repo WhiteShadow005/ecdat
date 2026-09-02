@@ -24,14 +24,14 @@ export const ScoreRing: React.FC<ScoreRingProps> = ({
   const clampedPercentage = Math.min(100, Math.max(0, percentage));
   const strokeDashoffset = circumference - (clampedPercentage / 100) * circumference;
 
-  // Color determination inspired by Nexus palette
+  // Color determination for SOC dark palette
   const getColor = () => {
-    if (clampedPercentage >= 75) return { stroke: "#10b981", text: "text-emerald-600", bg: "#ecfdf5" };
-    if (clampedPercentage >= 40) return { stroke: "#f59e0b", text: "text-amber-600", bg: "#fffbeb" };
-    return { stroke: "#5347ce", text: "text-indigo-600", bg: "#eef2ff" };
+    if (clampedPercentage >= 75) return { stroke: "#10b981", text: "text-emerald-400", glow: "rgba(16, 185, 129, 0.4)" };
+    if (clampedPercentage >= 40) return { stroke: "#f59e0b", text: "text-amber-400", glow: "rgba(245, 158, 11, 0.4)" };
+    return { stroke: "#38bdf8", text: "text-sky-400", glow: "rgba(56, 189, 248, 0.4)" };
   };
 
-  const { stroke, text } = getColor();
+  const { stroke, text, glow } = getColor();
 
   return (
     <div className={`flex flex-col items-center justify-center relative ${className}`}>
@@ -41,7 +41,7 @@ export const ScoreRing: React.FC<ScoreRingProps> = ({
             cx={size / 2}
             cy={size / 2}
             r={radius}
-            stroke="#f1f5f9"
+            stroke="rgba(56, 189, 248, 0.08)"
             strokeWidth={strokeWidth}
             fill="transparent"
           />
@@ -57,16 +57,17 @@ export const ScoreRing: React.FC<ScoreRingProps> = ({
             fill="transparent"
             style={{
               transition: "stroke-dashoffset 1.2s cubic-bezier(0.4, 0, 0.2, 1)",
+              filter: `drop-shadow(0 0 6px ${glow})`,
             }}
           />
         </svg>
 
         {/* Central percentage reading */}
         <div className="absolute inset-0 flex flex-col items-center justify-center text-center">
-          <span className={`text-3xl font-bold tracking-tight ${text}`}>
+          <span className={`text-3xl font-bold tracking-tight font-mono ${text}`}>
             {clampedPercentage.toFixed(1)}%
           </span>
-          <span className="text-[11px] font-semibold text-slate-400 uppercase tracking-wider mt-0.5">
+          <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mt-0.5 font-mono">
             PQC Ready
           </span>
         </div>
@@ -74,8 +75,8 @@ export const ScoreRing: React.FC<ScoreRingProps> = ({
 
       {(label || sublabel) && (
         <div className="text-center mt-3">
-          {label && <h4 className="text-sm font-semibold text-slate-800">{label}</h4>}
-          {sublabel && <p className="text-xs text-slate-500 mt-0.5">{sublabel}</p>}
+          {label && <h4 className="text-xs font-semibold text-slate-200">{label}</h4>}
+          {sublabel && <p className="text-[11px] text-slate-400 mt-0.5">{sublabel}</p>}
         </div>
       )}
     </div>

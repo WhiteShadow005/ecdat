@@ -58,7 +58,7 @@ export const Heatmap: React.FC<HeatmapProps> = ({ assets, onSelectAsset }) => {
                   <Cell
                     key={`cell-${index}`}
                     fill={entry.color}
-                    stroke="#ffffff"
+                    stroke="#0A1424"
                     strokeWidth={2}
                     opacity={activeFilter && activeFilter !== entry.status ? 0.35 : 1}
                   />
@@ -69,9 +69,9 @@ export const Heatmap: React.FC<HeatmapProps> = ({ assets, onSelectAsset }) => {
                   if (active && payload && payload.length) {
                     const item = payload[0].payload;
                     return (
-                      <div className="bg-white border border-slate-200 p-2.5 rounded-xl shadow-lg text-xs">
-                        <p className="font-bold text-slate-900">{item.name}</p>
-                        <p style={{ color: item.color }} className="font-semibold mt-0.5">
+                      <div className="bg-[#07111F] border border-slate-800 p-2.5 rounded-xl shadow-xl text-xs">
+                        <p className="font-bold text-white">{item.name}</p>
+                        <p style={{ color: item.color }} className="font-semibold mt-0.5 font-mono">
                           {item.value} Assets (
                           {((item.value / assets.length) * 100).toFixed(1)}%)
                         </p>
@@ -88,13 +88,13 @@ export const Heatmap: React.FC<HeatmapProps> = ({ assets, onSelectAsset }) => {
         {/* Breakdown Stats & Interactive Filter Pills */}
         <div className="lg:col-span-2 space-y-3">
           <div className="flex items-center justify-between">
-            <h4 className="text-xs font-semibold text-slate-500 uppercase tracking-wider">
+            <h4 className="text-xs font-semibold text-slate-400 uppercase tracking-wider">
               Cryptographic Threat Distribution (Click to filter)
             </h4>
             {activeFilter && (
               <button
                 onClick={() => setActiveFilter(null)}
-                className="text-xs font-semibold text-indigo-600 hover:text-indigo-700 underline"
+                className="text-xs font-semibold text-sky-400 hover:text-sky-300 underline"
               >
                 Reset Filter
               </button>
@@ -112,8 +112,8 @@ export const Heatmap: React.FC<HeatmapProps> = ({ assets, onSelectAsset }) => {
                   }
                   className={`p-3.5 rounded-xl border text-left transition-all ${
                     isSelected
-                      ? "bg-indigo-50/70 border-indigo-500 shadow-xs"
-                      : "bg-white border-slate-200 hover:border-slate-300"
+                      ? "bg-sky-500/10 border-sky-400 shadow-[0_0_15px_rgba(56,189,248,0.15)]"
+                      : "bg-[#0A1424]/90 border-slate-800 hover:border-slate-700"
                   }`}
                 >
                   <div className="flex items-center justify-between mb-1">
@@ -121,14 +121,14 @@ export const Heatmap: React.FC<HeatmapProps> = ({ assets, onSelectAsset }) => {
                       className="w-2.5 h-2.5 rounded-full"
                       style={{ backgroundColor: item.color }}
                     />
-                    <span className="text-xl font-bold text-slate-900">
+                    <span className="text-xl font-bold text-white font-mono">
                       {item.value}
                     </span>
                   </div>
-                  <p className="text-xs font-semibold text-slate-800 truncate">
+                  <p className="text-xs font-semibold text-slate-200 truncate">
                     {item.name}
                   </p>
-                  <p className="text-[11px] text-slate-400 mt-0.5">
+                  <p className="text-[11px] text-slate-400 mt-0.5 font-mono">
                     {((item.value / assets.length) * 100).toFixed(1)}% of total
                   </p>
                 </button>
@@ -141,10 +141,10 @@ export const Heatmap: React.FC<HeatmapProps> = ({ assets, onSelectAsset }) => {
       {/* Interactive Matrix / Treemap-Style Grid */}
       <div className="nexus-card p-5">
         <div className="flex items-center justify-between mb-4">
-          <h4 className="text-sm font-bold text-slate-900">
+          <h4 className="text-sm font-bold text-white">
             Quantum Threat Matrix ({filteredAssets.length} Assets)
           </h4>
-          <span className="text-xs text-slate-500">
+          <span className="text-xs text-slate-400">
             Click an algorithm block to inspect details
           </span>
         </div>
@@ -157,36 +157,36 @@ export const Heatmap: React.FC<HeatmapProps> = ({ assets, onSelectAsset }) => {
               <div
                 key={asset.id}
                 onClick={() => onSelectAsset && onSelectAsset(asset)}
-                className={`p-3 rounded-xl border cursor-pointer transition-all duration-150 hover:shadow-xs flex flex-col justify-between ${
+                className={`p-3 rounded-xl border cursor-pointer transition-all duration-150 flex flex-col justify-between ${
                   isBroken
-                    ? "bg-rose-50/60 border-rose-200/80 hover:border-rose-300 hover:bg-rose-50"
+                    ? "bg-rose-950/30 border-rose-900/50 hover:border-rose-500 hover:bg-rose-950/50 shadow-[0_0_10px_rgba(244,63,94,0.05)]"
                     : isWeakened
-                    ? "bg-amber-50/60 border-amber-200/80 hover:border-amber-300 hover:bg-amber-50"
-                    : "bg-emerald-50/60 border-emerald-200/80 hover:border-emerald-300 hover:bg-emerald-50"
+                    ? "bg-amber-950/30 border-amber-900/50 hover:border-amber-500 hover:bg-amber-950/50"
+                    : "bg-emerald-950/30 border-emerald-900/50 hover:border-emerald-500 hover:bg-emerald-950/50"
                 }`}
               >
                 <div>
                   <div className="flex items-center justify-between gap-1 mb-1.5">
-                    <span className="text-[10px] font-semibold uppercase text-slate-500">
+                    <span className="text-[10px] font-semibold uppercase text-slate-400">
                       {asset.language}
                     </span>
                     <span
-                      className={`text-[10px] font-bold px-1.5 py-0.5 rounded-md ${
+                      className={`text-[10px] font-bold px-1.5 py-0.5 rounded-md font-mono ${
                         isBroken
-                          ? "bg-rose-100 text-rose-700"
+                          ? "bg-rose-900/60 text-rose-300 border border-rose-800/60"
                           : isWeakened
-                          ? "bg-amber-100 text-amber-700"
-                          : "bg-emerald-100 text-emerald-700"
+                          ? "bg-amber-900/60 text-amber-300 border border-amber-800/60"
+                          : "bg-emerald-900/60 text-emerald-300 border border-emerald-800/60"
                       }`}
                     >
                       {asset.qars_score} QARS
                     </span>
                   </div>
-                  <p className="font-bold text-xs text-slate-900 truncate">
+                  <p className="font-bold text-xs text-white truncate font-mono">
                     {asset.algorithm}
                   </p>
                 </div>
-                <p className="text-[11px] font-mono text-slate-500 truncate mt-2">
+                <p className="text-[11px] font-mono text-slate-400 truncate mt-2">
                   {asset.file.split("/").pop()}
                 </p>
               </div>

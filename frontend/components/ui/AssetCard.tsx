@@ -24,25 +24,25 @@ export const AssetCard: React.FC<AssetCardProps> = ({
   return (
     <div
       onClick={() => onSelect && onSelect(asset)}
-      className={`rounded-xl p-4 transition-all duration-200 cursor-pointer border ${
+      className={`rounded-2xl p-4 transition-all duration-200 cursor-pointer border ${
         selected
-          ? "bg-navy-800 border-cyan-500 shadow-cyber-cyan"
-          : "bg-navy-850/80 border-navy-700 hover:border-slate-600 hover:bg-navy-800"
+          ? "bg-sky-500/10 border-sky-400 shadow-[0_0_16px_rgba(56,189,248,0.18)]"
+          : "bg-[#0A1424]/90 border-slate-800 hover:border-slate-700 hover:bg-[#0d1b30]"
       }`}
     >
       <div className="flex items-start justify-between gap-3 mb-2">
         <div>
           <div className="flex items-center gap-2 flex-wrap">
-            <h4 className="font-mono font-bold text-slate-100 text-base">
+            <h4 className="font-mono font-bold text-white text-base">
               {asset.algorithm}
             </h4>
-            <span className="text-[11px] font-mono px-2 py-0.5 rounded bg-slate-800 text-slate-400 border border-slate-700 uppercase">
+            <span className="text-[11px] font-mono px-2 py-0.5 rounded-md bg-slate-900 text-slate-400 border border-slate-800 uppercase">
               {asset.type}
             </span>
           </div>
           <p className="text-xs font-mono text-slate-400 flex items-center gap-1 mt-1 truncate max-w-md">
             <FileCode className="w-3.5 h-3.5 text-slate-500 shrink-0" />
-            <span className="text-cyan-400">{asset.file}</span>
+            <span className="text-sky-400">{asset.file}</span>
             {asset.line > 0 && <span className="text-slate-500">:L{asset.line}</span>}
           </p>
         </div>
@@ -50,17 +50,17 @@ export const AssetCard: React.FC<AssetCardProps> = ({
       </div>
 
       {/* QARS Risk Score bar */}
-      <div className="my-3 bg-navy-950/70 p-2.5 rounded-lg border border-navy-700">
+      <div className="my-3 bg-[#07111F] p-2.5 rounded-xl border border-slate-800/80">
         <div className="flex justify-between items-center text-xs mb-1.5 font-mono">
           <span className="text-slate-400 flex items-center gap-1">
-            <ShieldAlert className="w-3.5 h-3.5 text-slate-400" />
+            <ShieldAlert className="w-3.5 h-3.5 text-slate-500" />
             QARS Risk Score:
           </span>
           <span className={`font-bold ${getQarsColor(asset.qars_score).split(" ")[1]}`}>
             {asset.qars_score}/100
           </span>
         </div>
-        <div className="w-full bg-slate-800 rounded-full h-1.5 overflow-hidden">
+        <div className="w-full bg-slate-900 rounded-full h-1.5 overflow-hidden">
           <div
             className={`h-full rounded-full transition-all duration-500 ${
               getQarsColor(asset.qars_score).split(" ")[0]
@@ -80,22 +80,22 @@ export const AssetCard: React.FC<AssetCardProps> = ({
         </div>
         <div className="text-slate-400 flex items-center justify-between text-[11px]">
           <span className="text-slate-500">Threat:</span>
-          <span className="text-red-400 text-right truncate ml-2">
+          <span className="text-rose-400 text-right truncate ml-2">
             {asset.attack_vector}
           </span>
         </div>
       </div>
 
       {/* Remediation Action Link */}
-      <div className="mt-3 pt-2.5 border-t border-navy-700/60 flex items-center justify-between">
-        <span className="text-[11px] font-mono text-purple-400 flex items-center gap-1">
-          <Sparkles className="w-3 h-3 text-purple-400" />
+      <div className="mt-3 pt-2.5 border-t border-slate-800/80 flex items-center justify-between">
+        <span className="text-[11px] font-mono text-indigo-400 flex items-center gap-1">
+          <Sparkles className="w-3 h-3 text-indigo-400" />
           AI Fix Ready
         </span>
         <Link
           href={`/remediation?asset_id=${asset.id}`}
           onClick={(e) => e.stopPropagation()}
-          className="text-xs text-cyan-400 hover:text-cyan-300 font-mono font-medium flex items-center gap-1 hover:underline"
+          className="text-xs text-sky-400 hover:text-sky-300 font-mono font-medium flex items-center gap-1 hover:underline"
         >
           View Diff <ArrowRight className="w-3 h-3" />
         </Link>

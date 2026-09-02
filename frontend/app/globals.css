@@ -102,40 +102,40 @@
 
 
 /* ==========================================================================
-   Nexus SaaS Design Tokens & Color Palette
+   ECDAT Dark Cybersecurity Design Tokens & SOC Palette
    ========================================================================== */
 :root {
   /* Surfaces & Canvas */
-  --bg-canvas: #f8fafc;
-  --bg-surface: #ffffff;
-  --bg-surface-subtle: #f1f5f9;
-  --bg-surface-hover: #f8fafc;
+  --bg-canvas: #050B14;
+  --bg-surface: #0A1424;
+  --bg-surface-subtle: #0D1828;
+  --bg-surface-hover: #11223b;
 
   /* Typography */
-  --text-primary: #0f172a;
-  --text-secondary: #475569;
+  --text-primary: #f8fafc;
+  --text-secondary: #94a3b8;
   --text-muted: #64748b;
-  --text-subtle: #94a3b8;
+  --text-subtle: #475569;
 
   /* Borders & Dividers */
-  --border-subtle: #e2e8f0;
-  --border-medium: #cbd5e1;
+  --border-subtle: rgba(56, 189, 248, 0.12);
+  --border-medium: rgba(56, 189, 248, 0.22);
+  --border-highlight: rgba(56, 189, 248, 0.4);
 
-  /* Nexus Brand Accents */
-  --accent-primary: #5347ce;
-  --accent-primary-hover: #4338ca;
-  --accent-secondary: #887dfd;
-  --accent-sky: #6095fe;
-  --accent-teal: #16cbc7;
-  --accent-light: #eef2ff;
+  /* Cyber Brand Accents */
+  --accent-primary: #0284c7;
+  --accent-primary-hover: #0369a1;
+  --accent-electric: #38bdf8;
+  --accent-secondary: #818cf8;
+  --accent-light: rgba(56, 189, 248, 0.1);
 
-  /* Status Colors */
-  --status-critical: #ef4444;
-  --status-critical-bg: #fef2f2;
+  /* Status Colors (Restrained SOC Palette) */
+  --status-critical: #f43f5e;
+  --status-critical-bg: rgba(244, 63, 94, 0.12);
   --status-warning: #f59e0b;
-  --status-warning-bg: #fffbeb;
+  --status-warning-bg: rgba(245, 158, 11, 0.12);
   --status-safe: #10b981;
-  --status-safe-bg: #ecfdf5;
+  --status-safe-bg: rgba(16, 185, 129, 0.12);
 
   /* Fonts */
   --font-sans: "Inter", -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, sans-serif;
@@ -165,58 +165,62 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
-/* Custom Clean Scrollbar */
+/* Custom Clean Dark Scrollbar */
 ::-webkit-scrollbar {
   width: 6px;
   height: 6px;
 }
 
 ::-webkit-scrollbar-track {
-  background: #f1f5f9;
+  background: #07111F;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #cbd5e1;
+  background: #1e293b;
   border-radius: 3px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #94a3b8;
+  background: #334155;
 }
 
 /* ==========================================================================
-   Nexus SaaS Card & Container Styles
+   ECDAT Dark Cybersecurity Card & Container Styles
    ========================================================================== */
 .nexus-card {
-  background-color: #ffffff;
+  background-color: rgba(10, 20, 36, 0.85);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
   border: 1px solid var(--border-subtle);
   border-radius: 16px;
-  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.04), 0 1px 2px -1px rgba(0, 0, 0, 0.04);
-  transition: box-shadow 0.2s ease, border-color 0.2s ease, transform 0.2s ease;
+  box-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.04);
+  transition: box-shadow 0.25s ease, border-color 0.25s ease, transform 0.25s ease;
 }
 
 .nexus-card:hover {
-  border-color: #cbd5e1;
-  box-shadow: 0 4px 12px 0 rgba(0, 0, 0, 0.05);
+  border-color: rgba(56, 189, 248, 0.25);
+  box-shadow: 0 8px 25px -4px rgba(0, 0, 0, 0.6), 0 0 15px -3px rgba(56, 189, 248, 0.06);
 }
 
 .nexus-card-interactive {
-  background-color: #ffffff;
+  background-color: rgba(10, 20, 36, 0.85);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
   border: 1px solid var(--border-subtle);
   border-radius: 16px;
-  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.04);
-  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.4);
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .nexus-card-interactive:hover {
-  border-color: var(--accent-primary);
+  border-color: rgba(56, 189, 248, 0.35);
   transform: translateY(-2px);
-  box-shadow: 0 8px 20px -4px rgba(83, 71, 206, 0.12);
+  box-shadow: 0 12px 28px -4px rgba(0, 0, 0, 0.7), 0 0 20px -4px rgba(56, 189, 248, 0.12);
 }
 
-/* Nexus Button Styles */
+/* Cyber Button Styles */
 .btn-primary {
-  background-color: var(--text-primary);
+  background-color: #0284c7;
   color: #ffffff;
   font-weight: 500;
   font-size: 13px;
@@ -226,17 +230,19 @@ body {
   align-items: center;
   justify-content: center;
   gap: 8px;
+  border: 1px solid rgba(56, 189, 248, 0.3);
+  box-shadow: 0 0 12px rgba(56, 189, 248, 0.2);
   transition: background-color 0.15s ease, transform 0.15s ease, box-shadow 0.15s ease;
 }
 
 .btn-primary:hover {
-  background-color: #1e293b;
+  background-color: #0369a1;
   transform: translateY(-1px);
-  box-shadow: 0 2px 8px rgba(15, 23, 42, 0.15);
+  box-shadow: 0 0 18px rgba(56, 189, 248, 0.35);
 }
 
 .btn-accent {
-  background-color: var(--accent-primary);
+  background-color: #4f46e5;
   color: #ffffff;
   font-weight: 500;
   font-size: 13px;
@@ -246,7 +252,14 @@ body {
   align-items: center;
   justify-content: center;
   gap: 8px;
+  border: 1px solid rgba(129, 140, 248, 0.3);
   transition: background-color 0.15s ease, transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.btn-accent:hover {
+  background-color: #4338ca;
+  transform: translateY(-1px);
+  box-shadow: 0 0 18px rgba(129, 140, 248, 0.35);
 }
 
 .btn-accent:hover {

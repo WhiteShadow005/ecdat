@@ -18,6 +18,7 @@ import {
 } from "lucide-react";
 import { checkBackendHealth } from "@/lib/api";
 import { LandingHeader } from "@/components/landing/LandingHeader";
+import { CyberBackground } from "@/components/ui/CyberBackground";
 
 const NAV_GROUPS = [
   {
@@ -60,21 +61,24 @@ export function AppShell({ children }: { children: React.ReactNode }) {
   }
 
   return (
-    <div className="bg-[#f8fafc] text-slate-900 min-h-screen flex flex-col antialiased">
-      {/* Top Header Bar: Clean, Restrained, Authoritative */}
-      <header className="h-14 bg-white border-b border-slate-200 px-5 flex items-center justify-between z-30 sticky top-0">
+    <div className="bg-[#050B14] text-slate-100 min-h-screen flex flex-col antialiased relative selection:bg-sky-500/30 selection:text-sky-200">
+      {/* Background Animated Cyber Mesh (GPU-accelerated, non-intrusive) */}
+      <CyberBackground />
+
+      {/* Top Header Bar: Clean, Dark, Authoritative Command Center */}
+      <header className="h-14 bg-[#07111F]/90 backdrop-blur-md border-b border-slate-800/80 px-5 flex items-center justify-between z-30 sticky top-0 shadow-[0_4px_20px_rgba(0,0,0,0.4)]">
         {/* Brand */}
         <div className="flex items-center gap-3">
           <Link href="/dashboard" className="flex items-center gap-2.5 group">
-            <div className="w-8 h-8 rounded-lg bg-slate-900 flex items-center justify-center text-white shadow-xs group-hover:bg-indigo-600 transition-colors">
+            <div className="w-8 h-8 rounded-lg bg-sky-500/10 border border-sky-500/30 flex items-center justify-center text-sky-400 shadow-[0_0_12px_rgba(56,189,248,0.2)] group-hover:bg-sky-500/20 group-hover:border-sky-500/50 transition-all">
               <Shield className="w-4 h-4" />
             </div>
             <div className="flex items-center gap-2">
-              <span className="font-bold text-sm text-slate-900 tracking-tight">
+              <span className="font-bold text-sm text-white tracking-tight">
                 ECDAT
               </span>
-              <span className="text-[11px] font-medium text-slate-400">/</span>
-              <span className="text-xs text-slate-500 font-medium hidden sm:inline">
+              <span className="text-[11px] font-medium text-slate-600">/</span>
+              <span className="text-xs text-slate-400 font-medium hidden sm:inline">
                 Post-Quantum Cryptographic Analysis
               </span>
             </div>
@@ -84,28 +88,28 @@ export function AppShell({ children }: { children: React.ReactNode }) {
         {/* Right Header Status & Navigation */}
         <div className="flex items-center gap-3 text-xs">
           {/* Quick Search Shortcut */}
-          <div className="hidden md:flex items-center gap-2 px-2.5 py-1 rounded-lg bg-slate-50 border border-slate-200 text-slate-400 text-xs w-60">
-            <Search className="w-3.5 h-3.5" />
-            <span className="flex-1 text-[11px]">Search assets, ciphers...</span>
-            <kbd className="px-1.5 py-0.5 text-[9px] font-mono bg-white border border-slate-200 rounded text-slate-500">
+          <div className="hidden md:flex items-center gap-2 px-2.5 py-1 rounded-lg bg-[#050B14]/80 border border-slate-800 text-slate-400 text-xs w-60 focus-within:border-sky-500/40 transition-colors">
+            <Search className="w-3.5 h-3.5 text-slate-500" />
+            <span className="flex-1 text-[11px] text-slate-400">Search assets, ciphers...</span>
+            <kbd className="px-1.5 py-0.5 text-[9px] font-mono bg-slate-900 border border-slate-700/80 rounded text-slate-400">
               ⌘K
             </kbd>
           </div>
 
           {/* NTRO Evaluator Mode */}
-          <div className="hidden lg:flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-slate-100 text-slate-600 font-medium text-[11px]">
+          <div className="hidden lg:flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-slate-900/90 border border-slate-800 text-slate-400 font-medium text-[11px]">
             <span>Evaluator:</span>
-            <strong className="text-slate-900 font-semibold">NTRO (PMO India)</strong>
+            <strong className="text-sky-400 font-semibold">NTRO (PMO India)</strong>
           </div>
 
           {/* Engine Status */}
-          <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-slate-50 border border-slate-200 text-slate-600 text-[11px]">
+          <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-slate-900/90 border border-slate-800 text-slate-300 text-[11px]">
             <span
               className={`w-1.5 h-1.5 rounded-full ${
-                backendOnline ? "bg-emerald-500" : "bg-indigo-500"
+                backendOnline ? "bg-emerald-400 shadow-[0_0_8px_rgba(52,211,153,0.6)]" : "bg-sky-400 shadow-[0_0_8px_rgba(56,189,248,0.6)]"
               }`}
             />
-            <span className="font-medium">
+            <span className="font-medium text-slate-300">
               {backendOnline ? "API Live" : "Demo Engine"}
             </span>
           </div>
@@ -113,26 +117,26 @@ export function AppShell({ children }: { children: React.ReactNode }) {
           {/* Public Portal Link */}
           <Link
             href="/"
-            className="flex items-center gap-1 px-2.5 py-1 rounded-md hover:bg-slate-100 text-slate-600 hover:text-slate-900 transition-colors text-[11px] font-medium"
+            className="flex items-center gap-1 px-2.5 py-1 rounded-md hover:bg-slate-800/60 text-slate-400 hover:text-slate-200 transition-colors text-[11px] font-medium"
           >
             <span>Public Site</span>
-            <ExternalLink className="w-3 h-3 text-slate-400" />
+            <ExternalLink className="w-3 h-3 text-slate-500" />
           </Link>
 
           {/* User Profile Avatar */}
-          <div className="w-7 h-7 rounded-full bg-slate-900 text-white flex items-center justify-center font-bold text-[11px] ml-1">
+          <div className="w-7 h-7 rounded-full bg-slate-900 border border-sky-500/30 text-sky-400 flex items-center justify-center font-bold text-[11px] ml-1 shadow-[0_0_8px_rgba(56,189,248,0.2)]">
             AG
           </div>
         </div>
       </header>
 
-      <div className="flex flex-1 overflow-hidden">
+      <div className="flex flex-1 overflow-hidden relative z-10">
         {/* Left Sidebar Navigation */}
-        <aside className="w-60 bg-white border-r border-slate-200 p-3.5 flex flex-col justify-between hidden md:flex shrink-0">
+        <aside className="w-60 bg-[#07111F]/95 backdrop-blur-md border-r border-slate-800/80 p-3.5 flex flex-col justify-between hidden md:flex shrink-0 z-20">
           <div className="space-y-5">
             {NAV_GROUPS.map((group) => (
               <div key={group.group} className="space-y-1">
-                <p className="text-[10px] font-semibold text-slate-400 px-2.5 uppercase tracking-wider mb-1.5">
+                <p className="text-[10px] font-semibold text-slate-500 px-2.5 uppercase tracking-wider mb-1.5">
                   {group.group}
                 </p>
 
@@ -145,15 +149,15 @@ export function AppShell({ children }: { children: React.ReactNode }) {
                       <Link
                         key={item.name}
                         href={item.href}
-                        className={`flex items-center gap-2.5 px-2.5 py-2 rounded-lg text-xs font-medium transition-all ${
+                        className={`flex items-center gap-2.5 px-2.5 py-2 text-xs font-medium transition-all ${
                           isActive
-                            ? "bg-slate-900 text-white shadow-xs font-semibold"
-                            : "text-slate-600 hover:bg-slate-50 hover:text-slate-900"
+                            ? "bg-sky-500/10 text-sky-400 border-l-2 border-sky-400 font-semibold shadow-[0_0_12px_rgba(56,189,248,0.12)] rounded-r-lg"
+                            : "text-slate-400 hover:bg-slate-800/40 hover:text-slate-200 rounded-lg"
                         }`}
                       >
                         <Icon
                           className={`w-4 h-4 shrink-0 ${
-                            isActive ? "text-white" : "text-slate-400"
+                            isActive ? "text-sky-400" : "text-slate-500"
                           }`}
                         />
                         <span className="truncate">{item.name}</span>
@@ -166,20 +170,20 @@ export function AppShell({ children }: { children: React.ReactNode }) {
           </div>
 
           {/* Sidebar Footer Info Card */}
-          <div className="p-3 rounded-lg bg-slate-50 border border-slate-200 space-y-1 text-[11px]">
-            <div className="flex items-center justify-between text-slate-500 font-medium">
+          <div className="p-3 rounded-xl bg-[#050B14]/90 border border-slate-800/80 space-y-1.5 text-[11px]">
+            <div className="flex items-center justify-between text-slate-400 font-medium">
               <span>Standard</span>
-              <span className="text-slate-900 font-semibold">CycloneDX 1.6</span>
+              <span className="text-slate-200 font-semibold font-mono">CycloneDX 1.6</span>
             </div>
-            <div className="flex items-center justify-between text-slate-500 font-medium">
+            <div className="flex items-center justify-between text-slate-400 font-medium">
               <span>PQC Baseline</span>
-              <span className="text-slate-900 font-semibold">NIST FIPS 203/204</span>
+              <span className="text-slate-200 font-semibold font-mono">NIST FIPS 203/204</span>
             </div>
           </div>
         </aside>
 
         {/* Main Content Area */}
-        <main className="flex-1 overflow-y-auto p-5 md:p-7 bg-[#f8fafc]">
+        <main className="flex-1 overflow-y-auto p-5 md:p-7 bg-transparent relative z-10">
           <div className="max-w-6xl mx-auto space-y-5">{children}</div>
         </main>
       </div>
