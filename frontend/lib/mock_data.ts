@@ -1,29 +1,32 @@
 import { ScanResult, MoscaPreset, RemediationResult, PQCProofResult } from "./types";
 
 export const mockScanResult: ScanResult = {
-  scan_id: "scan-enterprise-cbom-8492",
-  timestamp: new Date().toISOString(),
-  repo_name: "core-banking-suite",
+  scan_id: "",
+  timestamp: "",
+  repo_name: "",
   summary: {
-    total_assets: 15,
-    critical: 8,
-    high: 3,
-    medium: 2,
-    safe: 2,
-    quantum_readiness_pct: 13.3,
-    scanned_files_count: 42,
-    duration_ms: 1420,
+    total_assets: 0,
+    critical: 0,
+    high: 0,
+    medium: 0,
+    safe: 0,
+    quantum_readiness_pct: 0,
+    scanned_files_count: 0,
+    duration_ms: 0,
   },
   mosca: {
-    x: 15,
-    y: 4,
+    x: 0,
+    y: 0,
     z: 7,
-    status: "CRITICAL",
-    message: "X+Y (19) > Z (7) — Active HNDL Threat Detected: Attackers recording encrypted traffic now can decrypt it before data expiration.",
+    status: "SAFE",
+    message: "No scan currently loaded. Upload a codebase archive to begin cryptographic discovery.",
     breach_year: new Date().getFullYear() + 7,
-    safety_margin_years: -12,
+    safety_margin_years: 7,
   },
-  assets: [
+  assets: [],
+};
+
+export const mockAssets = [
     {
       id: "asset-001",
       algorithm: "RSA-2048",

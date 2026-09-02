@@ -37,45 +37,72 @@ export default function DashboardPage() {
 
   return (
     <div className="space-y-5">
-      {/* Top Banner: Mosca Theorem HNDL Active Alert */}
-      <div className="nexus-card p-5 border-[#E8E2D5] bg-white flex flex-col md:flex-row items-start md:items-center justify-between gap-4 shadow-2xs relative overflow-hidden">
-        {/* Holographic Security Shield & Padlock Visual */}
-        <ThreatBannerVisual />
-
-        {/* Left Side Content */}
-        <div className="flex items-start gap-4 relative z-10 max-w-2xl">
-          <div className="w-10 h-10 rounded-full bg-[#FAF7F2] border border-[#E8E2D5] flex items-center justify-center text-[#1C1917] shrink-0 shadow-2xs">
-            <ShieldAlert className="w-5 h-5 stroke-[1.75]" />
-          </div>
-          <div>
-            <div className="flex items-center gap-2 flex-wrap text-xs">
-              <span className="text-[10px] font-bold uppercase tracking-wider text-[#991B1B] flex items-center gap-1.5">
-                <span className="w-1.5 h-1.5 rounded-full bg-[#DC2626]" />
-                ACTIVE HNDL THREAT DETECTED
-              </span>
-              <span className="text-[#A8A29E]">•</span>
-              <span className="text-xs text-[#57534E] font-mono">
-                X ({mosca.x}y) + Y ({mosca.y}y) &gt; Z ({mosca.z}y)
-              </span>
+      {/* Top Banner: Mosca Theorem HNDL Active Alert or System Ready */}
+      {totalAssets === 0 ? (
+        <div className="nexus-card p-6 border-[#E8E2D5] bg-white flex flex-col sm:flex-row items-center justify-between gap-4 shadow-2xs">
+          <div className="flex items-center gap-4">
+            <div className="w-12 h-12 rounded-full bg-[#FAF7F2] border border-[#E8E2D5] flex items-center justify-center text-[#1C1917] shrink-0 shadow-2xs">
+              <ShieldAlert className="w-6 h-6 text-[#8B5E34] stroke-[1.75]" />
             </div>
-            <h2 className="text-base md:text-lg font-bold text-[#1C1917] mt-1 tracking-tight">
-              {breachYears.toFixed(0)}-Year Breach Window: Encrypted Traffic Decryptable by ~{qDayYear}
-            </h2>
-            <p className="text-xs text-[#57534E] mt-1 leading-relaxed">
-              Adversaries harvesting communications today can decrypt stored payloads upon Q-Day. Immediate migration to NIST FIPS 203/204 is advised.
-            </p>
+            <div>
+              <div className="flex items-center gap-2 text-xs">
+                <span className="text-[10px] font-bold uppercase tracking-wider text-[#8B5E34] flex items-center gap-1.5">
+                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
+                  SYSTEM READY FOR DISCOVERY
+                </span>
+              </div>
+              <h2 className="text-base font-bold text-[#1C1917] mt-0.5">Awaiting Codebase Archive</h2>
+              <p className="text-xs text-[#57534E] mt-0.5">
+                No active scan loaded. Upload a repository ZIP archive to discover cryptographic primitives, calculate QARS scores, and evaluate Mosca's inequality.
+              </p>
+            </div>
           </div>
+          <Link href="/scan" className="btn-primary shrink-0">
+            <Zap className="w-4 h-4" />
+            Scan Codebase
+            <ArrowRight className="w-3.5 h-3.5" />
+          </Link>
         </div>
+      ) : (
+        <div className="nexus-card p-5 border-[#E8E2D5] bg-white flex flex-col md:flex-row items-start md:items-center justify-between gap-4 shadow-2xs relative overflow-hidden">
+          {/* Holographic Security Shield & Padlock Visual */}
+          <ThreatBannerVisual />
 
-        {/* Right Side CTA Button */}
-        <Link
-          href="/mosca"
-          className="btn-secondary shrink-0 relative z-10 shadow-2xs"
-        >
-          <span>Mosca Simulator</span>
-          <ArrowRight className="w-3.5 h-3.5" />
-        </Link>
-      </div>
+          {/* Left Side Content */}
+          <div className="flex items-start gap-4 relative z-10 max-w-2xl">
+            <div className="w-10 h-10 rounded-full bg-[#FAF7F2] border border-[#E8E2D5] flex items-center justify-center text-[#1C1917] shrink-0 shadow-2xs">
+              <ShieldAlert className="w-5 h-5 stroke-[1.75]" />
+            </div>
+            <div>
+              <div className="flex items-center gap-2 flex-wrap text-xs">
+                <span className="text-[10px] font-bold uppercase tracking-wider text-[#991B1B] flex items-center gap-1.5">
+                  <span className="w-1.5 h-1.5 rounded-full bg-[#DC2626]" />
+                  ACTIVE HNDL THREAT DETECTED
+                </span>
+                <span className="text-[#A8A29E]">•</span>
+                <span className="text-xs text-[#57534E] font-mono">
+                  X ({mosca.x}y) + Y ({mosca.y}y) &gt; Z ({mosca.z}y)
+                </span>
+              </div>
+              <h2 className="text-base md:text-lg font-bold text-[#1C1917] mt-1 tracking-tight">
+                {breachYears.toFixed(0)}-Year Breach Window: Encrypted Traffic Decryptable by ~{qDayYear}
+              </h2>
+              <p className="text-xs text-[#57534E] mt-1 leading-relaxed">
+                Adversaries harvesting communications today can decrypt stored payloads upon Q-Day. Immediate migration to NIST FIPS 203/204 is advised.
+              </p>
+            </div>
+          </div>
+
+          {/* Right Side CTA Button */}
+          <Link
+            href="/mosca"
+            className="btn-secondary shrink-0 relative z-10 shadow-2xs"
+          >
+            <span>Mosca Simulator</span>
+            <ArrowRight className="w-3.5 h-3.5" />
+          </Link>
+        </div>
+      )}
 
       {/* Main Executive Metrics Grid: 5 Analytical Instruments */}
       <div className="grid grid-cols-1 lg:grid-cols-5 gap-4 items-stretch">
@@ -251,41 +278,58 @@ export default function DashboardPage() {
               </tr>
             </thead>
             <tbody className="divide-y divide-[#E8E2D5]/80 text-[#57534E]">
-              {criticalAssets.slice(0, 5).map((asset) => (
-                <tr
-                  key={asset.id}
-                  className="hover:bg-[#FAF7F2]/60 transition-colors"
-                >
-                  <td className="py-3 px-4">
-                    <div className="flex items-center gap-2">
-                      <span className="font-bold text-[#1C1917] font-mono">{asset.algorithm}</span>
-                      <StatusBadge status={asset.quantum_status} size="sm" />
-                    </div>
-                  </td>
-                  <td className="py-3 px-4 text-[#57534E] font-mono text-[11px]">
-                    <div className="flex items-center gap-1.5">
-                      <FileCode className="w-3.5 h-3.5 text-[#A8A29E] shrink-0" />
-                      <span className="text-[#1C1917]">{asset.file}</span>
-                      {asset.line > 0 && <span className="text-[#78716C]">:{asset.line}</span>}
-                    </div>
-                  </td>
-                  <td className="py-3 px-4">
-                    <span className="font-bold text-[#1C1917] font-mono">{asset.qars_score}/100</span>
-                  </td>
-                  <td className="py-3 px-4 text-[#1C1917] font-semibold font-mono text-xs">
-                    {asset.replacement}
-                  </td>
-                  <td className="py-3 px-4 text-right">
-                    <Link
-                      href={`/remediation?asset_id=${asset.id}`}
-                      className="btn-pill-light text-[11px] py-1 px-3"
-                    >
-                      <Sparkles className="w-3 h-3 text-[#C28E58]" />
-                      <span>Remediate</span>
-                    </Link>
+              {criticalAssets.length === 0 ? (
+                <tr>
+                  <td colSpan={5} className="py-8 text-center text-xs text-[#78716C]">
+                    No cryptographic vulnerabilities currently detected. Upload a codebase archive on the{" "}
+                    <Link href="/scan" className="text-[#8B5E34] underline font-bold">
+                      Scanner Page
+                    </Link>{" "}
+                    to run analysis.
                   </td>
                 </tr>
-              ))}
+              ) : (
+                criticalAssets.slice(0, 5).map((asset) => {
+                  const displayPath = asset.file
+                    ? asset.file.replace(/^.*\/extracted\/[^\/]+\//, "")
+                    : "Unknown File";
+                  return (
+                    <tr
+                      key={asset.id}
+                      className="hover:bg-[#FAF7F2]/60 transition-colors"
+                    >
+                      <td className="py-3 px-4">
+                        <div className="flex items-center gap-2">
+                          <span className="font-bold text-[#1C1917] font-mono">{asset.algorithm}</span>
+                          <StatusBadge status={asset.quantum_status} size="sm" />
+                        </div>
+                      </td>
+                      <td className="py-3 px-4 text-[#57534E] font-mono text-[11px]">
+                        <div className="flex items-center gap-1.5">
+                          <FileCode className="w-3.5 h-3.5 text-[#A8A29E] shrink-0" />
+                          <span className="text-[#1C1917]">{displayPath}</span>
+                          {asset.line > 0 && <span className="text-[#78716C]">:{asset.line}</span>}
+                        </div>
+                      </td>
+                      <td className="py-3 px-4">
+                        <span className="font-bold text-[#1C1917] font-mono">{asset.qars_score}/100</span>
+                      </td>
+                      <td className="py-3 px-4 text-[#1C1917] font-semibold font-mono text-xs">
+                        {asset.replacement}
+                      </td>
+                      <td className="py-3 px-4 text-right">
+                        <Link
+                          href={`/remediation?asset_id=${asset.id}`}
+                          className="btn-pill-light text-[11px] py-1 px-3"
+                        >
+                          <Sparkles className="w-3 h-3 text-[#C28E58]" />
+                          <span>Remediate</span>
+                        </Link>
+                      </td>
+                    </tr>
+                  );
+                })
+              )}
             </tbody>
           </table>
         </div>
