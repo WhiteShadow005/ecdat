@@ -12,7 +12,6 @@ import {
   Sparkles,
   FileSpreadsheet,
   Shield,
-  Search,
   ExternalLink,
   ChevronRight,
 } from "lucide-react";
@@ -86,12 +85,6 @@ export function AppShell({ children }: { children: React.ReactNode }) {
 
         {/* Right Header Controls & Status */}
         <div className="flex items-center gap-2.5 text-xs">
-          {/* Quick Search Input */}
-          <div className="hidden md:flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white border border-[#E8E2D5] text-[#57534E] text-xs w-64 focus-within:border-[#C28E58] transition-colors shadow-2xs">
-            <Search className="w-3.5 h-3.5 text-[#A8A29E]" />
-            <span className="flex-1 text-[11px] text-[#78716C]">Search assets, ciphers...</span>
-          </div>
-
           {/* Evaluator Pill */}
           <div className="hidden lg:flex items-center gap-1 px-3.5 py-1.5 rounded-full bg-white border border-[#E8E2D5] text-[#57534E] font-medium text-[11px] shadow-2xs">
             <span>Evaluator:</span>
