@@ -7,13 +7,22 @@ Improvements over stub:
   - Passes migration recommendations table data to template
   - Graceful fallback if WeasyPrint not installed (returns HTML with warning)
 
-Owner: Ojasya Rajput
+Owner: Aujasya Rajput
 """
 
 import io
+import os
+import sys
 from pathlib import Path
 from typing import List, Optional
 from ..models import CryptoAsset, ScanResult, ScanSummary
+
+# On macOS, ensure brew installed libraries (pango, cairo, gobject) are found by WeasyPrint
+if sys.platform == "darwin":
+    for p in ["/opt/homebrew/lib", "/usr/local/lib"]:
+        if os.path.exists(p) and p not in os.environ.get("DYLD_FALLBACK_LIBRARY_PATH", ""):
+            cur = os.environ.get("DYLD_FALLBACK_LIBRARY_PATH", "")
+            os.environ["DYLD_FALLBACK_LIBRARY_PATH"] = f"{p}:{cur}".rstrip(":")
 
 
 TEMPLATE_PATH = Path(__file__).parent.parent / "templates" / "report.html"
@@ -156,19 +165,19 @@ def _simple_html_fallback(result: ScanResult) -> str:
 
 
 def build_pdf_bytes(result: ScanResult) -> bytes:
-    """Render scan result to PDF bytes. Falls back to HTML bytes if WeasyPrint absent."""
+    """Render scan result to PDF bytes. Falls back to HTML bytes if WeasyPrint absent or fails."""
     html_content = _render_html(result)
 
     try:
         import weasyprint
         doc = weasyprint.HTML(string=html_content)
         return doc.write_pdf()
-    except ImportError:
-        # Return HTML with a visible banner so the caller knows it's not a PDF
+    except (ImportError, OSError, Exception) as e:
+        # Return HTML with a visible banner so the caller knows it's an HTML fallback
         banner = (
-            "<div style='background:#fee2e2;border:2px solid red;padding:12px;font-family:sans-serif;'>"
-            "<strong>⚠ WeasyPrint not installed.</strong> This is an HTML preview. "
-            "Install with: <code>pip install weasyprint</code></div>"
+            f"<div style='background:#fee2e2;border:2px solid red;padding:12px;font-family:sans-serif;'>"
+            f"<strong>⚠ WeasyPrint PDF generation notice ({type(e).__name__}):</strong> "
+            f"Serving HTML report view. To enable native PDF compilation, install weasyprint and pango.</div>"
         )
         return (banner + html_content).encode("utf-8")
 

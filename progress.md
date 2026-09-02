@@ -110,7 +110,7 @@ curl -X POST http://localhost:8000/api/scan -F "file=@/tmp/demo.zip" -F "data_ca
 - [ ] Add scan caching so `/api/export/cbom?scan_id=` works after a scan
 - [ ] Add the `scan_id` response to a temporary in-memory store
 
-### Ojasya — ready to build on top
+### Aujasya — ready to build on top
 - [ ] Install: `pip install weasyprint jinja2 google-generativeai`
 - [ ] Add `GEMINI_API_KEY` to `.env`
 - [ ] Test `/api/remediate` with a real Gemini key

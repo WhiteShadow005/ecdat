@@ -14,7 +14,7 @@ We are building a tool that scans codebases, config files, certificates, and Doc
 
 **Your Primary Responsibilities:**
 1. **The Synthetic Demo Testbench:** Build the realistic enterprise mock repository that we will upload during the live demo.
-2. **QA & Edge Case Testing:** Stress-test Shaurya's backend, Ojasya's CBOM exporter, and Arnav's frontend.
+2. **QA & Edge Case Testing:** Stress-test Shaurya's backend, Aujasya's CBOM exporter, and Arnav's frontend.
 3. **Environment & Utility Support:** Help team members with Git conflicts, package installations, dependencies, and local dev environments.
 4. **CBOM Schema Validation:** Verify that our exported JSON strictly matches the official CycloneDX 1.6 specification.
 
@@ -73,7 +73,7 @@ We are building a tool that scans codebases, config files, certificates, and Doc
   - Install schema validator: `pip install jsonschema`
   - Download official CycloneDX 1.6 JSON schema from https://cyclonedx.org/schema/bom-1.6.schema.json
   - Write a validator script: `python tests/validate_cbom_schema.py`
-  - Ensure Ojasya's exported CBOM passes validation with 0 errors.
+  - Ensure Aujasya's exported CBOM passes validation with 0 errors.
 
 ---
 
@@ -100,7 +100,7 @@ We are building a tool that scans codebases, config files, certificates, and Doc
   - Open Mosca Timeline → Move sliders → Check real-time calculation
   - Click AI Fix → Verify diff viewer displays cleanly without layout breaks
   - Click Download CBOM, PDF, and CSV → Verify valid files download to disk
-- [ ] **Log and triage bugs:** Keep a simple shared bug list in WhatsApp/Notion and help Shaurya, Ojasya, and Arnav squash them immediately.
+- [ ] **Log and triage bugs:** Keep a simple shared bug list in WhatsApp/Notion and help Shaurya, Aujasya, and Arnav squash them immediately.
 
 ---
 

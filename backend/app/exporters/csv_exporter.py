@@ -7,7 +7,7 @@ Improvements over stub:
   - Extra columns: Source Scanner, Exposure Context
   - Clean line-break handling in snippet / notes
 
-Owner: Ojasya Rajput
+Owner: Aujasya Rajput
 """
 
 import csv
@@ -22,12 +22,12 @@ CSV_HEADERS = [
     "Asset ID",
     "Algorithm",
     "Type",
-    "Primitive",
-    "Key Size (bits)",
     "Quantum Status",
     "QARS Score",
     "Criticality",
     "Mosca Status",
+    "Key Size (bits)",
+    "Primitive",
     "Language",
     "Library Used",
     "Source Scanner",

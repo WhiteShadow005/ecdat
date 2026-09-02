@@ -9,7 +9,7 @@ Improvements over stub:
   - Proper NIST quantum security levels (0 / 1 / 3 / 5)
   - Reads full ScanResult from shared cache (includes Mosca metadata)
 
-Owner: Ojasya Rajput
+Owner: Aujasya Rajput
 """
 
 import uuid
@@ -22,20 +22,20 @@ from .. import cache as scan_cache
 
 # ─── NIST FIPS documentation references per algorithm family ──────────────────
 _NIST_REFS = {
-    "RSA":          {"url": "https://doi.org/10.6028/NIST.FIPS.186-5",  "comment": "FIPS 186-5 — Digital Signature Standard"},
-    "ECDSA":        {"url": "https://doi.org/10.6028/NIST.FIPS.186-5",  "comment": "FIPS 186-5 — Elliptic Curve DSS"},
-    "ECDH":         {"url": "https://doi.org/10.6028/NIST.SP.800-56Ar3","comment": "SP 800-56A — ECC Key Agreement"},
-    "Diffie-Hellman":{"url": "https://doi.org/10.6028/NIST.SP.800-56Ar3","comment": "SP 800-56A — Key Agreement"},
-    "AES":          {"url": "https://doi.org/10.6028/NIST.FIPS.197-upd1","comment": "FIPS 197 — Advanced Encryption Standard"},
-    "MD5":          {"url": "https://doi.org/10.6028/NIST.SP.800-131Ar2","comment": "SP 800-131A Rev2 — MD5 deprecated"},
-    "SHA-1":        {"url": "https://doi.org/10.6028/NIST.SP.800-131Ar2","comment": "SP 800-131A Rev2 — SHA-1 deprecated"},
-    "SHA-256":      {"url": "https://doi.org/10.6028/NIST.FIPS.180-4",  "comment": "FIPS 180-4 — Secure Hash Standard"},
-    "DES":          {"url": "https://doi.org/10.6028/NIST.SP.800-131Ar2","comment": "SP 800-131A Rev2 — DES withdrawn"},
-    "3DES":         {"url": "https://doi.org/10.6028/NIST.SP.800-131Ar2","comment": "SP 800-131A Rev2 — 3DES deprecated 2023"},
+    "RSA":          {"url": "https://doi.org/10.6028/NIST.FIPS.186-5",  "comment": "NIST FIPS 186-5 — Digital Signature Standard"},
+    "ECDSA":        {"url": "https://doi.org/10.6028/NIST.FIPS.186-5",  "comment": "NIST FIPS 186-5 — Elliptic Curve DSS"},
+    "ECDH":         {"url": "https://doi.org/10.6028/NIST.SP.800-56Ar3","comment": "NIST SP 800-56A — ECC Key Agreement"},
+    "Diffie-Hellman":{"url": "https://doi.org/10.6028/NIST.SP.800-56Ar3","comment": "NIST SP 800-56A — Key Agreement"},
+    "AES":          {"url": "https://doi.org/10.6028/NIST.FIPS.197-upd1","comment": "NIST FIPS 197 — Advanced Encryption Standard"},
+    "MD5":          {"url": "https://doi.org/10.6028/NIST.SP.800-131Ar2","comment": "NIST SP 800-131A Rev2 — MD5 deprecated"},
+    "SHA-1":        {"url": "https://doi.org/10.6028/NIST.SP.800-131Ar2","comment": "NIST SP 800-131A Rev2 — SHA-1 deprecated"},
+    "SHA-256":      {"url": "https://doi.org/10.6028/NIST.FIPS.180-4",  "comment": "NIST FIPS 180-4 — Secure Hash Standard"},
+    "DES":          {"url": "https://doi.org/10.6028/NIST.SP.800-131Ar2","comment": "NIST SP 800-131A Rev2 — DES withdrawn"},
+    "3DES":         {"url": "https://doi.org/10.6028/NIST.SP.800-131Ar2","comment": "NIST SP 800-131A Rev2 — 3DES deprecated 2023"},
     "RC4":          {"url": "https://www.rfc-editor.org/rfc/rfc7465",    "comment": "RFC 7465 — RC4 prohibited in TLS"},
-    "ML-KEM-768":   {"url": "https://doi.org/10.6028/NIST.FIPS.203",    "comment": "FIPS 203 — ML-KEM (Kyber)"},
-    "ML-DSA-65":    {"url": "https://doi.org/10.6028/NIST.FIPS.204",    "comment": "FIPS 204 — ML-DSA (Dilithium)"},
-    "SLH-DSA":      {"url": "https://doi.org/10.6028/NIST.FIPS.205",    "comment": "FIPS 205 — SLH-DSA (SPHINCS+)"},
+    "ML-KEM-768":   {"url": "https://doi.org/10.6028/NIST.FIPS.203",    "comment": "NIST FIPS 203 — ML-KEM (Kyber)"},
+    "ML-DSA-65":    {"url": "https://doi.org/10.6028/NIST.FIPS.204",    "comment": "NIST FIPS 204 — ML-DSA (Dilithium)"},
+    "SLH-DSA":      {"url": "https://doi.org/10.6028/NIST.FIPS.205",    "comment": "NIST FIPS 205 — SLH-DSA (SPHINCS+)"},
 }
 
 # Maps algorithm primitive labels to CycloneDX primitive values
@@ -86,9 +86,10 @@ def _asset_to_component(asset: CryptoAsset) -> dict:
             "assetType": asset.type or "algorithm",
         },
         "properties": [
-            {"name": "ecdat:quantumStatus",    "value": asset.quantum_status},
-            {"name": "ecdat:qarsRiskScore",    "value": str(asset.qars_score)},
-            {"name": "ecdat:criticality",      "value": asset.criticality},
+            {"name": "ecdat:quantumStatus",        "value": asset.quantum_status},
+            {"name": "ecdat:vulnerabilityStatus",  "value": asset.quantum_status},
+            {"name": "ecdat:qarsRiskScore",        "value": str(asset.qars_score)},
+            {"name": "ecdat:criticality",          "value": asset.criticality},
         ],
     }
 

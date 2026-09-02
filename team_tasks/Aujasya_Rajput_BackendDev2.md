@@ -1,4 +1,4 @@
-# 👤 Ojasya Rajput — Backend Dev 2 (Exports + AI + Reports)
+# 👤 Aujasya Rajput — Backend Dev 2 (Exports + AI + Reports)
 
 ## Your Role
 You handle everything that comes **after** the scanner finds the vulnerabilities. You build the export formats (CBOM JSON, CSV), the AI-powered features (semantic detection + code remediator), and the PDF report that NTRO judges will see. Your work is what makes this feel like a professional enterprise tool.
@@ -144,18 +144,18 @@ Every other CBOM tool on Earth says "you're using RSA-2048, that's bad." And the
 
 ## Git Workflow
 ```bash
-# Your branch: dev/ojasya
-git checkout -b dev/ojasya
+# Your branch: dev/aujasya (or dev/ojasya)
+git checkout -b dev/aujasya
 
 # Commit often (every 30–60 mins)
 git add .
 git commit -m "feat: add CycloneDX 1.6 CBOM exporter"
-git push origin dev/ojasya
+git push origin dev/aujasya
 
 # When done: merge to main
 git checkout main
 git pull origin main
-git merge dev/ojasya
+git merge dev/aujasya
 git push origin main
 ```
 

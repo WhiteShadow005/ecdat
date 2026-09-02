@@ -9,7 +9,7 @@ Improvements over stub:
   - Cleaner prompt with explicit output format instruction
   - Better markdown fence stripping
 
-Owner: Ojasya Rajput
+Owner: Aujasya Rajput
 """
 
 import json
@@ -27,8 +27,12 @@ def register_scan(scan_id: str, assets: list):
     """Store scan results for later remediation requests (legacy entry point)."""
     _scan_cache[scan_id] = assets
 
-    # Also mirror into the shared cache if a full ScanResult is available
-    # (main.py currently passes only the assets list, so this is a best-effort)
+    # Also mirror into the shared cache so all exporters have access
+    try:
+        from .. import cache as scan_cache
+        scan_cache.save_assets(scan_id, assets)
+    except Exception:
+        pass
 
 
 def _get_asset(asset_id: str, scan_id: str) -> Optional[CryptoAsset]:

@@ -246,11 +246,11 @@ def pqc_proof():
         return {"error": str(e), "message": "PQC demo failed — is liboqs installed?"}
 
 
-# ─── Export Endpoints (stub — Ojasya implements these) ────────────────────────
+# ─── Export Endpoints (Owner: Aujasya) ───────────────────────────────────────
 
 @app.get("/api/export/cbom", tags=["Export"])
 def export_cbom(scan_id: str = Query(...)):
-    """Export scan results as CycloneDX 1.6 CBOM JSON. (Owner: Ojasya)"""
+    """Export scan results as CycloneDX 1.6 CBOM JSON. (Owner: Aujasya)"""
     try:
         from .exporters.cbom_exporter import export_to_cbom
         return export_to_cbom(scan_id)
@@ -260,7 +260,7 @@ def export_cbom(scan_id: str = Query(...)):
 
 @app.get("/api/export/csv", tags=["Export"])
 def export_csv(scan_id: str = Query(...)):
-    """Export scan results as CSV. (Owner: Ojasya)"""
+    """Export scan results as CSV. (Owner: Aujasya)"""
     try:
         from .exporters.csv_exporter import export_to_csv
         return export_to_csv(scan_id)
@@ -270,7 +270,7 @@ def export_csv(scan_id: str = Query(...)):
 
 @app.get("/api/export/pdf", tags=["Export"])
 def export_pdf(scan_id: str = Query(...)):
-    """Export scan results as PDF audit report. (Owner: Ojasya)"""
+    """Export scan results as PDF audit report. (Owner: Aujasya)"""
     try:
         from .exporters.pdf_report import export_to_pdf
         return export_to_pdf(scan_id)
