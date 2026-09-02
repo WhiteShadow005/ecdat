@@ -52,6 +52,15 @@ def export_to_csv(scan_id: str) -> StreamingResponse:
     from ..ai.code_remediator import _scan_cache
     assets = _scan_cache.get(scan_id, [])
     if not assets:
+        try:
+            from ..db import get_scan
+            scan_rec = get_scan(scan_id)
+            if scan_rec:
+                assets = scan_rec.assets
+        except Exception:
+            pass
+
+    if not assets:
         from fastapi import HTTPException
         raise HTTPException(status_code=404, detail=f"No scan found with ID: {scan_id}")
 

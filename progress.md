@@ -1,7 +1,7 @@
 # 🚀 ECDAT Build Progress — Shaurya's Tasks
-**Last Updated:** 2026-09-01 08:27 IST  
+**Last Updated:** 2026-09-02 22:45 IST  
 **Branch:** `dev/shaurya`
-**Test Results:** ✅ **48/48 PASSING** (0 warnings) | ✅ **Live E2E scan verified**
+**Test Results:** ✅ **57/57 PASSING** (0 warnings) | ✅ **Live E2E scan verified**
 
 ---
 
@@ -13,15 +13,17 @@
 | **Models** | `models.py` | ✅ Done | CryptoAsset, ScanResult, MoscaResult, TLSProbeResult, RemediationResult, PQCProofResult |
 | **Config** | `config.py` | ✅ Done | All env vars, QARS weights, data category presets |
 | **Scanner** | `python_scanner.py` | ✅ Done | Python AST scanner — detects RSA/AES/MD5/SHA-1/SHA256/ECDSA/DH/RC4/DES/JWT |
+| **Scanner** | `java_scanner.py` | ✅ Done | Java Cryptography scanner — javax.crypto & java.security (RSA, AES, 3DES, MD5, ECDSA) |
 | **Scanner** | `cert_parser.py` | ✅ Done | X.509 .pem/.crt/.cer/.der parser — RSA/ECDSA/DSA certs |
 | **Scanner** | `config_parser.py` | ✅ Done | Nginx/SSH/Apache config scanner — TLS versions, cipher suites, KexAlgorithms |
 | **Scanner** | `tls_probe.py` | ✅ Done | Live TLS handshake prober for active hosts |
+| **Database** | `db.py` | ✅ Done | SQLite persistence (`ecdat.db`) — scan history, CBOM/CSV export lookups |
 | **Engine** | `inventory.py` | ✅ Done | Dedup + normalize + sequential ID assignment |
 | **Engine** | `risk_classifier.py` | ✅ Done | BROKEN/WEAKENED/SAFE via crypto_rules.json with fixed prefix matching |
 | **Engine** | `qars.py` | ✅ Done | QARS 0–100 composite score |
 | **Engine** | `mosca.py` | ✅ Done | X+Y>Z theorem with data category presets |
 | **Engine** | `recommender.py` | ✅ Done | NIST FIPS 203/204/205 migration guidance per algorithm |
-| **API** | `main.py` (FastAPI) | ✅ Done | `/api/scan`, `/api/health`, `/api/probe`, `/api/remediate`, `/api/demo/pqc`, export stubs |
+| **API** | `main.py` (FastAPI) | ✅ Done | `/api/scan`, `/api/scans`, `/api/scans/{id}`, `/api/health`, `/api/probe`, `/api/remediate`, `/api/export/*` |
 | **Exporter** | `cbom_exporter.py` | ✅ Done | Full CycloneDX 1.6 CBOM JSON (ECMA-424) |
 | **Exporter** | `csv_exporter.py` | ✅ Done | Flat CSV with all asset fields |
 | **Exporter** | `pdf_report.py` | ✅ Done | WeasyPrint + Jinja2 PDF report |
@@ -29,14 +31,15 @@
 | **AI** | `semantic_analyzer.py` | ✅ Done | Gemini-based hidden crypto detection (USP 1) |
 | **AI** | `code_remediator.py` | ✅ Done | Gemini Git diff generator (USP 2) with template fallback |
 | **AI** | `pqc_proof.py` | ✅ Done | liboqs ML-KEM-768 + ML-DSA-65 live demo |
+| **Demo Repo** | `PaymentGateway.java` | ✅ Done | Java RSA-2048, AES-CBC, 3DES, MD5 (BROKEN) |
+| **Demo Repo** | `TransactionSigner.java` | ✅ Done | Java ECDSA-secp256r1 signing (BROKEN) |
 | **Demo Repo** | `jwt_signer.py` | ✅ Done | RSA-2048 JWT signing (BROKEN) |
 | **Demo Repo** | `password_hasher.py` | ✅ Done | MD5 + SHA-1 password hashing (BROKEN) |
 | **Demo Repo** | `file_encryptor.py` | ✅ Done | AES-128-CBC + 3DES + RC4 encryption (WEAKENED/BROKEN) |
 | **Demo Repo** | `crypto_wrapper.py` | ✅ Done | Hidden MD5 in classes (AI USP1 target) |
 | **Demo Repo** | `nginx.conf` | ✅ Done | TLSv1.0, RC4, 3DES, AES-128 cipher suite weaknesses |
 | **Demo Repo** | `sshd_config` | ✅ Done | DH-Group1-SHA1, ssh-rsa, weak KexAlgorithms |
-| **Tests** | `test_scanners.py` | ✅ Done | 14 test cases — all passing |
-| **Tests** | `test_engines.py` | ✅ Done | 29 test cases — all passing |
+| **Tests** | All 6 test suites | ✅ Done | 57 test cases — 100% passing (0.26s) |
 | **Deps** | pip install | ✅ Done | fastapi, uvicorn, cryptography, python-multipart, aiofiles, python-dotenv, jsonschema, pytest |
 | **Packages** | `__init__.py` files | ✅ Done | All 5 packages initialized |
 
