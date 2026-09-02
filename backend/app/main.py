@@ -349,8 +349,15 @@ def get_scan_history(limit: int = Query(50, ge=1, le=200, description="Max numbe
 
 
 @app.get("/api/scans/{scan_id}", response_model=ScanResult, tags=["History"])
+@app.get("/api/scan/{scan_id}", response_model=ScanResult, tags=["History"])
 def get_scan_by_id(scan_id: str):
-    """Retrieve full details of a previous scan by ID."""
+    """Retrieve full details of a previous scan by ID (or 'latest' for the most recent scan)."""
+    if scan_id == "latest":
+        recent = list_scans(limit=1)
+        if not recent:
+            raise HTTPException(status_code=404, detail="No scans found in history")
+        scan_id = recent[0]["scan_id"]
+
     scan = get_scan(scan_id)
     if not scan:
         raise HTTPException(status_code=404, detail=f"Scan with ID '{scan_id}' not found")
