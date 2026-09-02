@@ -58,22 +58,60 @@ def health_check():
     return HealthResponse()
 
 
+from enum import Enum
+
+
+class DataCategory(str, Enum):
+    defense = "defense"
+    financial = "financial"
+    health = "health"
+    pii = "pii"
+    infrastructure = "infrastructure"
+    session = "session"
+
+
+class ExposureContext(str, Enum):
+    public_api = "public_api"
+    internal = "internal"
+    local = "local"
+
+
+def _parse_optional_float(val) -> Optional[float]:
+    """Parse float from form input, treating '', 0, or None as None to let category defaults apply."""
+    if val is None:
+        return None
+    if isinstance(val, (int, float)):
+        return float(val) if float(val) > 0 else None
+    s = str(val).strip()
+    if not s or s == "string":
+        return None
+    try:
+        f = float(s)
+        return f if f > 0 else None
+    except ValueError:
+        return None
+
+
 # ─── Main Scan Endpoint ────────────────────────────────────────────────────────
 
 @app.post("/api/scan", response_model=ScanResult, tags=["Scan"])
 async def scan_upload(
     file: UploadFile = File(..., description="ZIP archive of the target codebase/repo"),
-    x_years: Optional[float] = Form(None, description="Data shelf life (years). Overrides data_category."),
-    y_years: Optional[float] = Form(None, description="Migration time estimate (years)."),
-    z_years: float = Form(7.0, description="Q-Day estimate (years, default=7)"),
-    data_category: Optional[str] = Form(None, description="'defense','financial','health','pii','session','infrastructure'"),
-    exposure_context: str = Form("internal", description="'public_api','internal','local'"),
+    x_years: Optional[str] = Form(None, description="Data shelf life (years). Leave empty to use data_category preset."),
+    y_years: Optional[str] = Form(None, description="Migration time estimate (years). Leave empty for default."),
+    z_years: Optional[str] = Form("7", description="Q-Day estimate (years, default=7)"),
+    data_category: Optional[DataCategory] = Form(DataCategory.financial, description="Preset category for data retention & sensitivity"),
+    exposure_context: ExposureContext = Form(ExposureContext.internal, description="Network exposure level of the asset"),
 ):
     """
     Main scan endpoint. Upload a ZIP file containing source code, certificates,
     and/or config files. Returns a complete ScanResult with all crypto assets,
     QARS scores, and Mosca analysis.
     """
+    parsed_x = _parse_optional_float(x_years)
+    parsed_y = _parse_optional_float(y_years)
+    parsed_z = _parse_optional_float(z_years) or 7.0
+
     # ─── 1. Save uploaded ZIP ──────────────────────────────────────────────────
     if not file.filename or not file.filename.endswith(".zip"):
         raise HTTPException(status_code=400, detail="Only .zip files are accepted")
@@ -117,19 +155,22 @@ async def scan_upload(
         inventory = classify_inventory(inventory)
 
         # ─── 6. Mosca Theorem Evaluation ──────────────────────────────────────
+        cat_str = data_category.value if isinstance(data_category, DataCategory) else (data_category or "financial")
+        exp_str = exposure_context.value if isinstance(exposure_context, ExposureContext) else (exposure_context or "internal")
+
         mosca = evaluate_mosca(
-            x_years=x_years,
-            y_years=y_years,
-            z_years=z_years,
-            data_category=data_category,
+            x_years=parsed_x,
+            y_years=parsed_y,
+            z_years=parsed_z,
+            data_category=cat_str,
         )
 
         # ─── 7. QARS Scoring ──────────────────────────────────────────────────
         inventory = score_inventory(
             inventory,
             mosca=mosca,
-            data_category=data_category or "unknown",
-            exposure_context=exposure_context,
+            data_category=cat_str,
+            exposure_context=exp_str,
         )
 
         # ─── 8. Assign Criticality Tiers ──────────────────────────────────────
