@@ -21,8 +21,18 @@ def register_scan(scan_id: str, assets: list):
 
 
 def _get_asset(asset_id: str, scan_id: str) -> Optional[CryptoAsset]:
-    """Retrieve a specific asset from the scan cache."""
+    """Retrieve a specific asset from the scan cache or SQLite DB."""
     assets = _scan_cache.get(scan_id, [])
+    if not assets:
+        try:
+            from ..db import get_scan
+            scan_rec = get_scan(scan_id)
+            if scan_rec:
+                assets = scan_rec.assets
+                _scan_cache[scan_id] = assets
+        except Exception:
+            pass
+
     for a in assets:
         if a.id == asset_id:
             return a

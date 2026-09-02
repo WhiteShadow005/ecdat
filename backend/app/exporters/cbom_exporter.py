@@ -136,6 +136,17 @@ def export_to_cbom(scan_id: str) -> dict:
     """Export a stored scan as CycloneDX 1.6 CBOM JSON."""
     from ..ai.code_remediator import _scan_cache
     assets = _scan_cache.get(scan_id, [])
+    target_name = "unknown"
+    if not assets:
+        try:
+            from ..db import get_scan
+            scan_rec = get_scan(scan_id)
+            if scan_rec:
+                assets = scan_rec.assets
+                target_name = scan_rec.target_name
+        except Exception:
+            pass
+
     if not assets:
         return {"error": f"No scan found with ID: {scan_id}. Run /api/scan first."}
-    return build_cbom_json(assets, scan_id=scan_id)
+    return build_cbom_json(assets, target_name=target_name, scan_id=scan_id)

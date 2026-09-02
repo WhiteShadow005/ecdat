@@ -142,7 +142,7 @@
     {
       "id": "aes-128",
       "algorithm": "AES-128",
-      "variants": ["AES-128", "AES/CBC", "AES_128", "MODE_CBC", "MODE_ECB", "AES.MODE_CBC", "AES-128-CBC", "AES-128-GCM", "AES-128-ECB"],
+      "variants": ["AES-128", "AES", "AES/CBC", "AES_128", "MODE_CBC", "MODE_ECB", "AES.MODE_CBC", "AES-128-CBC", "AES-128-GCM", "AES-128-ECB"],
       "key_size": 128,
       "type": "symmetric",
       "primitive": "encryption",

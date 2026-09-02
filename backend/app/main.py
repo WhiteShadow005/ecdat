@@ -23,6 +23,7 @@ from .config import APP_VERSION, TEMP_DIR
 
 # Scanner imports
 from .scanners.python_scanner import scan_python_directory
+from .scanners.java_scanner import scan_java_directory
 from .scanners.cert_parser import scan_certs_in_directory
 from .scanners.config_parser import scan_configs_in_directory
 from .scanners.tls_probe import probe_tls
@@ -34,11 +35,19 @@ from .engines.qars import score_inventory
 from .engines.mosca import evaluate_mosca, apply_mosca_to_assets
 from .engines.recommender import enrich_with_recommendations
 
+# Database persistence
+from .db import init_db, save_scan, list_scans, get_scan, delete_scan
+
 app = FastAPI(
     title="ECDAT Backend",
     description="Enterprise Cryptographic Discovery & Analysis Tool — NTRO SIH26164",
     version=APP_VERSION,
 )
+
+# Initialize SQLite database on startup
+@app.on_event("startup")
+def on_startup():
+    init_db()
 
 # Allow frontend on localhost:3000
 app.add_middleware(
@@ -97,9 +106,9 @@ def _parse_optional_float(val) -> Optional[float]:
 @app.post("/api/scan", response_model=ScanResult, tags=["Scan"])
 async def scan_upload(
     file: UploadFile = File(..., description="ZIP archive of the target codebase/repo"),
-    x_years: Optional[str] = Form(None, description="Data shelf life (years). Leave empty to use data_category preset."),
-    y_years: Optional[str] = Form(None, description="Migration time estimate (years). Leave empty for default."),
-    z_years: Optional[str] = Form("7", description="Q-Day estimate (years, default=7)"),
+    x_years: Optional[float] = Form(None, description="Data shelf life (years). Leave empty to use data_category preset."),
+    y_years: Optional[float] = Form(None, description="Migration time estimate (years). Leave empty for default."),
+    z_years: float = Form(7.0, description="Q-Day estimate (years, default=7)"),
     data_category: Optional[DataCategory] = Form(DataCategory.financial, description="Preset category for data retention & sensitivity"),
     exposure_context: ExposureContext = Form(ExposureContext.internal, description="Network exposure level of the asset"),
 ):
@@ -108,9 +117,10 @@ async def scan_upload(
     and/or config files. Returns a complete ScanResult with all crypto assets,
     QARS scores, and Mosca analysis.
     """
-    parsed_x = _parse_optional_float(x_years)
-    parsed_y = _parse_optional_float(y_years)
-    parsed_z = _parse_optional_float(z_years) or 7.0
+    # Treat 0.0 as "not provided" — let data_category preset handle it
+    parsed_x = x_years if (x_years and x_years > 0) else None
+    parsed_y = y_years if (y_years and y_years > 0) else None
+    parsed_z = z_years if z_years > 0 else 7.0
 
     # ─── 1. Save uploaded ZIP ──────────────────────────────────────────────────
     if not file.filename or not file.filename.endswith(".zip"):
@@ -139,6 +149,10 @@ async def scan_upload(
         # Python AST scanner
         py_assets = scan_python_directory(str(extract_dir))
         raw_assets.extend(py_assets)
+
+        # Java Cryptography scanner
+        java_assets = scan_java_directory(str(extract_dir))
+        raw_assets.extend(java_assets)
 
         # X.509 Certificate parser
         cert_assets = scan_certs_in_directory(str(extract_dir))
@@ -192,8 +206,9 @@ async def scan_upload(
         safe_count = sum(1 for a in inventory if a.quantum_status == "SAFE")
         readiness_pct = round((safe_count / total * 100), 1) if total > 0 else 0.0
 
-        languages = list(set(a.language for a in inventory if a.language))
+        languages = sorted(list(set(a.language for a in inventory if a.language)))
         py_files = sum(1 for _ in extract_dir.rglob("*.py"))
+        java_files = sum(1 for _ in extract_dir.rglob("*.java"))
         cert_files = sum(1 for _ in extract_dir.rglob("*.pem")) + sum(1 for _ in extract_dir.rglob("*.crt"))
         conf_files = sum(1 for _ in extract_dir.rglob("*.conf"))
 
@@ -206,7 +221,7 @@ async def scan_upload(
             safe=counts["safe"],
             quantum_readiness_pct=readiness_pct,
             languages_scanned=languages,
-            files_scanned=py_files + cert_files + conf_files,
+            files_scanned=py_files + java_files + cert_files + conf_files,
         )
 
         # ─── 12. Build Final Result ────────────────────────────────────────────
@@ -217,12 +232,18 @@ async def scan_upload(
             assets=inventory,
         )
 
-        # Register in scan cache for exports and AI remediation
+        # Register in memory cache for immediate exports and AI remediation
         try:
             from .ai.code_remediator import register_scan
             register_scan(result.scan_id, result.assets)
         except Exception:
             pass
+
+        # Persist scan to SQLite database
+        try:
+            save_scan(result, data_category=cat_str, exposure_context=exp_str)
+        except Exception as db_err:
+            print(f"[WARN] Database persistence failed: {db_err}")
 
         return result
 
@@ -317,3 +338,29 @@ def export_pdf(scan_id: str = Query(...)):
         return export_to_pdf(scan_id)
     except Exception as e:
         raise HTTPException(status_code=501, detail=f"PDF exporter: {e}")
+
+
+# ─── Scan History / Persistence Endpoints ─────────────────────────────────────
+
+@app.get("/api/scans", tags=["History"])
+def get_scan_history(limit: int = Query(50, ge=1, le=200, description="Max number of scans to return")):
+    """List historical scan summaries stored in SQLite."""
+    return list_scans(limit=limit)
+
+
+@app.get("/api/scans/{scan_id}", response_model=ScanResult, tags=["History"])
+def get_scan_by_id(scan_id: str):
+    """Retrieve full details of a previous scan by ID."""
+    scan = get_scan(scan_id)
+    if not scan:
+        raise HTTPException(status_code=404, detail=f"Scan with ID '{scan_id}' not found")
+    return scan
+
+
+@app.delete("/api/scans/{scan_id}", tags=["History"])
+def delete_scan_by_id(scan_id: str):
+    """Delete a scan record from history."""
+    deleted = delete_scan(scan_id)
+    if not deleted:
+        raise HTTPException(status_code=404, detail=f"Scan with ID '{scan_id}' not found")
+    return {"status": "ok", "message": f"Scan {scan_id} deleted successfully"}
