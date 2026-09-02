@@ -39,12 +39,12 @@ export const RiskBar: React.FC<RiskBarProps> = ({ assets }) => {
   const chartData = Array.from(languageMap.values()).sort((a, b) => b.total - a.total);
 
   return (
-    <div className="nexus-card p-5">
+    <div className="nexus-card p-5 bg-white border-[#E8E2D5]">
       <div className="flex items-center justify-between mb-4">
-        <h4 className="text-sm font-bold text-white">
+        <h4 className="text-sm font-bold text-[#1C1917]">
           Vulnerability Distribution by Asset Type & Language
         </h4>
-        <span className="text-xs text-slate-400">
+        <span className="text-xs text-[#78716C]">
           Grouped by Stack
         </span>
       </div>
@@ -55,27 +55,27 @@ export const RiskBar: React.FC<RiskBarProps> = ({ assets }) => {
             data={chartData}
             margin={{ top: 10, right: 20, left: -10, bottom: 20 }}
           >
-            <CartesianGrid strokeDasharray="3 3" stroke="rgba(255, 255, 255, 0.04)" vertical={false} />
+            <CartesianGrid strokeDasharray="3 3" stroke="#E8E2D5" vertical={false} />
             <XAxis
               dataKey="language"
-              stroke="#71717A"
+              stroke="#78716C"
               fontSize={12}
               tickLine={false}
-              axisLine={{ stroke: "rgba(255, 255, 255, 0.08)" }}
+              axisLine={{ stroke: "#E8E2D5" }}
             />
             <YAxis
-              stroke="#71717A"
+              stroke="#78716C"
               fontSize={12}
               tickLine={false}
-              axisLine={{ stroke: "rgba(255, 255, 255, 0.08)" }}
+              axisLine={{ stroke: "#E8E2D5" }}
               allowDecimals={false}
             />
             <Tooltip
               content={({ active, payload, label }) => {
                 if (active && payload && payload.length) {
                   return (
-                    <div className="bg-[#0D0D11] border border-white/15 p-3 rounded-xl shadow-2xl text-xs font-mono">
-                      <p className="font-bold text-white mb-1.5">{label}</p>
+                    <div className="bg-white border border-[#E8E2D5] p-3 rounded-2xl shadow-lg text-xs font-mono">
+                      <p className="font-bold text-[#1C1917] mb-1.5">{label}</p>
                       {payload.map((p: any) => (
                         <div
                           key={p.name}
@@ -96,7 +96,7 @@ export const RiskBar: React.FC<RiskBarProps> = ({ assets }) => {
               verticalAlign="top"
               height={36}
               formatter={(value) => (
-                <span className="text-xs text-slate-300 capitalize mr-3 font-medium">
+                <span className="text-xs text-[#57534E] capitalize mr-3 font-semibold">
                   {value}
                 </span>
               )}
@@ -105,21 +105,21 @@ export const RiskBar: React.FC<RiskBarProps> = ({ assets }) => {
               dataKey="broken"
               name="Broken (Shor's)"
               stackId="a"
-              fill="#ef4444"
+              fill="#DC2626"
               radius={[0, 0, 0, 0]}
             />
             <Bar
               dataKey="weakened"
               name="Weakened (Grover's)"
               stackId="a"
-              fill="#f59e0b"
+              fill="#D97706"
               radius={[0, 0, 0, 0]}
             />
             <Bar
               dataKey="safe"
               name="Quantum Safe"
               stackId="a"
-              fill="#10b981"
+              fill="#15803D"
               radius={[4, 4, 0, 0]}
             />
           </BarChart>

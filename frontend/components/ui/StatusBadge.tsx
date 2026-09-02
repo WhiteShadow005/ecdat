@@ -19,9 +19,9 @@ export const StatusBadge: React.FC<StatusBadgeProps> = ({
   className = "",
 }) => {
   const sizeClasses = {
-    sm: "px-2 py-0.5 text-[11px] font-medium rounded-md",
-    md: "px-2.5 py-1 text-xs font-medium rounded-lg",
-    lg: "px-3 py-1.5 text-sm font-semibold rounded-lg",
+    sm: "px-2 py-0.5 text-[10px] font-semibold rounded-full",
+    md: "px-2.5 py-0.5 text-xs font-semibold rounded-full",
+    lg: "px-3 py-1 text-sm font-semibold rounded-full",
   }[size];
 
   if (status) {
@@ -29,27 +29,27 @@ export const StatusBadge: React.FC<StatusBadgeProps> = ({
       case "BROKEN":
         return (
           <span
-            className={`inline-flex items-center gap-1.5 bg-rose-950/40 text-rose-300 border border-rose-800/60 shadow-[0_0_8px_rgba(244,63,94,0.15)] ${sizeClasses} ${className}`}
+            className={`inline-flex items-center gap-1.5 bg-[#FEF2F2] text-[#991B1B] border border-[#FEE2E2] shadow-2xs ${sizeClasses} ${className}`}
           >
-            <span className="w-1.5 h-1.5 rounded-full bg-rose-500 animate-pulse" />
+            <span className="w-1.5 h-1.5 rounded-full bg-[#DC2626]" />
             {text || "Broken (Shor's)"}
           </span>
         );
       case "WEAKENED":
         return (
           <span
-            className={`inline-flex items-center gap-1.5 bg-amber-950/40 text-amber-300 border border-amber-800/60 ${sizeClasses} ${className}`}
+            className={`inline-flex items-center gap-1.5 bg-[#FFFBEB] text-[#92400E] border border-[#FEF3C7] shadow-2xs ${sizeClasses} ${className}`}
           >
-            <span className="w-1.5 h-1.5 rounded-full bg-amber-500" />
+            <span className="w-1.5 h-1.5 rounded-full bg-[#D97706]" />
             {text || "Weakened (Grover's)"}
           </span>
         );
       case "SAFE":
         return (
           <span
-            className={`inline-flex items-center gap-1.5 bg-emerald-950/40 text-emerald-300 border border-emerald-800/60 shadow-[0_0_8px_rgba(16,185,129,0.15)] ${sizeClasses} ${className}`}
+            className={`inline-flex items-center gap-1.5 bg-[#F0FDF4] text-[#166534] border border-[#DCFCE7] shadow-2xs ${sizeClasses} ${className}`}
           >
-            <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" />
+            <span className="w-1.5 h-1.5 rounded-full bg-[#16A34A]" />
             {text || "Quantum Safe"}
           </span>
         );
@@ -61,7 +61,7 @@ export const StatusBadge: React.FC<StatusBadgeProps> = ({
       case "critical":
         return (
           <span
-            className={`inline-flex items-center gap-1 bg-rose-950/40 text-rose-300 border border-rose-800/60 font-mono font-semibold uppercase tracking-wide text-[10px] ${sizeClasses} ${className}`}
+            className={`inline-flex items-center gap-1 bg-[#FEF2F2] text-[#991B1B] border border-[#FEE2E2] font-mono font-bold uppercase tracking-wide text-[10px] ${sizeClasses} ${className}`}
           >
             {text || "Critical"}
           </span>
@@ -69,7 +69,7 @@ export const StatusBadge: React.FC<StatusBadgeProps> = ({
       case "high":
         return (
           <span
-            className={`inline-flex items-center gap-1 bg-amber-950/40 text-amber-300 border border-amber-800/60 font-mono font-semibold uppercase tracking-wide text-[10px] ${sizeClasses} ${className}`}
+            className={`inline-flex items-center gap-1 bg-[#FFFBEB] text-[#92400E] border border-[#FEF3C7] font-mono font-bold uppercase tracking-wide text-[10px] ${sizeClasses} ${className}`}
           >
             {text || "High"}
           </span>
@@ -77,7 +77,7 @@ export const StatusBadge: React.FC<StatusBadgeProps> = ({
       case "medium":
         return (
           <span
-            className={`inline-flex items-center gap-1 bg-yellow-950/40 text-yellow-300 border border-yellow-800/60 font-mono font-semibold uppercase tracking-wide text-[10px] ${sizeClasses} ${className}`}
+            className={`inline-flex items-center gap-1 bg-[#FFFBEB] text-[#B45309] border border-[#FEF3C7] font-mono font-bold uppercase tracking-wide text-[10px] ${sizeClasses} ${className}`}
           >
             {text || "Medium"}
           </span>
@@ -85,7 +85,7 @@ export const StatusBadge: React.FC<StatusBadgeProps> = ({
       case "safe":
         return (
           <span
-            className={`inline-flex items-center gap-1 bg-emerald-950/40 text-emerald-300 border border-emerald-800/60 font-mono font-semibold uppercase tracking-wide text-[10px] ${sizeClasses} ${className}`}
+            className={`inline-flex items-center gap-1 bg-[#F0FDF4] text-[#166534] border border-[#DCFCE7] font-mono font-bold uppercase tracking-wide text-[10px] ${sizeClasses} ${className}`}
           >
             {text || "Safe"}
           </span>
@@ -95,7 +95,7 @@ export const StatusBadge: React.FC<StatusBadgeProps> = ({
 
   return (
     <span
-      className={`inline-flex items-center bg-slate-900 text-slate-400 border border-slate-800 ${sizeClasses} ${className}`}
+      className={`inline-flex items-center bg-[#F6F2EB] text-[#78716C] border border-[#E8E2D5] ${sizeClasses} ${className}`}
     >
       {text || "Unknown"}
     </span>

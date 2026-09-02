@@ -38,7 +38,7 @@ export const Heatmap: React.FC<HeatmapProps> = ({ assets, onSelectAsset }) => {
       {/* Visual Chart Header */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 items-center">
         {/* Pie / Donut Chart */}
-        <div className="h-64 relative nexus-card p-4 flex items-center justify-center">
+        <div className="h-64 relative nexus-card p-4 flex items-center justify-center bg-white border-[#E8E2D5]">
           <ResponsiveContainer width="100%" height="100%">
             <PieChart>
               <Pie
@@ -58,7 +58,7 @@ export const Heatmap: React.FC<HeatmapProps> = ({ assets, onSelectAsset }) => {
                   <Cell
                     key={`cell-${index}`}
                     fill={entry.color}
-                    stroke="#0A0A0D"
+                    stroke="#FFFFFF"
                     strokeWidth={2}
                     opacity={activeFilter && activeFilter !== entry.status ? 0.35 : 1}
                   />
@@ -69,8 +69,8 @@ export const Heatmap: React.FC<HeatmapProps> = ({ assets, onSelectAsset }) => {
                   if (active && payload && payload.length) {
                     const item = payload[0].payload;
                     return (
-                      <div className="bg-[#0D0D11] border border-white/15 p-2.5 rounded-xl shadow-2xl text-xs">
-                        <p className="font-bold text-white">{item.name}</p>
+                      <div className="bg-white border border-[#E8E2D5] p-2.5 rounded-xl shadow-lg text-xs">
+                        <p className="font-bold text-[#1C1917]">{item.name}</p>
                         <p style={{ color: item.color }} className="font-semibold mt-0.5 font-mono">
                           {item.value} Assets (
                           {((item.value / assets.length) * 100).toFixed(1)}%)
@@ -88,13 +88,13 @@ export const Heatmap: React.FC<HeatmapProps> = ({ assets, onSelectAsset }) => {
         {/* Breakdown Stats & Interactive Filter Pills */}
         <div className="lg:col-span-2 space-y-3">
           <div className="flex items-center justify-between">
-            <h4 className="text-xs font-semibold text-[#71717A] uppercase tracking-wider">
+            <h4 className="text-xs font-bold text-[#78716C] uppercase tracking-wider">
               Cryptographic Threat Distribution (Click to filter)
             </h4>
             {activeFilter && (
               <button
                 onClick={() => setActiveFilter(null)}
-                className="text-xs font-semibold text-purple-400 hover:text-purple-300 underline"
+                className="text-xs font-semibold text-[#8B5E34] hover:underline"
               >
                 Reset Filter
               </button>
@@ -110,10 +110,10 @@ export const Heatmap: React.FC<HeatmapProps> = ({ assets, onSelectAsset }) => {
                   onClick={() =>
                     setActiveFilter(isSelected ? null : item.status)
                   }
-                  className={`p-3.5 rounded-xl border text-left transition-all ${
+                  className={`p-3.5 rounded-2xl border text-left transition-all ${
                     isSelected
-                      ? "bg-purple-500/10 border-purple-400 shadow-[0_0_15px_rgba(168,85,247,0.2)]"
-                      : "bg-[#0A0A0D] border-white/[0.06] hover:border-white/15"
+                      ? "bg-[#FAF7F2] border-[#C28E58] shadow-md"
+                      : "bg-white border-[#E8E2D5] hover:border-[#D5CBB9]"
                   }`}
                 >
                   <div className="flex items-center justify-between mb-1">
@@ -121,14 +121,14 @@ export const Heatmap: React.FC<HeatmapProps> = ({ assets, onSelectAsset }) => {
                       className="w-2.5 h-2.5 rounded-full"
                       style={{ backgroundColor: item.color }}
                     />
-                    <span className="text-xl font-bold text-white font-mono">
+                    <span className="text-xl font-extrabold text-[#1C1917] font-mono">
                       {item.value}
                     </span>
                   </div>
-                  <p className="text-xs font-semibold text-[#F5F5F5] truncate">
+                  <p className="text-xs font-bold text-[#1C1917] truncate">
                     {item.name}
                   </p>
-                  <p className="text-[11px] text-[#71717A] mt-0.5 font-mono">
+                  <p className="text-[11px] text-[#78716C] mt-0.5 font-mono">
                     {((item.value / assets.length) * 100).toFixed(1)}% of total
                   </p>
                 </button>
@@ -139,12 +139,12 @@ export const Heatmap: React.FC<HeatmapProps> = ({ assets, onSelectAsset }) => {
       </div>
 
       {/* Interactive Matrix / Treemap-Style Grid */}
-      <div className="nexus-card p-5">
+      <div className="nexus-card p-5 bg-white border-[#E8E2D5]">
         <div className="flex items-center justify-between mb-4">
-          <h4 className="text-sm font-bold text-white">
+          <h4 className="text-sm font-bold text-[#1C1917]">
             Quantum Threat Matrix ({filteredAssets.length} Assets)
           </h4>
-          <span className="text-xs text-slate-400">
+          <span className="text-xs text-[#78716C]">
             Click an algorithm block to inspect details
           </span>
         </div>
@@ -157,36 +157,36 @@ export const Heatmap: React.FC<HeatmapProps> = ({ assets, onSelectAsset }) => {
               <div
                 key={asset.id}
                 onClick={() => onSelectAsset && onSelectAsset(asset)}
-                className={`p-3 rounded-xl border cursor-pointer transition-all duration-150 flex flex-col justify-between ${
+                className={`p-3 rounded-2xl border cursor-pointer transition-all duration-150 flex flex-col justify-between ${
                   isBroken
-                    ? "bg-rose-950/30 border-rose-900/50 hover:border-rose-500 hover:bg-rose-950/50 shadow-[0_0_10px_rgba(244,63,94,0.05)]"
+                    ? "bg-[#FEF2F2] border-[#FEE2E2] hover:border-[#FECACA] shadow-2xs"
                     : isWeakened
-                    ? "bg-amber-950/30 border-amber-900/50 hover:border-amber-500 hover:bg-amber-950/50"
-                    : "bg-emerald-950/30 border-emerald-900/50 hover:border-emerald-500 hover:bg-emerald-950/50"
+                    ? "bg-[#FFFBEB] border-[#FEF3C7] hover:border-[#FDE68A] shadow-2xs"
+                    : "bg-[#F0FDF4] border-[#DCFCE7] hover:border-[#BBF7D0] shadow-2xs"
                 }`}
               >
                 <div>
                   <div className="flex items-center justify-between gap-1 mb-1.5">
-                    <span className="text-[10px] font-semibold uppercase text-slate-400">
+                    <span className="text-[10px] font-semibold uppercase text-[#78716C]">
                       {asset.language}
                     </span>
                     <span
-                      className={`text-[10px] font-bold px-1.5 py-0.5 rounded-md font-mono ${
+                      className={`text-[10px] font-bold px-1.5 py-0.5 rounded-full font-mono ${
                         isBroken
-                          ? "bg-rose-900/60 text-rose-300 border border-rose-800/60"
+                          ? "bg-white text-[#991B1B] border border-[#FECACA]"
                           : isWeakened
-                          ? "bg-amber-900/60 text-amber-300 border border-amber-800/60"
-                          : "bg-emerald-900/60 text-emerald-300 border border-emerald-800/60"
+                          ? "bg-white text-[#92400E] border border-[#FDE68A]"
+                          : "bg-white text-[#166534] border border-[#BBF7D0]"
                       }`}
                     >
                       {asset.qars_score} QARS
                     </span>
                   </div>
-                  <p className="font-bold text-xs text-white truncate font-mono">
+                  <p className="font-bold text-xs text-[#1C1917] truncate font-mono">
                     {asset.algorithm}
                   </p>
                 </div>
-                <p className="text-[11px] font-mono text-slate-400 truncate mt-2">
+                <p className="text-[11px] font-mono text-[#78716C] truncate mt-2">
                   {asset.file.split("/").pop()}
                 </p>
               </div>

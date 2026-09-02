@@ -102,43 +102,46 @@
 
 
 /* ==========================================================================
-   ECDAT Unified Quantum Research Design Tokens & Palette
-   Matching Overview / Landing Brand Identity (Quiet Luxury Quantum Console)
+   ECDAT Warm Ivory / Cream Luxury Quantum Defense Design Tokens & Palette
+   Matching User Approved Design System
    ========================================================================== */
 :root {
   /* Surfaces & Canvas */
-  --bg-canvas: #050505;
-  --bg-surface: #0A0A0C;
-  --bg-surface-subtle: #111114;
-  --bg-surface-elevated: #16161B;
-  --bg-surface-hover: #1A1A22;
+  --bg-canvas: #F5F0E8;
+  --bg-canvas-subtle: #FAF7F2;
+  --bg-surface: #FFFFFF;
+  --bg-surface-subtle: #F6F2EB;
+  --bg-surface-elevated: #FFFFFF;
+  --bg-surface-hover: #FAF7F2;
 
   /* Typography */
-  --text-primary: #F5F5F5;
-  --text-secondary: #A6A6AD;
-  --text-muted: #71717A;
-  --text-subtle: #52525B;
+  --text-primary: #1C1917;
+  --text-secondary: #57534E;
+  --text-muted: #78716C;
+  --text-subtle: #A8A29E;
 
   /* Borders & Dividers */
-  --border-subtle: rgba(255, 255, 255, 0.07);
-  --border-medium: rgba(255, 255, 255, 0.14);
-  --border-highlight: rgba(168, 85, 247, 0.35);
-  --border-violet: rgba(168, 85, 247, 0.22);
+  --border-subtle: #E8E2D5;
+  --border-medium: #DCD4C4;
+  --border-highlight: #C28E58;
+  --border-bronze: rgba(180, 130, 70, 0.25);
 
-  /* Atmospheric Accents */
-  --accent-violet: #a855f7;
-  --accent-purple: #7c3aed;
-  --accent-pink: #f472b6;
-  --accent-indigo: #818cf8;
-  --accent-blue: #38bdf8;
+  /* Warm Luxury Accents */
+  --accent-gold: #C28E58;
+  --accent-bronze: #8B5E34;
+  --accent-copper: #A16207;
+  --accent-warm-charcoal: #292524;
 
-  /* Status Colors (Restrained Quantum Research Palette) */
-  --status-critical: #f43f5e;
-  --status-critical-bg: rgba(244, 63, 94, 0.12);
-  --status-warning: #f59e0b;
-  --status-warning-bg: rgba(245, 158, 11, 0.12);
-  --status-safe: #10b981;
-  --status-safe-bg: rgba(16, 185, 129, 0.12);
+  /* Status Colors */
+  --status-critical: #DC2626;
+  --status-critical-bg: #FEF2F2;
+  --status-critical-border: #FEE2E2;
+  --status-warning: #D97706;
+  --status-warning-bg: #FFFBEB;
+  --status-warning-border: #FEF3C7;
+  --status-safe: #15803D;
+  --status-safe-bg: #F0FDF4;
+  --status-safe-border: #DCFCE7;
 
   /* Fonts */
   --font-sans: "Inter", -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, sans-serif;
@@ -173,122 +176,138 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
-/* Custom Clean Dark Scrollbar */
+/* Clean Minimal Scrollbar */
 ::-webkit-scrollbar {
-  width: 5px;
-  height: 5px;
+  width: 6px;
+  height: 6px;
 }
 
 ::-webkit-scrollbar-track {
-  background: #070709;
+  background: #EFE9DF;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #1e1e24;
+  background: #D5CBB9;
   border-radius: 3px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #2e2e38;
+  background: #BAAC95;
 }
 
 /* ==========================================================================
-   ECDAT Dark Glassmorphic Card & Panel Styles
+   ECDAT Warm Luxury Card & Container Styles
    ========================================================================== */
 .nexus-card {
-  background-color: rgba(10, 10, 12, 0.88);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
+  background-color: #FFFFFF;
   border: 1px solid var(--border-subtle);
-  border-radius: 16px;
-  box-shadow: 0 4px 24px -2px rgba(0, 0, 0, 0.6), inset 0 1px 0 rgba(255, 255, 255, 0.05);
-  transition: box-shadow 0.25s ease, border-color 0.25s ease, transform 0.25s ease;
+  border-radius: 18px;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.02), 0 4px 16px rgba(180, 140, 100, 0.03);
+  transition: box-shadow 0.2s ease, border-color 0.2s ease, transform 0.2s ease;
 }
 
 .nexus-card:hover {
-  border-color: rgba(255, 255, 255, 0.14);
-  box-shadow: 0 8px 30px -4px rgba(0, 0, 0, 0.75), 0 0 15px -3px rgba(168, 85, 247, 0.06);
+  border-color: var(--border-medium);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04), 0 8px 24px rgba(180, 140, 100, 0.05);
 }
 
 .nexus-card-interactive {
-  background-color: rgba(10, 10, 12, 0.88);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
+  background-color: #FFFFFF;
   border: 1px solid var(--border-subtle);
-  border-radius: 16px;
-  box-shadow: 0 4px 24px -2px rgba(0, 0, 0, 0.6), inset 0 1px 0 rgba(255, 255, 255, 0.05);
-  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  border-radius: 18px;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.02), 0 4px 16px rgba(180, 140, 100, 0.03);
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .nexus-card-interactive:hover {
-  border-color: rgba(168, 85, 247, 0.35);
-  transform: translateY(-2px);
-  box-shadow: 0 12px 32px -4px rgba(0, 0, 0, 0.85), 0 0 20px -4px rgba(168, 85, 247, 0.12);
+  border-color: #D5CBB9;
+  transform: translateY(-1px);
+  box-shadow: 0 6px 24px rgba(0, 0, 0, 0.06);
 }
 
 /* Unified Button Styles */
 .btn-primary {
-  background-color: #ffffff;
-  color: #050505;
+  background-color: #1C1917;
+  color: #FFFFFF;
   font-weight: 500;
-  font-size: 13px;
+  font-size: 12px;
   border-radius: 999px;
-  padding: 7px 16px;
+  padding: 6px 16px;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: 8px;
-  border: 1px solid rgba(255, 255, 255, 0.9);
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+  gap: 6px;
+  border: 1px solid #1C1917;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
   transition: all 0.15s ease;
 }
 
 .btn-primary:hover {
-  background-color: #eaeaea;
+  background-color: #292524;
   transform: translateY(-1px);
-  box-shadow: 0 4px 16px rgba(255, 255, 255, 0.15);
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.15);
 }
 
 .btn-secondary {
-  background-color: rgba(255, 255, 255, 0.06);
-  color: #F5F5F5;
+  background-color: #FFFFFF;
+  color: #1C1917;
   font-weight: 500;
-  font-size: 13px;
+  font-size: 12px;
   border-radius: 999px;
-  padding: 7px 16px;
+  padding: 6px 14px;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: 8px;
-  border: 1px solid rgba(255, 255, 255, 0.12);
+  gap: 6px;
+  border: 1px solid var(--border-subtle);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.03);
   transition: all 0.15s ease;
 }
 
 .btn-secondary:hover {
-  background-color: rgba(255, 255, 255, 0.12);
-  border-color: rgba(255, 255, 255, 0.25);
-  color: #ffffff;
+  background-color: #FAF7F2;
+  border-color: var(--border-medium);
   transform: translateY(-1px);
 }
 
-.btn-pill-dark {
-  background: #141419;
-  color: #F5F5F5;
-  border: 1px solid rgba(255, 255, 255, 0.12);
+.btn-pill-light {
+  background: #FFFFFF;
+  color: #1C1917;
+  border: 1px solid var(--border-subtle);
   border-radius: 999px;
-  padding: 6px 14px;
+  padding: 5px 12px;
+  font-size: 11px;
+  font-weight: 500;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.02);
+  transition: all 0.15s ease;
+}
+
+.btn-pill-light:hover {
+  background: #FAF7F2;
+  border-color: var(--border-medium);
+}
+
+.btn-pill-dark {
+  background: #FFFFFF;
+  color: #1C1917;
+  border: 1px solid var(--border-subtle);
+  border-radius: 999px;
+  padding: 5px 14px;
   font-size: 12px;
   font-weight: 500;
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  transition: all 0.2s ease;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.02);
+  transition: all 0.15s ease;
 }
 
 .btn-pill-dark:hover {
-  background: #1e1e26;
-  border-color: rgba(168, 85, 247, 0.4);
-  box-shadow: 0 0 12px rgba(168, 85, 247, 0.15);
+  background: #FAF7F2;
+  border-color: var(--border-medium);
 }
 
 .btn-accent {

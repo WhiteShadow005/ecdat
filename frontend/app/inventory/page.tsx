@@ -55,15 +55,15 @@ export default function InventoryPage() {
   return (
     <div className="space-y-5">
       {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-white/[0.06] pb-3.5">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-[#E8E2D5] pb-3.5">
         <div>
           <div className="flex items-center gap-2">
-            <Layers className="w-5 h-5 text-white" />
-            <h1 className="text-lg md:text-xl font-bold text-white tracking-tight font-display">
+            <Layers className="w-5 h-5 text-[#1C1917]" />
+            <h1 className="text-lg md:text-xl font-bold text-[#1C1917] tracking-tight font-display">
               Cryptographic Inventory (CBOM)
             </h1>
           </div>
-          <p className="text-xs text-[#A6A6AD] mt-0.5">
+          <p className="text-xs text-[#57534E] mt-0.5">
             ECMA-424 standardized catalog of discovered algorithms, keys, certificates, and TLS ciphers.
           </p>
         </div>
@@ -80,28 +80,28 @@ export default function InventoryPage() {
       </div>
 
       {/* Filter and Search Controls */}
-      <div className="nexus-card p-3.5 space-y-3">
+      <div className="nexus-card p-3.5 space-y-3 bg-white border-[#E8E2D5] shadow-2xs">
         <div className="flex flex-col md:flex-row gap-3 items-center justify-between">
           {/* Search Input */}
           <div className="relative w-full md:w-80">
-            <Search className="w-3.5 h-3.5 text-[#71717A] absolute left-3 top-1/2 -translate-y-1/2" />
+            <Search className="w-3.5 h-3.5 text-[#78716C] absolute left-3 top-1/2 -translate-y-1/2" />
             <input
               type="text"
               placeholder="Search algorithm or file..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full bg-[#0D0D11] border border-white/10 rounded-full pl-9 pr-3 py-1.5 text-xs text-[#F5F5F5] placeholder-[#71717A] focus:outline-none focus:border-white/25 transition-colors font-mono"
+              className="w-full bg-[#FAF7F2] border border-[#E8E2D5] rounded-full pl-9 pr-3 py-1.5 text-xs text-[#1C1917] placeholder-[#78716C] focus:outline-none focus:border-[#C28E58] transition-colors font-mono"
             />
           </div>
 
           {/* Filters */}
           <div className="flex items-center gap-2.5 w-full md:w-auto flex-wrap">
             <div className="flex items-center gap-1.5">
-              <span className="text-[11px] text-[#71717A] font-medium">Status:</span>
+              <span className="text-[11px] text-[#78716C] font-semibold">Status:</span>
               <select
                 value={statusFilter}
                 onChange={(e) => setStatusFilter(e.target.value)}
-                className="bg-[#0D0D11] border border-white/10 rounded-full px-3 py-1 text-xs text-[#F5F5F5] focus:outline-none focus:border-white/25 font-mono"
+                className="bg-[#FAF7F2] border border-[#E8E2D5] rounded-full px-3 py-1 text-xs text-[#1C1917] focus:outline-none focus:border-[#C28E58] font-mono"
               >
                 <option value="ALL">All ({assets.length})</option>
                 <option value="BROKEN">Broken (Shor's)</option>
@@ -111,11 +111,11 @@ export default function InventoryPage() {
             </div>
 
             <div className="flex items-center gap-1.5">
-              <span className="text-[11px] text-[#71717A] font-medium">Type:</span>
+              <span className="text-[11px] text-[#78716C] font-semibold">Type:</span>
               <select
                 value={typeFilter}
                 onChange={(e) => setTypeFilter(e.target.value)}
-                className="bg-[#0D0D11] border border-white/10 rounded-full px-3 py-1 text-xs text-[#F5F5F5] focus:outline-none focus:border-white/25 font-mono"
+                className="bg-[#FAF7F2] border border-[#E8E2D5] rounded-full px-3 py-1 text-xs text-[#1C1917] focus:outline-none focus:border-[#C28E58] font-mono"
               >
                 <option value="ALL">All Types</option>
                 <option value="algorithm">Algorithm</option>
@@ -128,9 +128,9 @@ export default function InventoryPage() {
         </div>
 
         {/* Results Counter */}
-        <div className="flex items-center justify-between text-[11px] text-[#71717A] pt-1.5 border-t border-white/[0.06]">
+        <div className="flex items-center justify-between text-[11px] text-[#78716C] pt-1.5 border-t border-[#E8E2D5]">
           <span>
-            Showing <strong className="text-white font-mono">{filteredAssets.length}</strong> of {assets.length} components
+            Showing <strong className="text-[#1C1917] font-mono">{filteredAssets.length}</strong> of {assets.length} components
           </span>
           {(statusFilter !== "ALL" || typeFilter !== "ALL" || searchQuery) && (
             <button
@@ -139,7 +139,7 @@ export default function InventoryPage() {
                 setTypeFilter("ALL");
                 setSearchQuery("");
               }}
-              className="text-purple-400 hover:text-purple-300 font-semibold"
+              className="text-[#8B5E34] hover:underline font-bold"
             >
               Reset Filters
             </button>
@@ -148,10 +148,10 @@ export default function InventoryPage() {
       </div>
 
       {/* Main CBOM Data Table */}
-      <div className="nexus-card overflow-hidden">
+      <div className="nexus-card overflow-hidden bg-white border-[#E8E2D5] shadow-2xs">
         <div className="overflow-x-auto">
           <table className="w-full text-left text-xs">
-            <thead className="bg-[#08080A]/90 text-[#71717A] uppercase text-[10px] font-semibold tracking-wider border-b border-white/[0.06]">
+            <thead className="bg-[#FAF7F2] text-[#78716C] uppercase text-[10px] font-bold tracking-wider border-b border-[#E8E2D5]">
               <tr>
                 <th className="py-2.5 px-4">Algorithm & Type</th>
                 <th className="py-2.5 px-4">Location</th>
@@ -161,31 +161,31 @@ export default function InventoryPage() {
                 <th className="py-2.5 px-4 text-right">Actions</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-white/[0.04] text-[#A6A6AD]">
+            <tbody className="divide-y divide-[#E8E2D5]/80 text-[#57534E]">
               {filteredAssets.map((asset) => {
                 const isExpanded = expandedRow === asset.id;
                 return (
                   <React.Fragment key={asset.id}>
                     <tr
                       onClick={() => setExpandedRow(isExpanded ? null : asset.id)}
-                      className={`hover:bg-white/[0.02] transition-colors cursor-pointer ${
-                        isExpanded ? "bg-white/[0.03]" : ""
+                      className={`hover:bg-[#FAF7F2]/60 transition-colors cursor-pointer ${
+                        isExpanded ? "bg-[#FAF7F2]/80" : ""
                       }`}
                     >
                       <td className="py-2.5 px-4">
                         <div className="flex items-center gap-2">
-                          <div className="font-bold text-white font-mono">{asset.algorithm}</div>
-                          <span className="text-[10px] px-2 py-0.5 rounded-full bg-[#18181E] text-[#A6A6AD] border border-white/10 font-mono uppercase">
+                          <div className="font-bold text-[#1C1917] font-mono">{asset.algorithm}</div>
+                          <span className="text-[10px] px-2 py-0.5 rounded-full bg-[#FAF7F2] text-[#57534E] border border-[#E8E2D5] font-mono uppercase">
                             {asset.type}
                           </span>
                         </div>
                       </td>
 
-                      <td className="py-2.5 px-4 font-mono text-[11px] text-[#A6A6AD]">
+                      <td className="py-2.5 px-4 font-mono text-[11px] text-[#57534E]">
                         <div className="flex items-center gap-1.5">
-                          <FileCode className="w-3.5 h-3.5 text-[#52525B] shrink-0" />
+                          <FileCode className="w-3.5 h-3.5 text-[#A8A29E] shrink-0" />
                           <span className="truncate max-w-xs">{asset.file}</span>
-                          {asset.line > 0 && <span className="text-[#52525B]">:{asset.line}</span>}
+                          {asset.line > 0 && <span className="text-[#78716C]">:{asset.line}</span>}
                         </div>
                       </td>
 
@@ -197,10 +197,10 @@ export default function InventoryPage() {
                         <span
                           className={`font-bold ${
                             asset.qars_score >= 80
-                              ? "text-rose-400"
+                              ? "text-[#991B1B]"
                               : asset.qars_score >= 40
-                              ? "text-amber-400"
-                              : "text-emerald-400"
+                              ? "text-[#92400E]"
+                              : "text-[#166534]"
                           }`}
                         >
                           {asset.qars_score}
@@ -208,7 +208,7 @@ export default function InventoryPage() {
                       </td>
 
                       <td className="py-2.5 px-4">
-                        <div className="font-semibold text-emerald-400 font-mono">{asset.replacement}</div>
+                        <div className="font-semibold text-[#166534] font-mono">{asset.replacement}</div>
                       </td>
 
                       <td className="py-2.5 px-4 text-right">
@@ -217,15 +217,15 @@ export default function InventoryPage() {
                             <Link
                               href={`/remediation?asset_id=${asset.id}`}
                               onClick={(e) => e.stopPropagation()}
-                              className="btn-pill-dark text-[11px] py-1 px-2.5 hover:border-purple-500/40"
+                              className="btn-pill-light text-[11px] py-1 px-2.5"
                             >
-                              <Sparkles className="w-3 h-3 text-purple-400" />
+                              <Sparkles className="w-3 h-3 text-[#C28E58]" />
                               <span>Fix</span>
                             </Link>
                           )}
                           <button
                             type="button"
-                            className="p-1 text-[#71717A] hover:text-white"
+                            className="p-1 text-[#78716C] hover:text-[#1C1917]"
                           >
                             {isExpanded ? (
                               <ChevronUp className="w-3.5 h-3.5" />
@@ -239,33 +239,33 @@ export default function InventoryPage() {
 
                     {/* Expandable Finding Detail Row */}
                     {isExpanded && (
-                      <tr className="bg-[#0A0A0D]/90">
-                        <td colSpan={6} className="p-3.5 border-b border-white/[0.06]">
+                      <tr className="bg-[#FAF7F2]">
+                        <td colSpan={6} className="p-3.5 border-b border-[#E8E2D5]">
                           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
                             <div className="space-y-2">
                               <div>
-                                <span className="text-[#71717A] text-[11px] font-medium">Attack Vector:</span>
-                                <p className="text-rose-400 font-medium text-[11px] mt-0.5 font-mono">{asset.attack_vector}</p>
+                                <span className="text-[#78716C] text-[11px] font-semibold">Attack Vector:</span>
+                                <p className="text-[#991B1B] font-semibold text-[11px] mt-0.5 font-mono">{asset.attack_vector}</p>
                               </div>
                               <div>
-                                <span className="text-[#71717A] text-[11px] font-medium">NIST Specification:</span>
-                                <p className="text-emerald-400 font-medium text-[11px] mt-0.5 font-mono">{asset.nist_standard}</p>
+                                <span className="text-[#78716C] text-[11px] font-semibold">NIST Specification:</span>
+                                <p className="text-[#166534] font-semibold text-[11px] mt-0.5 font-mono">{asset.nist_standard}</p>
                               </div>
                             </div>
 
                             <div className="space-y-1">
                               <div className="flex items-center justify-between">
-                                <span className="text-[#71717A] text-[11px] font-medium">Code Snippet:</span>
+                                <span className="text-[#78716C] text-[11px] font-semibold">Code Snippet:</span>
                                 <button
                                   onClick={(e) => {
                                     e.stopPropagation();
                                     handleCopyCode(asset.id, asset.code_snippet);
                                   }}
-                                  className="text-[10px] text-purple-400 hover:text-purple-300 flex items-center gap-1 font-semibold"
+                                  className="text-[10px] text-[#8B5E34] hover:underline flex items-center gap-1 font-bold"
                                 >
                                   {copiedId === asset.id ? (
                                     <>
-                                      <Check className="w-3 h-3 text-emerald-400" /> Copied
+                                      <Check className="w-3 h-3 text-emerald-600" /> Copied
                                     </>
                                   ) : (
                                     <>
@@ -274,7 +274,7 @@ export default function InventoryPage() {
                                   )}
                                 </button>
                               </div>
-                              <pre className="p-2.5 bg-[#070709] border border-white/[0.06] text-[#F5F5F5] font-mono text-[11px] rounded-xl overflow-x-auto">
+                              <pre className="p-2.5 bg-white border border-[#E8E2D5] text-[#1C1917] font-mono text-[11px] rounded-xl overflow-x-auto shadow-2xs">
                                 {asset.code_snippet}
                               </pre>
                             </div>

@@ -95,72 +95,32 @@ export const CyberBackground: React.FC = () => {
     const render = () => {
       ctx.clearRect(0, 0, width, height);
 
-      // Layer 1: Base Dark Velvet Atmosphere
-      ctx.fillStyle = "#050505";
+      // Layer 1: Base Warm Ivory/Parchment Atmosphere
+      ctx.fillStyle = "#F5F0E8";
       ctx.fillRect(0, 0, width, height);
 
-      // Layer 2: Subtle Flowing Atmospheric Wave Ribbons (matching Overview page landscape)
-      waveTime += 0.004;
+      // Layer 2: Subtle Flowing Warm Luxury Gradients
+      waveTime += 0.003;
 
-      // Atmospheric Violet-Pink Glowing Aura
+      // Soft Golden/Bronze Glowing Aura
       const gradAura = ctx.createRadialGradient(
-        width * 0.55 + Math.sin(waveTime * 0.7) * 60,
-        height * 0.35 + Math.cos(waveTime * 0.5) * 40,
-        50,
-        width * 0.55,
-        height * 0.35,
-        width * 0.6
+        width * 0.6 + Math.sin(waveTime * 0.5) * 50,
+        height * 0.3 + Math.cos(waveTime * 0.4) * 35,
+        60,
+        width * 0.6,
+        height * 0.3,
+        width * 0.55
       );
-      gradAura.addColorStop(0, "rgba(168, 85, 247, 0.055)");
-      gradAura.addColorStop(0.35, "rgba(244, 114, 182, 0.035)");
-      gradAura.addColorStop(0.7, "rgba(129, 140, 248, 0.025)");
-      gradAura.addColorStop(1, "rgba(5, 5, 5, 0)");
+      gradAura.addColorStop(0, "rgba(217, 160, 100, 0.04)");
+      gradAura.addColorStop(0.5, "rgba(240, 230, 215, 0.03)");
+      gradAura.addColorStop(1, "rgba(245, 240, 232, 0)");
 
       ctx.fillStyle = gradAura;
       ctx.fillRect(0, 0, width, height);
 
-      // Subtle Atmospheric Sine Wave 1 (Dusky Violet Wave)
-      ctx.beginPath();
-      ctx.moveTo(0, height * 0.5);
-      for (let x = 0; x <= width; x += 30) {
-        const y =
-          height * 0.52 +
-          Math.sin(x * 0.0022 + waveTime) * 45 +
-          Math.cos(x * 0.004 + waveTime * 0.6) * 25;
-        ctx.lineTo(x, y);
-      }
-      ctx.lineTo(width, height);
-      ctx.lineTo(0, height);
-      ctx.closePath();
-      const waveGrad1 = ctx.createLinearGradient(0, height * 0.4, 0, height);
-      waveGrad1.addColorStop(0, "rgba(168, 85, 247, 0.022)");
-      waveGrad1.addColorStop(0.5, "rgba(244, 114, 182, 0.015)");
-      waveGrad1.addColorStop(1, "rgba(5, 5, 5, 0)");
-      ctx.fillStyle = waveGrad1;
-      ctx.fill();
-
-      // Subtle Atmospheric Sine Wave 2 (Deep Purple/Indigo Horizon)
-      ctx.beginPath();
-      ctx.moveTo(0, height * 0.68);
-      for (let x = 0; x <= width; x += 40) {
-        const y =
-          height * 0.68 +
-          Math.sin(x * 0.0018 - waveTime * 0.8) * 35 +
-          Math.sin(x * 0.0035 + waveTime * 0.5) * 20;
-        ctx.lineTo(x, y);
-      }
-      ctx.lineTo(width, height);
-      ctx.lineTo(0, height);
-      ctx.closePath();
-      const waveGrad2 = ctx.createLinearGradient(0, height * 0.6, 0, height);
-      waveGrad2.addColorStop(0, "rgba(129, 140, 248, 0.025)");
-      waveGrad2.addColorStop(1, "rgba(5, 5, 5, 0)");
-      ctx.fillStyle = waveGrad2;
-      ctx.fill();
-
-      // Layer 3: Faint Coordinate Mesh & Cryptographic Matrix
-      const gridSize = 72;
-      ctx.strokeStyle = "rgba(255, 255, 255, 0.018)";
+      // Layer 3: Faint Coordinate Mesh
+      const gridSize = 80;
+      ctx.strokeStyle = "rgba(0, 0, 0, 0.02)";
       ctx.lineWidth = 1;
       ctx.beginPath();
       for (let x = 0; x < width; x += gridSize) {
@@ -173,25 +133,6 @@ export const CyberBackground: React.FC = () => {
       }
       ctx.stroke();
 
-      // Slow radar beam sweep
-      if (!prefersReducedMotion) {
-        radarY += 0.4;
-        if (radarY > height) radarY = 0;
-
-        const radarGrad = ctx.createLinearGradient(0, radarY - 60, 0, radarY);
-        radarGrad.addColorStop(0, "rgba(168, 85, 247, 0)");
-        radarGrad.addColorStop(1, "rgba(168, 85, 247, 0.025)");
-        ctx.fillStyle = radarGrad;
-        ctx.fillRect(0, radarY - 60, width, 60);
-
-        ctx.strokeStyle = "rgba(168, 85, 247, 0.06)";
-        ctx.lineWidth = 1;
-        ctx.beginPath();
-        ctx.moveTo(0, radarY);
-        ctx.lineTo(width, radarY);
-        ctx.stroke();
-      }
-
       // Layer 4: Interconnected Nodes & Hex Matrix Particles
       const maxDistance = 180;
       for (let i = 0; i < nodes.length; i++) {
@@ -201,9 +142,9 @@ export const CyberBackground: React.FC = () => {
           const dist = Math.sqrt(dx * dx + dy * dy);
 
           if (dist < maxDistance) {
-            const alpha = (1 - dist / maxDistance) * 0.065;
-            ctx.strokeStyle = `rgba(168, 85, 247, ${alpha})`;
-            ctx.lineWidth = 0.85;
+            const alpha = (1 - dist / maxDistance) * 0.045;
+            ctx.strokeStyle = `rgba(180, 130, 70, ${alpha})`;
+            ctx.lineWidth = 0.75;
             ctx.beginPath();
             ctx.moveTo(nodes[i].x, nodes[i].y);
             ctx.lineTo(nodes[j].x, nodes[j].y);
@@ -212,11 +153,11 @@ export const CyberBackground: React.FC = () => {
         }
         ctx.beginPath();
         ctx.arc(nodes[i].x, nodes[i].y, nodes[i].radius, 0, Math.PI * 2);
-        ctx.fillStyle = "rgba(168, 85, 247, 0.4)";
+        ctx.fillStyle = "rgba(180, 130, 70, 0.18)";
         ctx.fill();
       }
 
-      // 4. Data Packets traveling across connections
+      // Moving Data Packets along connections
       if (!prefersReducedMotion) {
         for (let i = packets.length - 1; i >= 0; i--) {
           const p = packets[i];
@@ -248,15 +189,9 @@ export const CyberBackground: React.FC = () => {
           const px = n1.x + dx * p.progress;
           const py = n1.y + dy * p.progress;
 
-          // Packet glow
-          ctx.fillStyle = "rgba(129, 140, 248, 0.7)";
+          ctx.fillStyle = "rgba(194, 142, 88, 0.55)";
           ctx.beginPath();
-          ctx.arc(px, py, 2, 0, Math.PI * 2);
-          ctx.fill();
-
-          ctx.fillStyle = "rgba(255, 255, 255, 0.9)";
-          ctx.beginPath();
-          ctx.arc(px, py, 1, 0, Math.PI * 2);
+          ctx.arc(px, py, 1.5, 0, Math.PI * 2);
           ctx.fill();
         }
       }
