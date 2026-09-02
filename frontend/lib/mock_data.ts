@@ -1,9 +1,9 @@
 import { ScanResult, MoscaPreset, RemediationResult, PQCProofResult } from "./types";
 
 export const mockScanResult: ScanResult = {
-  scan_id: "scan-ecdat-sih26164-demo",
+  scan_id: "scan-enterprise-cbom-8492",
   timestamp: new Date().toISOString(),
-  repo_name: "demo_enterprise_repo",
+  repo_name: "core-banking-suite",
   summary: {
     total_assets: 15,
     critical: 8,

@@ -182,7 +182,7 @@ export default function DashboardPage() {
             </div>
             <div>
               <h4 className="text-xs font-bold text-[#1C1917]">Run Codebase Scan</h4>
-              <p className="text-[11px] text-[#78716C]">Upload ZIP or scan demo repo</p>
+              <p className="text-[11px] text-[#78716C]">Upload repository archive for analysis</p>
             </div>
           </div>
           <ArrowRight className="w-4 h-4 text-[#A8A29E] group-hover:text-[#1C1917] group-hover:translate-x-0.5 transition-all" />
