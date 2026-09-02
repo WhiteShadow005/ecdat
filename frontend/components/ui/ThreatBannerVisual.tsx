@@ -5,7 +5,7 @@ import React from "react";
 export const ThreatBannerVisual: React.FC = () => {
   return (
     <div
-      className="absolute right-8 sm:right-20 md:right-28 lg:right-44 top-0 bottom-0 w-[340px] sm:w-[400px] md:w-[460px] pointer-events-none overflow-hidden select-none z-0"
+      className="absolute right-4 sm:right-8 md:right-14 lg:right-24 top-0 bottom-0 w-[340px] sm:w-[380px] md:w-[440px] pointer-events-none overflow-hidden select-none z-0"
       aria-hidden="true"
     >
       {/* Subtle soft edge fading masks */}
