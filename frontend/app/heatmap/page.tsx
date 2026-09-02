@@ -23,24 +23,24 @@ export default function HeatmapPage() {
   return (
     <div className="space-y-5">
       {/* Page Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-800/80 pb-3.5">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-[#E8E2D5] pb-3.5">
         <div>
           <div className="flex items-center gap-2">
-            <Flame className="w-5 h-5 text-sky-400" />
-            <h1 className="text-lg md:text-xl font-bold text-white tracking-tight">
+            <Flame className="w-5 h-5 text-[#8B5E34]" />
+            <h1 className="text-lg md:text-xl font-bold text-[#1C1917] tracking-tight font-display">
               Quantum Risk Heatmap & Analytics
             </h1>
           </div>
-          <p className="text-xs text-slate-400 mt-0.5">
+          <p className="text-xs text-[#57534E] mt-0.5">
             Visual distribution of cryptographic vulnerabilities across repository components and languages.
           </p>
         </div>
 
         <div className="flex items-center gap-2 text-xs">
-          <span className="px-3 py-1.5 rounded-lg bg-[#07111F] border border-slate-800 text-slate-300 font-medium shadow-2xs font-mono">
-            Total Assets: <strong className="text-white">{totalAssets}</strong>
+          <span className="px-3.5 py-1.5 rounded-full bg-white border border-[#E8E2D5] text-[#57534E] font-medium shadow-2xs font-mono">
+            Total Assets: <strong className="text-[#1C1917]">{totalAssets}</strong>
           </span>
-          <span className="px-3 py-1.5 rounded-lg bg-rose-950/40 border border-rose-800/60 text-rose-300 font-medium font-mono shadow-[0_0_10px_rgba(244,63,94,0.1)]">
+          <span className="px-3.5 py-1.5 rounded-full bg-[#FEF2F2] border border-[#FEE2E2] text-[#991B1B] font-bold font-mono shadow-2xs">
             Critical: <strong>{criticalCount}</strong>
           </span>
         </div>
@@ -61,13 +61,13 @@ export default function HeatmapPage() {
         {/* Right 1 Col: Selected Asset Detail Inspector Drawer */}
         <div className="xl:col-span-1 sticky top-20">
           {selectedAsset ? (
-            <div className="nexus-card p-4 space-y-3.5 shadow-xs">
-              <div className="flex items-start justify-between gap-2 pb-2.5 border-b border-slate-800/80">
+            <div className="nexus-card p-4 space-y-3.5 bg-white border-[#E8E2D5] shadow-2xs">
+              <div className="flex items-start justify-between gap-2 pb-2.5 border-b border-[#E8E2D5]">
                 <div>
-                  <span className="text-[10px] font-semibold text-slate-400 uppercase tracking-wider">
+                  <span className="text-[10px] font-bold text-[#78716C] uppercase tracking-wider">
                     Selected Primitive
                   </span>
-                  <h3 className="text-sm font-bold text-white font-mono">
+                  <h3 className="text-sm font-bold text-[#1C1917] font-mono mt-0.5">
                     {selectedAsset.algorithm}
                   </h3>
                 </div>
@@ -75,42 +75,44 @@ export default function HeatmapPage() {
               </div>
 
               {/* Asset Meta Info */}
-              <div className="space-y-2.5 text-xs">
-                <div className="p-3 bg-[#050B14] rounded-xl border border-slate-800 space-y-1.5 font-mono">
-                  <div className="flex justify-between text-slate-400">
-                    <span>Language / Type:</span>
-                    <span className="text-slate-200 font-medium capitalize">
+              <div className="space-y-3 text-xs">
+                <div className="p-3 bg-[#FAF7F2] rounded-2xl border border-[#E8E2D5] space-y-1.5 font-mono">
+                  <div className="flex justify-between text-[#78716C]">
+                    <span className="font-semibold">Language / Type:</span>
+                    <span className="text-[#1C1917] font-bold capitalize">
                       {selectedAsset.language} ({selectedAsset.type})
                     </span>
                   </div>
-                  <div className="flex justify-between text-slate-400">
-                    <span>File Location:</span>
-                    <span className="text-sky-400 text-[11px] truncate max-w-[160px] text-right">
+                  <div className="flex justify-between text-[#78716C]">
+                    <span className="font-semibold">File Location:</span>
+                    <span className="text-[#1C1917] font-bold text-[11px] truncate max-w-[160px] text-right">
                       {selectedAsset.file}:{selectedAsset.line}
                     </span>
                   </div>
-                  <div className="flex justify-between text-slate-400">
-                    <span>QARS Risk Score:</span>
-                    <span className="font-bold text-rose-400">
+                  <div className="flex justify-between text-[#78716C]">
+                    <span className="font-semibold">QARS Risk Score:</span>
+                    <span className={`font-bold ${selectedAsset.qars_score >= 80 ? "text-[#DC2626]" : selectedAsset.qars_score >= 50 ? "text-[#D97706]" : "text-[#15803D]"}`}>
                       {selectedAsset.qars_score}/100
                     </span>
                   </div>
                 </div>
 
+                {/* Attack Vector with Crystal Clear Contrast */}
                 <div className="space-y-1 font-mono">
-                  <span className="text-slate-400 text-[11px] font-medium">Attack Vector:</span>
-                  <p className="text-[11px] text-rose-300 bg-rose-950/30 border border-rose-900/50 p-2.5 rounded-xl leading-relaxed">
+                  <span className="text-[#78716C] text-[11px] font-bold">Attack Vector:</span>
+                  <p className="text-xs font-semibold text-[#991B1B] bg-[#FEF2F2] border border-[#FEE2E2] p-3 rounded-2xl leading-relaxed">
                     {selectedAsset.attack_vector}
                   </p>
                 </div>
 
+                {/* NIST Replacement with Crystal Clear Contrast */}
                 <div className="space-y-1 font-mono">
-                  <span className="text-slate-400 text-[11px] font-medium">NIST Replacement:</span>
-                  <div className="p-2.5 bg-emerald-950/30 border border-emerald-900/50 rounded-xl">
-                    <p className="font-bold text-emerald-300 text-xs">
+                  <span className="text-[#78716C] text-[11px] font-bold">NIST Replacement:</span>
+                  <div className="p-3 bg-[#F0FDF4] border border-[#DCFCE7] rounded-2xl space-y-0.5">
+                    <p className="font-bold text-[#166534] text-xs">
                       {selectedAsset.replacement}
                     </p>
-                    <p className="text-[10px] text-emerald-400/80 font-medium">
+                    <p className="text-[11px] text-[#15803D] font-medium">
                       {selectedAsset.nist_standard}
                     </p>
                   </div>
@@ -120,18 +122,20 @@ export default function HeatmapPage() {
                   <div className="pt-1">
                     <Link
                       href={`/remediation?asset_id=${selectedAsset.id}`}
-                      className="w-full btn-primary text-xs py-2"
+                      className="w-full btn-primary text-xs py-2.5 rounded-full justify-between px-4 shadow-sm"
                     >
-                      <Sparkles className="w-3.5 h-3.5" />
-                      <span>Remediate Code Diff</span>
-                      <ArrowRight className="w-3.5 h-3.5 ml-auto" />
+                      <span className="flex items-center gap-1.5">
+                        <Sparkles className="w-3.5 h-3.5 text-[#C28E58]" />
+                        <span>Remediate Code Diff</span>
+                      </span>
+                      <ArrowRight className="w-3.5 h-3.5" />
                     </Link>
                   </div>
                 )}
               </div>
             </div>
           ) : (
-            <div className="nexus-card p-6 text-center text-slate-400 text-xs font-mono">
+            <div className="nexus-card p-6 text-center text-[#78716C] text-xs font-mono bg-white border-[#E8E2D5]">
               Select an algorithm from the matrix to inspect details.
             </div>
           )}
