@@ -18,8 +18,11 @@ env/
 
 # Node / Next.js
 node_modules/
+*.nosync
+.metadata_never_index
 .next/
 out/
+official_test_codebases/
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
