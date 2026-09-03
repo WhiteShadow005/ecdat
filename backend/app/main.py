@@ -265,6 +265,13 @@ async def scan_upload(
         # ─── 10. Enrich with Migration Recommendations ─────────────────────────
         inventory = enrich_with_recommendations(inventory)
 
+        # ─── 10b. Sync frontend alias fields after all engines have run ────────
+        # Engines mutate canonical fields post-construction; refresh the
+        # file/line/replacement/attack_vector/nist_standard aliases now so the
+        # API response, cache and SQLite copy are all consistent.
+        for asset in inventory:
+            asset.sync_aliases()
+
         # ─── 11. Compute Summary ──────────────────────────────────────────────
         total = len(inventory)
         counts = {"critical": 0, "high": 0, "medium": 0, "low": 0, "safe": 0}

@@ -230,3 +230,32 @@ class TestRecommender:
         guidance = get_migration_guidance(asset)
         assert "nist_doc" in guidance
         assert len(guidance["nist_doc"]) > 0
+
+
+# ─── Frontend Alias Sync Tests (regression: aliases went stale after engines) ─
+
+class TestAliasSync:
+
+    def test_aliases_sync_after_classification(self):
+        """attack_vector/nist_standard/replacement must reflect engine output."""
+        asset = CryptoAsset(algorithm="RSA-2048", file_path="auth.py", line_number=10)
+        assert asset.file == "auth.py"   # post_init alias
+        assert asset.line == 10
+
+        result = classify_asset(asset)
+        assert result.quantum_status == "BROKEN"
+        result.sync_aliases()
+        assert result.attack_vector == "Shor's Algorithm"
+        assert result.nist_standard == "NIST FIPS 203/204"
+        assert result.replacement == result.recommended_replacement
+        assert result.file == result.file_path
+        assert result.line == result.line_number
+
+    def test_aliases_recomputed_when_status_changes(self):
+        """Derived aliases must not stay frozen at construction-time values."""
+        asset = CryptoAsset(algorithm="AES-128", quantum_status="UNKNOWN")
+        assert asset.attack_vector == "None"  # UNKNOWN at construction
+        asset.quantum_status = "WEAKENED"
+        asset.sync_aliases()
+        assert asset.attack_vector == "Grover's Algorithm"
+        assert asset.nist_standard == "NIST FIPS 203/204"
