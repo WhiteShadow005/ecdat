@@ -107,6 +107,17 @@ def export_to_csv(scan_id: str) -> StreamingResponse:
     result = scan_cache.get(scan_id)
     assets = result.assets if result else []
 
+    # Fallback to SQLite persistence (survives restarts)
+    if not assets:
+        try:
+            from ..db import get_scan
+            db_result = get_scan(scan_id)
+            if db_result:
+                result = db_result
+                assets = db_result.assets
+        except Exception:
+            pass
+
     # Fallback to legacy remediator cache
     if not assets:
         try:

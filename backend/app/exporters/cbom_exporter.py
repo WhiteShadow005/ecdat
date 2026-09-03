@@ -251,6 +251,20 @@ def export_to_cbom(scan_id: str) -> dict:
             mosca=result.mosca,
         )
 
+    # Fallback: full ScanResult from SQLite (persists across restarts)
+    try:
+        from ..db import get_scan
+        db_result = get_scan(scan_id)
+        if db_result:
+            return build_cbom_json(
+                assets=db_result.assets,
+                target_name=db_result.target_name,
+                scan_id=scan_id,
+                mosca=db_result.mosca,
+            )
+    except Exception:
+        pass
+
     # Fallback: check legacy remediator cache (for backward compatibility)
     try:
         from ..ai.code_remediator import _scan_cache as _legacy

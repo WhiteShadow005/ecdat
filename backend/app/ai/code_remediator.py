@@ -51,6 +51,18 @@ def _get_asset(asset_id: str, scan_id: str) -> Optional[CryptoAsset]:
     for a in assets:
         if a.id == asset_id:
             return a
+
+    # 3. Fallback: SQLite persistence (survives backend restarts)
+    try:
+        from ..db import get_scan
+        scan_rec = get_scan(scan_id)
+        if scan_rec:
+            for a in scan_rec.assets:
+                if a.id == asset_id:
+                    _scan_cache[scan_id] = scan_rec.assets
+                    return a
+    except Exception:
+        pass
     return None
 
 

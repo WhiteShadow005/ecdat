@@ -35,7 +35,13 @@ backend/.env
 backend/bin/cryptoscan
 backend/bin/cryptoscan.exe
 
-# Temp upload directory
+# Temporary scan uploads
+tmp/
+*.zip
+backend/tmp/
+core_banking_suite/
+backend/ecdat.db
+backend/ecdat.db-journalrectory
 backend/tmp/
 
 # OS files
@@ -53,6 +59,7 @@ Thumbs.db
 htmlcov/
 .coverage
 coverage.xml
+*.tsbuildinfo
 
 # Generated exports (don't commit scan results)
 *.cbom.json

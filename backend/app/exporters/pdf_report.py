@@ -191,6 +191,14 @@ def export_to_pdf(scan_id: str):
     # Try the shared cache first (has full ScanResult including Mosca)
     result = scan_cache.get(scan_id)
 
+    # Fallback: full ScanResult from SQLite persistence (survives restarts)
+    if not result:
+        try:
+            from ..db import get_scan
+            result = get_scan(scan_id)
+        except Exception:
+            result = None
+
     # Fallback: reconstruct minimal ScanResult from legacy asset cache
     if not result:
         try:

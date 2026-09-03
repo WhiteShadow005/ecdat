@@ -39,6 +39,35 @@ class CryptoAsset(BaseModel):
     notes: Optional[str] = None
     source_scanner: Optional[str] = None   # Which scanner found it
 
+    # Frontend-friendly compatibility aliases
+    file: Optional[str] = None
+    line: Optional[int] = None
+    replacement: Optional[str] = None
+    attack_vector: Optional[str] = None
+    nist_standard: Optional[str] = None
+
+    def model_post_init(self, __context):
+        if not self.file and self.file_path:
+            self.file = self.file_path
+        elif not self.file_path and self.file:
+            self.file_path = self.file
+
+        if self.line is None and self.line_number is not None:
+            self.line = self.line_number
+        elif self.line_number is None and self.line is not None:
+            self.line_number = self.line
+
+        if not self.replacement and self.recommended_replacement:
+            self.replacement = self.recommended_replacement
+        elif not self.recommended_replacement and self.replacement:
+            self.recommended_replacement = self.replacement
+
+        if not self.attack_vector:
+            self.attack_vector = "Shor's Algorithm" if self.quantum_status == "BROKEN" else ("Grover's Algorithm" if self.quantum_status == "WEAKENED" else "None")
+
+        if not self.nist_standard:
+            self.nist_standard = "NIST FIPS 203/204" if self.quantum_status in ("BROKEN", "WEAKENED") else "Classical"
+
 
 class MoscaResult(BaseModel):
     """Result of Mosca's Theorem evaluation."""
@@ -50,8 +79,17 @@ class MoscaResult(BaseModel):
     message: str = ""
     data_category: Optional[str] = None
 
+    # Frontend aliases
+    x: float = 0.0
+    y: float = 0.0
+    z: float = 7.0
+
     def model_post_init(self, __context):
         self.x_plus_y = self.x_shelf_life_years + self.y_migration_years
+        self.x = self.x_shelf_life_years
+        self.y = self.y_migration_years
+        self.z = self.z_qday_years
+
         if self.x_plus_y > self.z_qday_years:
             self.status = "CRITICAL"
             self.message = (
@@ -88,9 +126,16 @@ class ScanResult(BaseModel):
     scan_id: str = Field(default_factory=lambda: f"scan-{uuid.uuid4().hex[:12]}")
     timestamp: str = Field(default_factory=lambda: datetime.now(timezone.utc).isoformat())
     target_name: str = ""
+    repo_name: str = ""
     summary: ScanSummary = ScanSummary()
     mosca: Optional[MoscaResult] = None
     assets: List[CryptoAsset] = []
+
+    def model_post_init(self, __context):
+        if not self.repo_name and self.target_name:
+            self.repo_name = self.target_name
+        elif not self.target_name and self.repo_name:
+            self.target_name = self.repo_name
 
 
 # ─── API Request / Response Models ─────────────────────────────────────────────
