@@ -8,7 +8,7 @@ Owner: Aujasya Rajput
 import os
 import ast
 from pathlib import Path
-from typing import List
+from typing import List, Optional
 from ..models import CryptoAsset
 from ..config import GEMINI_API_KEY
 
@@ -111,36 +111,106 @@ If no cryptographic operation is present, return {{"detected": false, "algorithm
         return _heuristic_semantic_detection(code_snippet, function_name)
 
 
-def run_semantic_analysis(dir_path: str, already_found_paths: set = None) -> List[CryptoAsset]:
+# Ordered (fragment, family) rules for coarse dedupe keys. Order matters:
+# more specific fragments (3DES, SHA-1 vs SHA-256) must precede generic ones
+# (DES, SHA). "AES", "AES-128", "AES-256" all collapse to "aes" so the AI
+# pass never re-reports crypto the static scanner already found.
+_FAMILY_RULES = (
+    ("TRIPLE", "3des"), ("3DES", "3des"),
+    ("SHA-256", "sha256"), ("SHA256", "sha256"),
+    ("SHA-3", "sha3"), ("SHA3", "sha3"),
+    ("SHA-1", "sha1"), ("SHA1", "sha1"),
+    ("HMAC", "hmac"),
+    ("MD5", "md5"),
+    ("ECDSA", "ecdsa"),
+    ("RSA", "rsa"),
+    ("AES", "aes"),
+    ("ARC4", "rc4"), ("RC4", "rc4"),
+    ("DIFFIE", "dh"), ("ECDH", "ecdh"),
+    ("DSA", "dsa"),
+    ("DES", "des"),
+    ("JWT", "jwt"),
+)
+
+
+def crypto_family(algorithm: Optional[str]) -> str:
+    """
+    Coarse algorithm family key used for cross-scanner deduplication.
+
+    'AES', 'AES-128' and 'AES-256' all collapse to 'aes', while 'SHA-1' vs
+    'SHA-256' and 'DES' vs '3DES' remain distinct families.
+    """
+    a = (algorithm or "").upper().strip()
+    if not a:
+        return ""
+    for fragment, family in _FAMILY_RULES:
+        if fragment in a:
+            return family
+    return a
+
+
+def run_semantic_analysis(
+    dir_path: str,
+    skip_keys: Optional[set] = None,
+    use_gemini: bool = False,
+) -> List[CryptoAsset]:
     """
     Run AI semantic analysis on Python files in dir_path.
-    Focuses on functions NOT already detected by the static scanner.
-    Returns list of newly discovered CryptoAsset findings.
+    Detects crypto hidden in wrappers / dynamic code that static scanners miss.
+
+    Args:
+        dir_path:   Root directory to walk for .py files.
+        skip_keys:  Set of "ALGORITHM|file_path" keys already reported by the
+                    static scanners — those (file, algorithm) hits are not
+                    re-reported as AI findings.
+        use_gemini: When True, query Gemini for analysis (still falls back to
+                    the offline heuristic when no API key or on network error).
+                    When False, only the fast offline heuristic runs.
+
+    Returns:
+        List of newly discovered CryptoAsset findings.
     """
-    already_found_paths = already_found_paths or set()
+    skip_keys = skip_keys or set()
     new_assets: List[CryptoAsset] = []
 
-    for root, _, files in Path(dir_path).walk() if hasattr(Path(dir_path), 'walk') else _walk(dir_path):
+    for root, _, files in _walk(dir_path):
         for fname in files:
             if not fname.endswith(".py"):
                 continue
             fpath = str(Path(root) / fname)
             suspicious_fns = _extract_suspicious_functions(fpath)
+            seen_keys = set()
 
             for fn in suspicious_fns:
-                result = _analyze_with_gemini(fn["body_snippet"], fn["function_name"])
-                if result.get("detected") and result.get("algorithm") and result.get("confidence", 0) >= 0.6:
-                    asset = CryptoAsset(
-                        algorithm=result["algorithm"],
-                        type="algorithm",
-                        file_path=fpath,
-                        line_number=fn["line_number"],
-                        language="python",
-                        code_snippet=fn["body_snippet"][:200],
-                        notes=f"AI detected (confidence {result['confidence']:.0%}): {result['explanation']}",
-                        source_scanner="ai_semantic_analyzer",
-                    )
-                    new_assets.append(asset)
+                if use_gemini:
+                    result = _analyze_with_gemini(fn["body_snippet"], fn["function_name"])
+                else:
+                    result = _heuristic_semantic_detection(fn["body_snippet"], fn["function_name"])
+
+                if not (result.get("detected") and result.get("algorithm")):
+                    continue
+                if result.get("confidence", 0) < 0.6:
+                    continue
+
+                # Don't re-report crypto the static scanner already flagged in
+                # this file, and avoid duplicate hits within this pass. Family
+                # keys make 'AES-128' (AI) dedupe against 'AES' (static).
+                key = f"{crypto_family(result['algorithm'])}|{fpath}"
+                if key in skip_keys or key in seen_keys:
+                    continue
+                seen_keys.add(key)
+
+                asset = CryptoAsset(
+                    algorithm=result["algorithm"],
+                    type="algorithm",
+                    file_path=fpath,
+                    line_number=fn["line_number"],
+                    language="python",
+                    code_snippet=fn["body_snippet"][:200],
+                    notes=f"AI detected (confidence {result['confidence']:.0%}): {result['explanation']}",
+                    source_scanner="ai_semantic_analyzer",
+                )
+                new_assets.append(asset)
 
     return new_assets
 

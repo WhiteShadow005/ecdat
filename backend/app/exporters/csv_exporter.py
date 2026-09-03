@@ -53,7 +53,6 @@ def build_csv_string(
     output = io.StringIO()
 
     # ─── Metadata header (human-readable prefix rows) ─────────────────────────
-    timestamp = datetime.now(timezone.utc).strftime("%Y-%m-%d %Human:%M UTC").replace("Human:", "")
     timestamp = datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M UTC")
 
     output.write(f"# ECDAT — Cryptographic Asset Inventory Export\n")

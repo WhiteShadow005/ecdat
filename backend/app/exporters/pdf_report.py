@@ -172,7 +172,7 @@ def build_pdf_bytes(result: ScanResult) -> bytes:
         import weasyprint
         doc = weasyprint.HTML(string=html_content)
         return doc.write_pdf()
-    except (ImportError, OSError, Exception) as e:
+    except Exception as e:
         # Return HTML with a visible banner so the caller knows it's an HTML fallback
         banner = (
             f"<div style='background:#fee2e2;border:2px solid red;padding:12px;font-family:sans-serif;'>"

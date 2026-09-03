@@ -196,18 +196,28 @@ def _template_diff(asset: CryptoAsset, replacement: str, error: str = None) -> R
         fixed_code  = f"# TODO: Replace {algo} with {replacement}"
 
     old_line = import_old if import_old else code.split("\n")[0]
-    new_line  = import_new if import_new else fixed_code.split("\n")[0]
+
+    # fixed_code body lines are authored with a leading "+" for some branches;
+    # strip it so each line is prefixed exactly once below (previously produced
+    # "++line" artifacts, duplicated the first body line, and dropped the
+    # replacement import entirely).
+    body_lines = [
+        ln[1:] if ln.startswith("+") else ln
+        for ln in fixed_code.split("\n")
+        if ln.strip()
+    ]
+
+    added_lines = ([import_new] if import_new else []) + body_lines
+    if not added_lines:
+        added_lines = [f"# TODO: Replace {algo} with {replacement}"]
 
     diff = (
         f"--- a/{file_path}\n"
         f"+++ b/{file_path}\n"
-        f"@@ -{line},1 +{line},{len(fixed_code.split(chr(10)))} @@\n"
+        f"@@ -{line},1 +{line},{len(added_lines)} @@\n"
         f"-{old_line}\n"
-        f"+{new_line}\n"
     )
-    if import_new and fixed_code:
-        for extra in fixed_code.split("\n"):
-            diff += f"+{extra}\n"
+    diff += "".join(f"+{ln}\n" for ln in added_lines)
 
     explanation = f"Template patch: Replace {algo} with {replacement}."
     if error:

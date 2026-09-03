@@ -260,4 +260,8 @@ def export_to_cbom(scan_id: str) -> dict:
     except Exception:
         pass
 
-    return {"error": f"No scan found with ID: {scan_id}. Run /api/scan first."}
+    from fastapi import HTTPException
+    raise HTTPException(
+        status_code=404,
+        detail=f"No scan found with ID: {scan_id}. Run /api/scan first.",
+    )
