@@ -177,6 +177,15 @@ class PythonCryptoVisitor(ast.NodeVisitor):
                         mapped = STRING_ALGORITHM_MAP.get(arg.value)
                         if mapped:
                             algo = mapped
+
+                # Check keyword string args too (e.g.
+                # jwt.encode(payload, key, algorithm="RS256") which passes the
+                # algorithm name as a keyword, not a positional arg)
+                for kwarg in node.keywords:
+                    if isinstance(kwarg.value, ast.Constant) and isinstance(kwarg.value.value, str):
+                        mapped = STRING_ALGORITHM_MAP.get(kwarg.value.value)
+                        if mapped:
+                            algo = mapped
                 break
 
         # Also check if any string arg matches algorithm names (e.g., Cipher.getInstance("RSA"))

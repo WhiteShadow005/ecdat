@@ -4,6 +4,7 @@ All API routes for the Enterprise Cryptographic Discovery & Analysis Tool.
 Owner: Shaurya Pratap Singh
 """
 
+import logging
 import os
 import shutil
 import zipfile
@@ -15,11 +16,14 @@ from fastapi import FastAPI, File, Form, UploadFile, HTTPException, Query
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 
+from . import cache as scan_cache
 from .models import (
     ScanResult, ScanSummary, HealthResponse,
     TLSProbeResult, RemediationRequest, RemediationResult,
 )
-from .config import APP_VERSION, TEMP_DIR
+from .config import APP_VERSION, TEMP_DIR, MAX_UPLOAD_BYTES, CORS_ORIGINS
+
+logger = logging.getLogger("ecdat")
 
 # Scanner imports
 from .scanners.python_scanner import scan_python_directory
@@ -49,14 +53,44 @@ app = FastAPI(
 def on_startup():
     init_db()
 
-# Allow frontend on localhost:3000
+# Allow the Next.js frontend on localhost:3000. Explicit origins only —
+# "*" combined with allow_credentials=True is rejected by browsers.
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:3000", "http://127.0.0.1:3000", "*"],
+    allow_origins=CORS_ORIGINS,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+
+def _safe_extract_zip(zf: zipfile.ZipFile, dest_dir: Path) -> None:
+    """
+    Extract a ZIP archive without allowing zip-slip path traversal.
+
+    Rejects any entry whose normalized path is absolute or contains "..",
+    or that would resolve outside the extraction directory.
+    """
+    if not zf.namelist():
+        raise HTTPException(status_code=400, detail="ZIP archive contains no files")
+
+    dest_root = dest_dir.resolve()
+    for name in zf.namelist():
+        # Normalize Windows-style separators; reject absolute / parent paths
+        norm = name.replace("\\", "/")
+        drive_prefix = len(norm) >= 2 and norm[1] == ":" and norm[0].isalpha()
+        if norm.startswith("/") or ".." in norm.split("/") or drive_prefix:
+            raise HTTPException(
+                status_code=400,
+                detail=f"ZIP entry '{name}' is unsafe (path traversal)",
+            )
+        target = (dest_root / norm).resolve()
+        if not str(target).startswith(str(dest_root) + os.sep):
+            raise HTTPException(
+                status_code=400,
+                detail=f"ZIP entry '{name}' escapes the extraction directory",
+            )
+    zf.extractall(dest_dir)
 
 
 # ─── Health Check ──────────────────────────────────────────────────────────────
@@ -111,6 +145,7 @@ async def scan_upload(
     z_years: float = Form(7.0, description="Q-Day estimate (years, default=7)"),
     data_category: Optional[DataCategory] = Form(DataCategory.financial, description="Preset category for data retention & sensitivity"),
     exposure_context: ExposureContext = Form(ExposureContext.internal, description="Network exposure level of the asset"),
+    deep_ai_scan: bool = Form(False, description="Run Gemini-backed AI deep scan (USP 1); offline heuristics run regardless"),
 ):
     """
     Main scan endpoint. Upload a ZIP file containing source code, certificates,
@@ -122,24 +157,36 @@ async def scan_upload(
     parsed_y = y_years if (y_years and y_years > 0) else None
     parsed_z = z_years if z_years > 0 else 7.0
 
-    # ─── 1. Save uploaded ZIP ──────────────────────────────────────────────────
-    if not file.filename or not file.filename.endswith(".zip"):
+    # ─── 1. Validate & stream the upload to disk ───────────────────────────────
+    if not file.filename or Path(file.filename).suffix.lower() != ".zip":
         raise HTTPException(status_code=400, detail="Only .zip files are accepted")
 
     tmp_dir = Path(tempfile.mkdtemp(dir=TEMP_DIR))
     zip_path = tmp_dir / "upload.zip"
+    extract_dir = tmp_dir / "extracted"
 
     try:
-        contents = await file.read()
+        # Stream in 1 MB chunks with a hard size cap so oversized uploads are
+        # rejected early instead of being buffered entirely into memory.
+        received = 0
         with open(zip_path, "wb") as f:
-            f.write(contents)
+            while chunk := await file.read(1024 * 1024):
+                received += len(chunk)
+                if received > MAX_UPLOAD_BYTES:
+                    raise HTTPException(
+                        status_code=413,
+                        detail=f"Upload exceeds the {MAX_UPLOAD_BYTES // (1024 * 1024)} MB limit",
+                    )
+                f.write(chunk)
 
-        # ─── 2. Extract ZIP ────────────────────────────────────────────────────
-        extract_dir = tmp_dir / "extracted"
+        if received == 0:
+            raise HTTPException(status_code=400, detail="Uploaded file is empty")
+
+        # ─── 2. Validate & safely extract ZIP (zip-slip protected) ─────────────
         extract_dir.mkdir()
         try:
             with zipfile.ZipFile(zip_path, "r") as zf:
-                zf.extractall(extract_dir)
+                _safe_extract_zip(zf, extract_dir)
         except zipfile.BadZipFile:
             raise HTTPException(status_code=400, detail="Invalid or corrupted ZIP file")
 
@@ -153,6 +200,27 @@ async def scan_upload(
         # Java Cryptography scanner
         java_assets = scan_java_directory(str(extract_dir))
         raw_assets.extend(java_assets)
+
+        # AI Semantic Analyzer (USP 1) — catches crypto hidden in wrapper
+        # classes / dynamic code that the static AST scanner misses.
+        # Offline heuristics always run; Gemini deep analysis is opt-in via
+        # deep_ai_scan (and still falls back to heuristics when keyless).
+        try:
+            from .ai.semantic_analyzer import run_semantic_analysis, crypto_family
+            static_keys = {
+                f"{crypto_family(a.algorithm)}|{a.file_path or ''}"
+                for a in py_assets
+            }
+            ai_assets = run_semantic_analysis(
+                str(extract_dir),
+                skip_keys=static_keys,
+                use_gemini=deep_ai_scan,
+            )
+            if ai_assets:
+                logger.info("AI semantic analyzer found %d additional asset(s)", len(ai_assets))
+                raw_assets.extend(ai_assets)
+        except Exception as exc:  # semantic analysis must never break the core scan
+            logger.warning("AI semantic analysis skipped: %s", exc)
 
         # X.509 Certificate parser
         cert_assets = scan_certs_in_directory(str(extract_dir))
@@ -197,6 +265,13 @@ async def scan_upload(
         # ─── 10. Enrich with Migration Recommendations ─────────────────────────
         inventory = enrich_with_recommendations(inventory)
 
+        # ─── 10b. Sync frontend alias fields after all engines have run ────────
+        # Engines mutate canonical fields post-construction; refresh the
+        # file/line/replacement/attack_vector/nist_standard aliases now so the
+        # API response, cache and SQLite copy are all consistent.
+        for asset in inventory:
+            asset.sync_aliases()
+
         # ─── 11. Compute Summary ──────────────────────────────────────────────
         total = len(inventory)
         counts = {"critical": 0, "high": 0, "medium": 0, "low": 0, "safe": 0}
@@ -236,6 +311,13 @@ async def scan_upload(
         try:
             from .ai.code_remediator import register_scan
             register_scan(result.scan_id, result.assets)
+        except Exception:
+            pass
+
+        # Keep the full ScanResult in the shared in-memory cache so exports
+        # carry Mosca / summary metadata even before SQLite flush
+        try:
+            scan_cache.save(result.scan_id, result)
         except Exception:
             pass
 
@@ -308,34 +390,40 @@ def pqc_proof():
         return {"error": str(e), "message": "PQC demo failed — is liboqs installed?"}
 
 
-# ─── Export Endpoints (stub — Ojasya implements these) ────────────────────────
+# ─── Export Endpoints (Owner: Aujasya) ────────────────────────────────────────
 
 @app.get("/api/export/cbom", tags=["Export"])
 def export_cbom(scan_id: str = Query(...)):
-    """Export scan results as CycloneDX 1.6 CBOM JSON. (Owner: Ojasya)"""
+    """Export scan results as CycloneDX 1.6 CBOM JSON. (Owner: Aujasya)"""
     try:
         from .exporters.cbom_exporter import export_to_cbom
         return export_to_cbom(scan_id)
+    except HTTPException:
+        raise  # let 404 "scan not found" pass through
     except Exception as e:
         raise HTTPException(status_code=501, detail=f"CBOM exporter: {e}")
 
 
 @app.get("/api/export/csv", tags=["Export"])
 def export_csv(scan_id: str = Query(...)):
-    """Export scan results as CSV. (Owner: Ojasya)"""
+    """Export scan results as CSV. (Owner: Aujasya)"""
     try:
         from .exporters.csv_exporter import export_to_csv
         return export_to_csv(scan_id)
+    except HTTPException:
+        raise  # let 404 "scan not found" pass through
     except Exception as e:
         raise HTTPException(status_code=501, detail=f"CSV exporter: {e}")
 
 
 @app.get("/api/export/pdf", tags=["Export"])
 def export_pdf(scan_id: str = Query(...)):
-    """Export scan results as PDF audit report. (Owner: Ojasya)"""
+    """Export scan results as PDF audit report. (Owner: Aujasya)"""
     try:
         from .exporters.pdf_report import export_to_pdf
         return export_to_pdf(scan_id)
+    except HTTPException:
+        raise  # let 404 "scan not found" pass through
     except Exception as e:
         raise HTTPException(status_code=501, detail=f"PDF exporter: {e}")
 

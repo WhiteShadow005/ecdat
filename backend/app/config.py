@@ -25,6 +25,23 @@ TEMP_DIR.mkdir(parents=True, exist_ok=True)
 # ─── API Keys ──────────────────────────────────────────────────────────────────
 GEMINI_API_KEY: str = os.getenv("GEMINI_API_KEY", "")
 
+# ─── Scan / Upload Limits ──────────────────────────────────────────────────────
+# Maximum accepted ZIP upload size (default: 50 MB) — read in streaming chunks
+# so oversized files are rejected before being buffered into memory.
+MAX_UPLOAD_BYTES: int = int(os.getenv("MAX_UPLOAD_MB", "50")) * 1024 * 1024
+
+# ─── CORS Origins ──────────────────────────────────────────────────────────────
+# Explicit allow-list (never "*" together with allow_credentials=True, which
+# browsers reject). Override via CORS_ORIGINS="a,b,c" env var if needed.
+CORS_ORIGINS: list = [
+    o.strip()
+    for o in os.getenv(
+        "CORS_ORIGINS",
+        "http://localhost:3000,http://127.0.0.1:3000",
+    ).split(",")
+    if o.strip()
+]
+
 # ─── Risk Engine Defaults ──────────────────────────────────────────────────────
 DEFAULT_Z_YEARS: float = float(os.getenv("DEFAULT_Z_YEARS", "7"))     # Q-Day estimate
 DEFAULT_Y_YEARS: float = float(os.getenv("DEFAULT_Y_YEARS", "4"))     # Migration time

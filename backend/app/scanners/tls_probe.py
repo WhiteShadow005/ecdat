@@ -15,18 +15,6 @@ from cryptography.x509.oid import NameOID
 from ..models import TLSProbeResult
 
 
-# Dangerous TLS protocol identifiers
-WEAK_TLS_PROTOCOLS = {
-    ssl.PROTOCOL_TLS_CLIENT: "TLS",
-}
-
-TLS_VERSION_STATUS = {
-    "TLSv1": "BROKEN",
-    "TLSv1.1": "WEAKENED",
-    "TLSv1.2": "WEAKENED",  # Weakened but still used. Cipher matters more.
-    "TLSv1.3": "SAFE",
-}
-
 WEAK_CIPHER_KEYWORDS = {
     "RC4": ("RC4", "BROKEN", "ChaCha20-Poly1305"),
     "DES": ("DES", "BROKEN", "AES-256-GCM"),
@@ -129,15 +117,15 @@ def _estimate_tls_qars(result: TLSProbeResult) -> int:
     """Quick QARS estimate based on TLS version and cipher suite keywords."""
     score = 0
 
-    # TLS version contribution
+    # TLS version contribution (OpenSSL reports e.g. "TLSv1.2").
+    # TLS 1.3 contributes 0.
     if result.tls_version:
-        if "1.0" in result.tls_version or "1" == result.tls_version.split("v")[-1]:
+        if result.tls_version in ("TLSv1", "TLSv1.0"):
             score += 35
-        elif "1.1" in result.tls_version:
+        elif result.tls_version == "TLSv1.1":
             score += 25
-        elif "1.2" in result.tls_version:
+        elif result.tls_version == "TLSv1.2":
             score += 15
-        # TLS 1.3 contributes 0
 
     # Cert algo contribution
     if result.quantum_status == "BROKEN":
@@ -147,8 +135,14 @@ def _estimate_tls_qars(result: TLSProbeResult) -> int:
 
     # Cipher suite contribution
     if result.cipher_suite:
+        suite_upper = result.cipher_suite.upper()
         for keyword in WEAK_CIPHER_KEYWORDS:
-            if keyword in result.cipher_suite.upper():
+            if keyword in suite_upper:
+                # "RSA" also appears in ECDHE-RSA / DHE-RSA suites, which DO
+                # provide forward secrecy — only penalize true static-RSA key
+                # exchange cipher suites.
+                if keyword == "RSA" and ("ECDHE" in suite_upper or "DHE-" in suite_upper):
+                    continue
                 score += 10
                 break
 

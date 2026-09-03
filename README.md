@@ -91,7 +91,7 @@ ecdat/
 │
 ├── team_tasks/                      # Individual member task checklists
 │   ├── Shaurya_Pratap_Singh_TechLead.md
-│   ├── Ojasya_Rajput_BackendDev2.md
+│   ├── Aujasya_Rajput_BackendDev2.md
 │   ├── Arnav_Gupta_FrontendDev.md
 │   ├── Mehek_Sharma_PitchDeck.md
 │   ├── Jashanpreet_Singh_PitchDeck.md
@@ -137,7 +137,7 @@ curl http://localhost:8000/api/health
 |---|---|---|
 | `main` | All | Protected — only tested, working code |
 | `dev/shaurya` | Shaurya Pratap Singh | Core scanners, risk engine, FastAPI |
-| `dev/ojasya` | Ojasya Rajput | CBOM export, AI features, PDF reports |
+| `dev/aujasya` | Aujasya Rajput | CBOM export, AI features, PDF reports |
 | `dev/arnav` | Arnav Gupta | Next.js frontend dashboard |
 | `dev/sahil` | Sahil Sharma | Test repo, QA, schema validation |
 
@@ -148,7 +148,7 @@ curl http://localhost:8000/api/health
 | Name | Role |
 |---|---|
 | **Shaurya Pratap Singh** | Tech Lead — Core Backend (Scanners, Risk Engine, Mosca) |
-| **Ojasya Rajput** | Backend Dev 2 (CBOM Export, AI Semantic Analyzer, PDF Reports) |
+| **Aujasya Rajput** | Backend Dev 2 (CBOM Export, AI Semantic Analyzer, PDF Reports) |
 | **Arnav Gupta** | Frontend Lead (Next.js Dashboard, Mosca Timeline, Diff Viewer) |
 | **Mehek Sharma** | Pitch Deck & Strategy Lead (SIH PPT, Presentation) |
 | **Jashanpreet Singh** | Pitch Deck Technical Lead (Architecture, NIST Standards, Q&A) |

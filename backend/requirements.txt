@@ -1,12 +1,30 @@
+# ECDAT Backend — Python Dependencies
+# Install: pip install -r requirements.txt
+
+# ── Core API ────────────────────────────────────────────────────────────────
 fastapi
 uvicorn[standard]
 python-multipart
 aiofiles
-cryptography
-cyclonedx-python-lib
-WeasyPrint
-Jinja2
-google-generativeai
 python-dotenv
+
+# ── Crypto scanning ──────────────────────────────────────────────────────────
+cryptography
+
+# ── Data validation ──────────────────────────────────────────────────────────
 jsonschema
 requests
+
+# ── CBOM export (CycloneDX 1.6 / ECMA-424) ──────────────────────────────────
+cyclonedx-python-lib
+
+# ── PDF report generation ────────────────────────────────────────────────────
+WeasyPrint
+Jinja2
+
+# ── AI features (Gemini API) ─────────────────────────────────────────────────
+google-generativeai
+
+# ── PQC live demo (liboqs — requires liboqs C library installed first) ────────
+# Install guide: https://github.com/open-quantum-safe/liboqs-python
+liboqs-python

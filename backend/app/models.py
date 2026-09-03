@@ -47,26 +47,43 @@ class CryptoAsset(BaseModel):
     nist_standard: Optional[str] = None
 
     def model_post_init(self, __context):
-        if not self.file and self.file_path:
+        self.sync_aliases()
+
+    def sync_aliases(self):
+        """
+        Refresh frontend-friendly alias fields from the canonical values.
+
+        Engines mutate canonical fields (quantum_status, recommended_replacement,
+        file_path, …) *after* model construction, so aliases must be re-synced
+        once analysis completes. Derived fields (attack_vector, nist_standard)
+        are recomputed from quantum_status every call so they never go stale.
+        """
+        if self.file_path:
             self.file = self.file_path
-        elif not self.file_path and self.file:
+        elif self.file:
             self.file_path = self.file
 
-        if self.line is None and self.line_number is not None:
+        if self.line_number is not None:
             self.line = self.line_number
-        elif self.line_number is None and self.line is not None:
+        elif self.line is not None:
             self.line_number = self.line
 
-        if not self.replacement and self.recommended_replacement:
+        if self.recommended_replacement:
             self.replacement = self.recommended_replacement
-        elif not self.recommended_replacement and self.replacement:
+        elif self.replacement:
             self.recommended_replacement = self.replacement
 
-        if not self.attack_vector:
-            self.attack_vector = "Shor's Algorithm" if self.quantum_status == "BROKEN" else ("Grover's Algorithm" if self.quantum_status == "WEAKENED" else "None")
+        if self.quantum_status == "BROKEN":
+            self.attack_vector = "Shor's Algorithm"
+        elif self.quantum_status == "WEAKENED":
+            self.attack_vector = "Grover's Algorithm"
+        else:
+            self.attack_vector = "None"
 
-        if not self.nist_standard:
-            self.nist_standard = "NIST FIPS 203/204" if self.quantum_status in ("BROKEN", "WEAKENED") else "Classical"
+        if self.quantum_status in ("BROKEN", "WEAKENED"):
+            self.nist_standard = "NIST FIPS 203/204"
+        else:
+            self.nist_standard = "Classical"
 
 
 class MoscaResult(BaseModel):
