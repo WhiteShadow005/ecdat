@@ -39,7 +39,7 @@ Click on your name to view your dedicated day-by-day task checklist, technical s
 1. **Main Branch is Protected:** Never push directly to `main`.
 2. **Individual Feature Branches:**
    - Shaurya: `dev/shaurya`
-   - Aujasya: `dev/aujasya` (or `dev/ojasya`)
+   - Aujasya: `dev/aujasya`
    - Arnav: `dev/arnav`
    - Sahil: `dev/sahil`
 3. **Daily Routine:**

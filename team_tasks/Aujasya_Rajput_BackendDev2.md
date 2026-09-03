@@ -144,7 +144,7 @@ Every other CBOM tool on Earth says "you're using RSA-2048, that's bad." And the
 
 ## Git Workflow
 ```bash
-# Your branch: dev/aujasya (or dev/ojasya)
+# Your branch: dev/aujasya
 git checkout -b dev/aujasya
 
 # Commit often (every 30–60 mins)
