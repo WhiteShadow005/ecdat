@@ -17,6 +17,7 @@ env/
 .env
 
 # Node / Next.js
+node_modules
 node_modules/
 *.nosync
 .metadata_never_index

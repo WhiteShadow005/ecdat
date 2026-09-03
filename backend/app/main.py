@@ -372,11 +372,12 @@ def remediate_asset(request: RemediationRequest):
 
 # ─── PQC Live Proof Endpoint ───────────────────────────────────────────────────
 
-@app.get("/api/demo/pqc", tags=["Demo"])
+@app.get("/api/pqc/proof", tags=["PQC"])
+@app.get("/api/demo/pqc", tags=["PQC"])
 def pqc_proof():
     """
-    Live PQC demonstration using liboqs-python.
-    Runs ML-KEM-768 key encapsulation and ML-DSA-65 signing to prove PQC works.
+    Live PQC operational verification using liboqs-python.
+    Executes ML-KEM-768 key encapsulation and ML-DSA-65 digital signatures to verify NIST PQC algorithms.
     """
     try:
         from .ai.pqc_proof import run_pqc_demo

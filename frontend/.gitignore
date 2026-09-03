@@ -1,0 +1,7 @@
+node_modules
+node_modules/
+node_modules.nosync
+*.nosync
+.next/
+out/
+.metadata_never_index
