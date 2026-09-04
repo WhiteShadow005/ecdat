@@ -81,6 +81,7 @@ export function LandingHeader() {
                 <Link
                   key={link.name}
                   href={link.href}
+                  prefetch={true}
                   className={`nav-link ${isActive ? "active" : ""}`}
                 >
                   {link.name}
@@ -90,7 +91,7 @@ export function LandingHeader() {
           </nav>
 
           {/* Dark Launch Console Pill */}
-          <Link href="/dashboard" className="sign-in-btn">
+          <Link href="/dashboard" prefetch={true} className="sign-in-btn">
             Launch Console
           </Link>
 

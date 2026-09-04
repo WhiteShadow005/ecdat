@@ -1,13 +1,30 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
+import dynamic from "next/dynamic";
 import { useScan } from "@/context/ScanContext";
 import { CryptoAsset } from "@/lib/types";
-import { Heatmap } from "@/components/charts/Heatmap";
-import { RiskBar } from "@/components/charts/RiskBar";
 import { StatusBadge } from "@/components/ui/StatusBadge";
 import { Flame, Sparkles, ArrowRight } from "lucide-react";
 import Link from "next/link";
+
+const Heatmap = dynamic(
+  () => import("@/components/charts/Heatmap").then((mod) => mod.Heatmap),
+  {
+    ssr: false,
+    loading: () => (
+      <div className="nexus-card p-12 bg-white border-[#E8E2D5] flex items-center justify-center text-xs text-[#78716C]">
+        <span className="w-2 h-2 rounded-full bg-[#8B5E34] animate-ping mr-2" />
+        Loading Quantum Heatmap Analytics...
+      </div>
+    ),
+  }
+);
+
+const RiskBar = dynamic(
+  () => import("@/components/charts/RiskBar").then((mod) => mod.RiskBar),
+  { ssr: false }
+);
 
 export default function HeatmapPage() {
   const { scanData, totalAssets, criticalCount } = useScan();
