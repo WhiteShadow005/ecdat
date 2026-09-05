@@ -79,10 +79,19 @@ export default function ReportsPage() {
       else if (type === "csv") blob = await exportCSV(scanData);
       else blob = await exportPDF(scanData);
 
+      let actualFilename = filename;
+      if (type === "pdf") {
+        if (blob.type.includes("text/plain")) {
+          actualFilename = filename.replace(/\.pdf$/, "_summary.txt");
+        } else if (blob.type.includes("text/html")) {
+          actualFilename = filename.replace(/\.pdf$/, ".html");
+        }
+      }
+
       const url = URL.createObjectURL(blob);
       const a = document.createElement("a");
       a.href = url;
-      a.download = filename;
+      a.download = actualFilename;
       a.click();
       URL.revokeObjectURL(url);
     } catch (e) {
