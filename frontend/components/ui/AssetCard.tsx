@@ -1,7 +1,7 @@
 import React from "react";
 import { CryptoAsset } from "@/lib/types";
 import { StatusBadge } from "./StatusBadge";
-import { FileCode, ShieldAlert, ArrowRight, Sparkles } from "lucide-react";
+import { FileCode, ShieldAlert, ArrowRight, BrainCircuit } from "lucide-react";
 import Link from "next/link";
 
 interface AssetCardProps {
@@ -89,7 +89,7 @@ export const AssetCard: React.FC<AssetCardProps> = ({
       {/* Remediation Action Link */}
       <div className="mt-3 pt-2.5 border-t border-[#E8E2D5] flex items-center justify-between">
         <span className="text-[11px] font-mono text-[#8B5E34] flex items-center gap-1 font-bold">
-          <Sparkles className="w-3 h-3 text-[#C28E58]" />
+          <BrainCircuit className="w-3 h-3 text-[#C28E58]" />
           AI Fix Ready
         </span>
         <Link

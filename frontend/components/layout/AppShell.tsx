@@ -9,7 +9,7 @@ import {
   Flame,
   Layers,
   Hourglass,
-  Sparkles,
+  BrainCircuit,
   FileSpreadsheet,
   Shield,
   ExternalLink,
@@ -38,7 +38,7 @@ const NAV_GROUPS = [
   {
     group: "Remediation & Reports",
     items: [
-      { name: "AI Code Remediator", href: "/remediation", icon: Sparkles },
+      { name: "AI Code Remediator", href: "/remediation", icon: BrainCircuit },
       { name: "Compliance Reports", href: "/reports", icon: FileSpreadsheet },
     ],
   },

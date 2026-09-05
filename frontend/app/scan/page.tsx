@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import { useScan } from "@/context/ScanContext";
 import { UploadZone } from "@/components/scanner/UploadZone";
 import { ScanProgress } from "@/components/scanner/ScanProgress";
-import { ShieldCheck, FileCode, Sparkles } from "lucide-react";
+import { ShieldCheck, FileCode, BrainCircuit } from "lucide-react";
 
 export default function ScanPage() {
   const router = useRouter();
@@ -67,7 +67,7 @@ export default function ScanPage() {
 
             <div className="nexus-card p-4 space-y-2 bg-white border-[#E8E2D5] shadow-2xs hover:border-[#D5CBB9]">
               <div className="w-8 h-8 rounded-full bg-[#FAF7F2] border border-[#E8E2D5] text-[#1C1917] flex items-center justify-center">
-                <Sparkles className="w-4 h-4 stroke-[1.75]" />
+                <BrainCircuit className="w-4 h-4 stroke-[1.75]" />
               </div>
               <h4 className="font-bold text-[#1C1917]">AI Semantic Discovery</h4>
               <p className="text-[11px] text-[#78716C] leading-relaxed">
