@@ -398,7 +398,13 @@ def export_cbom(scan_id: str = Query(...)):
     """Export scan results as CycloneDX 1.6 CBOM JSON. (Owner: Aujasya)"""
     try:
         from .exporters.cbom_exporter import export_to_cbom
-        return export_to_cbom(scan_id)
+        from fastapi.responses import Response
+        cbom = export_to_cbom(scan_id)
+        return Response(
+            content=json.dumps(cbom, indent=2),
+            media_type="application/json",
+            headers={"Content-Disposition": f'attachment; filename="{scan_id}_cyclonedx_cbom.json"'},
+        )
     except HTTPException:
         raise  # let 404 "scan not found" pass through
     except Exception as e:
