@@ -4,43 +4,43 @@ import React, { useEffect, useState } from "react";
 import { CheckCircle2, Loader2, Terminal, Cpu, ShieldCheck } from "lucide-react";
 
 interface ScanProgressProps {
+  fileName?: string;
   onComplete: () => void;
 }
 
 const SCAN_STEPS = [
-  { id: 1, label: "Extracting Archive & Scanning Python/Java AST Trees", tool: "AST Parser + Go cryptoscan" },
-  { id: 2, label: "Parsing X.509 Certificates & Signature Algorithms", tool: "Cert Parser (OpenSSL/Cryptography)" },
-  { id: 3, label: "Inspecting TLS, SSH & VPN Configuration Files", tool: "Config Parser (Nginx / SSHD / IPSec)" },
-  { id: 4, label: "Running AI Semantic Crypto Discovery", tool: "Gemini 1.5 Pro LLM" },
-  { id: 5, label: "Computing QARS Risk Scores & Mosca Theorem HNDL", tool: "QARS Engine (0-100)" },
-  { id: 6, label: "Synthesizing CycloneDX 1.6 CBOM (ECMA-424)", tool: "CBOM Exporter Engine" },
+  { id: 1, label: "Archive Extraction & Source File Mapping", tool: "Zip Extractor & File Walker" },
+  { id: 2, label: "Abstract Syntax Tree (AST) & Code Parsing", tool: "Python AST & Java Bytecode Engine" },
+  { id: 3, label: "X.509 Certificate & PKI Hierarchy Inspection", tool: "Cert Parser (OpenSSL / Cryptography)" },
+  { id: 4, label: "Network Protocol & Server Config Auditing", tool: "Config Parser (TLS / SSH / Nginx)" },
+  { id: 5, label: "AI Semantic Wrapper & Dynamic Discovery", tool: "Gemini 2.0 Flash Semantic Analyzer" },
+  { id: 6, label: "QARS Risk Scoring & Mosca HNDL Assessment", tool: "QARS Composite & Mosca Inequality" },
+  { id: 7, label: "CycloneDX 1.6 CBOM Synthesis (ECMA-424)", tool: "CBOM Exporter Engine" },
 ];
 
-const LOG_MESSAGES = [
-  "[AST-SCANNER] Initializing AST walker over src/auth/jwt_signer.py...",
-  "[AST-SCANNER] Detected: RSA-2048 key generation (public_exponent=65537) -> Vulnerable to Shor's algorithm.",
-  "[AST-SCANNER] Flagged: MD5 digest in src/auth/password_hasher.py -> Collision attack risk.",
-  "[JAVA-SCAN] Found: ECDSA secp256r1 in TransactionSigner.java -> Shor curve forgery risk.",
-  "[CERT-PARSER] Inspecting certs/server.pem -> Subject: CN=api.enterprise.internal, Key: RSA-2048.",
-  "[CERT-PARSER] Warning: certs/ca_bundle.crt uses deprecated SHA-1 signature algorithm.",
-  "[CONFIG-PARSER] Parsing config/nginx.conf -> TLSv1.0 / TLSv1.1 protocols and DHE ciphers enabled.",
-  "[CONFIG-PARSER] Parsing config/sshd_config -> Found diffie-hellman-group1-sha1 and ssh-rsa.",
-  "[AI-SEMANTIC] Triggering Gemini LLM on custom wrapper in src/api/crypto_wrapper.py...",
-  "[AI-SEMANTIC] LLM identified hidden 3DES ECB cipher wrapper -> Flagged as CRITICAL.",
-  "[QARS-ENGINE] Calculating composite risk: CryptoWeakness(40) + Exposure(25) + DataCrit(20) + Mosca(15)...",
-  "[MOSCA-ENGINE] Running Mosca Theorem: X (15yr) + Y (4yr) = 19yr > Z (7yr) -> CRITICAL HNDL Threat.",
-  "[CBOM-SYNTH] Compiling CycloneDX 1.6 CBOM with 15 cryptographic components...",
-  "[PIPELINE] Scan completed successfully. Redirecting to Executive Dashboard...",
-];
-
-export const ScanProgress: React.FC<ScanProgressProps> = ({ onComplete }) => {
+export const ScanProgress: React.FC<ScanProgressProps> = ({ fileName = "codebase archive", onComplete }) => {
   const [currentStep, setCurrentStep] = useState(1);
   const [progress, setProgress] = useState(5);
-  const [logs, setLogs] = useState<string[]>([LOG_MESSAGES[0]]);
+
+  const stageLogs = [
+    `[PIPELINE] Receiving archive ${fileName} — initializing sandboxed extraction...`,
+    `[EXTRACTOR] Archive extracted. Enumerating source files, certificates, and configuration manifests...`,
+    `[AST-PARSER] Walking Abstract Syntax Trees (Python AST & Java Parser) for crypto primitives...`,
+    `[CRYPTO-SCAN] Analyzing key generation calls, symmetric ciphers, and hash functions...`,
+    `[CERT-PARSER] Parsing X.509 certificate chains, public key algorithms, and signature algorithms...`,
+    `[CONFIG-AUDIT] Inspecting TLS/SSL, SSH, and VPN configuration directives...`,
+    `[SEMANTIC-AI] Running semantic discovery heuristics and Gemini 2.0 wrapper analysis...`,
+    `[QARS-ENGINE] Computing Quantum Asset Risk Scores (0–100) per identified primitive...`,
+    `[MOSCA-ENGINE] Calculating Michele Mosca's HNDL inequality (X shelf-life + Y migration vs Z Q-Day)...`,
+    `[CBOM-SYNTH] Compiling CycloneDX 1.6 Cryptographic Bill of Materials (ECMA-424)...`,
+    `[PIPELINE] Scan complete. Finalizing cryptographic asset inventory...`,
+  ];
+
+  const [logs, setLogs] = useState<string[]>([stageLogs[0]]);
 
   useEffect(() => {
-    const totalDuration = 3200; // 3.2 seconds simulated deep scan
-    const interval = 120;
+    const totalDuration = 2800; // 2.8 seconds smooth progression
+    const interval = 100;
     const increment = 100 / (totalDuration / interval);
 
     const timer = setInterval(() => {
@@ -50,25 +50,23 @@ export const ScanProgress: React.FC<ScanProgressProps> = ({ onComplete }) => {
           clearInterval(timer);
           setTimeout(() => {
             onComplete();
-          }, 400);
+          }, 350);
           return 100;
         }
 
-        // Update step based on progress
         const stepIndex = Math.min(
           SCAN_STEPS.length,
           Math.floor((next / 100) * SCAN_STEPS.length) + 1
         );
         setCurrentStep(stepIndex);
 
-        // Add log messages smoothly
         const logIndex = Math.min(
-          LOG_MESSAGES.length - 1,
-          Math.floor((next / 100) * LOG_MESSAGES.length)
+          stageLogs.length - 1,
+          Math.floor((next / 100) * stageLogs.length)
         );
         setLogs((prevLogs) => {
-          if (!prevLogs.includes(LOG_MESSAGES[logIndex])) {
-            return [...prevLogs, LOG_MESSAGES[logIndex]];
+          if (!prevLogs.includes(stageLogs[logIndex])) {
+            return [...prevLogs, stageLogs[logIndex]];
           }
           return prevLogs;
         });
@@ -78,7 +76,7 @@ export const ScanProgress: React.FC<ScanProgressProps> = ({ onComplete }) => {
     }, interval);
 
     return () => clearInterval(timer);
-  }, [onComplete]);
+  }, [onComplete, fileName]);
 
   return (
     <div className="space-y-6 max-w-4xl mx-auto">
@@ -94,7 +92,7 @@ export const ScanProgress: React.FC<ScanProgressProps> = ({ onComplete }) => {
                 ECDAT Cryptographic Discovery Pipeline Active
               </h3>
               <p className="text-xs text-[#57534E]">
-                Analyzing cryptographic primitives, certificates, and post-quantum readiness
+                Scanning <span className="font-mono font-semibold text-[#1C1917]">{fileName}</span> for post-quantum readiness
               </p>
             </div>
           </div>

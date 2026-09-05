@@ -177,22 +177,136 @@ def _simple_html_fallback(result: ScanResult) -> str:
 </body></html>"""
 
 
-def build_pdf_bytes(result: ScanResult) -> bytes:
-    """Render scan result to PDF bytes. Falls back to HTML bytes if WeasyPrint absent or fails."""
-    html_content = _render_html(result)
+def _build_reportlab_pdf(result: ScanResult) -> bytes:
+    """Robust fallback PDF generator using ReportLab when WeasyPrint native libs fail."""
+    from reportlab.lib.pagesizes import letter
+    from reportlab.lib import colors
+    from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer, Table, TableStyle
+    from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
+    
+    buf = io.BytesIO()
+    doc = SimpleDocTemplate(buf, pagesize=letter, rightMargin=36, leftMargin=36, topMargin=36, bottomMargin=36)
+    story = []
+    styles = getSampleStyleSheet()
+    
+    title_style = ParagraphStyle(
+        'DocTitle',
+        parent=styles['Heading1'],
+        fontSize=20,
+        leading=24,
+        textColor=colors.HexColor('#0f172a'),
+        spaceAfter=8
+    )
+    subtitle_style = ParagraphStyle(
+        'DocSubTitle',
+        parent=styles['Normal'],
+        fontSize=10,
+        textColor=colors.HexColor('#475569'),
+        spaceAfter=16
+    )
+    h2_style = ParagraphStyle(
+        'SectionHeading',
+        parent=styles['Heading2'],
+        fontSize=13,
+        leading=16,
+        textColor=colors.HexColor('#1e293b'),
+        spaceBefore=12,
+        spaceAfter=8
+    )
+    table_text = ParagraphStyle(
+        'TableText',
+        parent=styles['Normal'],
+        fontSize=8,
+        leading=10,
+        textColor=colors.HexColor('#0f172a')
+    )
+    table_header = ParagraphStyle(
+        'TableHeader',
+        parent=styles['Normal'],
+        fontSize=8,
+        leading=10,
+        fontName='Helvetica-Bold',
+        textColor=colors.white
+    )
 
+    # Document Header
+    story.append(Paragraph("ECDAT — Quantum Cryptographic Audit Report", title_style))
+    story.append(Paragraph(f"Smart India Hackathon 2026 | NTRO (National Technical Research Organisation)<br/>Scan ID: <b>{result.scan_id}</b> | Target: <b>{result.target_name}</b> | Generated: {result.timestamp}", subtitle_style))
+    story.append(Spacer(1, 8))
+
+    # Executive Summary Box
+    story.append(Paragraph("Executive Summary", h2_style))
+    sum_data = [
+        [Paragraph("Metric", table_header), Paragraph("Value", table_header)],
+        [Paragraph("Total Cryptographic Assets Discovered", table_text), Paragraph(str(result.summary.total_assets), table_text)],
+        [Paragraph("Critical Quantum Vulnerabilities (Shor's Threat)", table_text), Paragraph(str(result.summary.critical), table_text)],
+        [Paragraph("Weakened Primitives (Grover's Threat)", table_text), Paragraph(str(result.summary.medium + result.summary.high), table_text)],
+        [Paragraph("Quantum-Safe Primitives", table_text), Paragraph(str(result.summary.safe), table_text)],
+        [Paragraph("Overall Quantum Readiness Score", table_text), Paragraph(f"{result.summary.quantum_readiness_pct}%", table_text)],
+    ]
+    t_sum = Table(sum_data, colWidths=[300, 240])
+    t_sum.setStyle(TableStyle([
+        ('BACKGROUND', (0, 0), (-1, 0), colors.HexColor('#1e293b')),
+        ('ALIGN', (0, 0), (-1, -1), 'LEFT'),
+        ('BOTTOMPADDING', (0, 0), (-1, -1), 5),
+        ('TOPPADDING', (0, 0), (-1, -1), 5),
+        ('GRID', (0, 0), (-1, -1), 0.5, colors.HexColor('#cbd5e1')),
+    ]))
+    story.append(t_sum)
+    story.append(Spacer(1, 12))
+
+    # Cryptographic Findings Table
+    story.append(Paragraph("Cryptographic Asset Inventory & Migration Roadmap", h2_style))
+    asset_rows = [
+        [Paragraph("Asset", table_header), Paragraph("Status", table_header), Paragraph("QARS", table_header), Paragraph("NIST Replacement", table_header), Paragraph("Location", table_header)]
+    ]
+    for a in result.assets[:50]:
+        status_color = colors.HexColor('#dc2626') if a.quantum_status == 'BROKEN' else (colors.HexColor('#d97706') if a.quantum_status == 'WEAKENED' else colors.HexColor('#16a34a'))
+        asset_rows.append([
+            Paragraph(f"<b>{a.algorithm}</b><br/>{a.type}", table_text),
+            Paragraph(f"<b>{a.quantum_status}</b>", ParagraphStyle('Status', parent=table_text, textColor=status_color)),
+            Paragraph(str(a.qars_score), table_text),
+            Paragraph(f"{a.replacement}<br/><i>{a.nist_standard}</i>", table_text),
+            Paragraph(f"{a.file}:{a.line}", table_text),
+        ])
+    t_assets = Table(asset_rows, colWidths=[90, 65, 40, 185, 160])
+    t_assets.setStyle(TableStyle([
+        ('BACKGROUND', (0, 0), (-1, 0), colors.HexColor('#1e293b')),
+        ('ALIGN', (0, 0), (-1, -1), 'LEFT'),
+        ('VALIGN', (0, 0), (-1, -1), 'TOP'),
+        ('BOTTOMPADDING', (0, 0), (-1, -1), 4),
+        ('TOPPADDING', (0, 0), (-1, -1), 4),
+        ('GRID', (0, 0), (-1, -1), 0.5, colors.HexColor('#e2e8f0')),
+    ]))
+    story.append(t_assets)
+
+    doc.build(story)
+    return buf.getvalue()
+
+
+def build_pdf_bytes(result: ScanResult) -> bytes:
+    """Render scan result to PDF bytes. Primary: WeasyPrint (HTML/CSS), Secondary: ReportLab."""
+    # 1. Primary: WeasyPrint (full Jinja2 HTML template with dark cover page and styling)
     try:
         import weasyprint
+        html_content = _render_html(result)
         doc = weasyprint.HTML(string=html_content)
-        return doc.write_pdf()
-    except Exception as e:
-        # Return HTML with a visible banner so the caller knows it's an HTML fallback
-        banner = (
-            f"<div style='background:#fee2e2;border:2px solid red;padding:12px;font-family:sans-serif;'>"
-            f"<strong>⚠ WeasyPrint PDF generation notice ({type(e).__name__}):</strong> "
-            f"Serving HTML report view. To enable native PDF compilation, install weasyprint and pango.</div>"
-        )
-        return (banner + html_content).encode("utf-8")
+        pdf = doc.write_pdf()
+        if pdf and pdf[:4] == b"%PDF":
+            return pdf
+    except Exception:
+        pass
+
+    # 2. Secondary: ReportLab (generates genuine binary PDF)
+    try:
+        pdf = _build_reportlab_pdf(result)
+        if pdf and pdf[:4] == b"%PDF":
+            return pdf
+    except Exception:
+        pass
+
+    # 3. Emergency fallback: HTML bytes (will be served as text/html with .html extension)
+    return _render_html(result).encode("utf-8")
 
 
 def export_to_pdf(scan_id: str):
@@ -249,13 +363,13 @@ def export_to_pdf(scan_id: str):
 
     try:
         pdf_bytes = build_pdf_bytes(result)
-        is_pdf = pdf_bytes[:4] == b"%PDF"
+        is_pdf = (pdf_bytes[:4] == b"%PDF")
         media = "application/pdf" if is_pdf else "text/html; charset=utf-8"
-        filename = f"ecdat_{scan_id}.pdf" if is_pdf else f"ecdat_{scan_id}.html"
+        filename = f"{scan_id}_audit_report.pdf" if is_pdf else f"{scan_id}_audit_report.html"
         return Response(
             content=pdf_bytes,
             media_type=media,
-            headers={"Content-Disposition": f"attachment; filename={filename}"},
+            headers={"Content-Disposition": f'attachment; filename="{filename}"'},
         )
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"PDF generation failed: {e}")

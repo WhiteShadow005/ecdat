@@ -11,8 +11,10 @@ export default function ScanPage() {
   const router = useRouter();
   const { runScan } = useScan();
   const [isScanning, setIsScanning] = useState(false);
+  const [targetFile, setTargetFile] = useState<File | null>(null);
 
   const handleFileSelect = async (file: File) => {
+    setTargetFile(file);
     setIsScanning(true);
     try {
       await runScan(file);
@@ -42,7 +44,7 @@ export default function ScanPage() {
       {/* Main Scanner Section */}
       {isScanning ? (
         <div className="space-y-5">
-          <ScanProgress onComplete={handleScanDone} />
+          <ScanProgress fileName={targetFile?.name} onComplete={handleScanDone} />
         </div>
       ) : (
         <div className="space-y-5">

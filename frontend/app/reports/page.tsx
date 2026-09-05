@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useMemo } from "react";
 import { useScan } from "@/context/ScanContext";
 import { exportCBOM, exportCSV, exportPDF } from "@/lib/api";
 import {
@@ -17,7 +17,7 @@ export default function ReportsPage() {
   const [downloading, setDownloading] = useState<string | null>(null);
   const [copiedJson, setCopiedJson] = useState(false);
 
-  const sampleCbomJson = {
+  const sampleCbomJson = useMemo(() => ({
     bomFormat: "CycloneDX",
     specVersion: "1.6",
     serialNumber: `urn:uuid:${scanData.scan_id}`,
@@ -64,7 +64,9 @@ export default function ReportsPage() {
         { name: "ecdat:lineNumber", value: asset.line.toString() },
       ],
     })),
-  };
+  }), [scanData]);
+
+  const cbomJsonString = useMemo(() => JSON.stringify(sampleCbomJson, null, 2), [sampleCbomJson]);
 
   const handleDownload = async (
     type: "cbom" | "pdf" | "csv",
@@ -77,10 +79,19 @@ export default function ReportsPage() {
       else if (type === "csv") blob = await exportCSV(scanData);
       else blob = await exportPDF(scanData);
 
+      let actualFilename = filename;
+      if (type === "pdf") {
+        if (blob.type.includes("text/plain")) {
+          actualFilename = filename.replace(/\.pdf$/, "_summary.txt");
+        } else if (blob.type.includes("text/html")) {
+          actualFilename = filename.replace(/\.pdf$/, ".html");
+        }
+      }
+
       const url = URL.createObjectURL(blob);
       const a = document.createElement("a");
       a.href = url;
-      a.download = filename;
+      a.download = actualFilename;
       a.click();
       URL.revokeObjectURL(url);
     } catch (e) {
@@ -91,7 +102,7 @@ export default function ReportsPage() {
   };
 
   const handleCopyJson = () => {
-    navigator.clipboard.writeText(JSON.stringify(sampleCbomJson, null, 2));
+    navigator.clipboard.writeText(cbomJsonString);
     setCopiedJson(true);
     setTimeout(() => setCopiedJson(false), 2000);
   };
@@ -225,7 +236,7 @@ export default function ReportsPage() {
         </div>
 
         <div className="p-4 bg-white text-[#1C1917] font-mono text-[11px] max-h-80 overflow-y-auto">
-          <pre>{JSON.stringify(sampleCbomJson, null, 2)}</pre>
+          <pre>{cbomJsonString}</pre>
         </div>
       </div>
     </div>

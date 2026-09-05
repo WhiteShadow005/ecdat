@@ -143,7 +143,15 @@ export async function exportCBOM(scanData: ScanResult): Promise<Blob> {
   try {
     const res = await fetch(`${API_BASE_URL}/api/export/cbom?scan_id=${scanData.scan_id}`);
     if (!res.ok) throw new Error("Export CBOM failed");
-    return await res.blob();
+    const text = await res.text();
+    try {
+      const parsed = JSON.parse(text);
+      return new Blob([JSON.stringify(parsed, null, 2)], {
+        type: "application/json",
+      });
+    } catch {
+      return new Blob([text], { type: "application/json" });
+    }
   } catch {
     const cbomJson = {
       bomFormat: "CycloneDX",

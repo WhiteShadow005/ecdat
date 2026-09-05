@@ -1,12 +1,13 @@
 "use client";
 
 import React, { useState, useEffect, Suspense } from "react";
+import dynamic from "next/dynamic";
 import { useSearchParams } from "next/navigation";
 import { useScan } from "@/context/ScanContext";
 import { CryptoAsset, RemediationDiff } from "@/lib/types";
 import { getRemediation } from "@/lib/api";
 import { StatusBadge } from "@/components/ui/StatusBadge";
-import ReactDiffViewer, { DiffMethod } from "react-diff-viewer-continued";
+import { DiffMethod } from "react-diff-viewer-continued";
 import {
   Sparkles,
   FileCode,
@@ -18,6 +19,18 @@ import {
   Loader2,
 } from "lucide-react";
 
+const ReactDiffViewer = dynamic(
+  () => import("react-diff-viewer-continued"),
+  {
+    ssr: false,
+    loading: () => (
+      <div className="flex items-center justify-center p-12 text-[#78716C] text-xs">
+        <Loader2 className="w-4 h-4 animate-spin mr-2 text-[#8B5E34]" /> Loading Diff Engine...
+      </div>
+    ),
+  }
+);
+
 function RemediationContent() {
   const searchParams = useSearchParams();
   const { scanData } = useScan();
@@ -27,7 +40,7 @@ function RemediationContent() {
     (a) => a.quantum_status !== "SAFE"
   );
 
-  const initialAssetId = searchParams.get("asset_id") || vulnerableAssets[0]?.id;
+  const initialAssetId = (searchParams ? searchParams.get("asset_id") : null) || vulnerableAssets[0]?.id;
 
   const [selectedAsset, setSelectedAsset] = useState<CryptoAsset | undefined>(
     vulnerableAssets.find((a) => a.id === initialAssetId) || vulnerableAssets[0]
@@ -40,7 +53,7 @@ function RemediationContent() {
   const [applied, setApplied] = useState<boolean>(false);
 
   useEffect(() => {
-    const paramId = searchParams.get("asset_id");
+    const paramId = searchParams ? searchParams.get("asset_id") : null;
     if (paramId) {
       const found = vulnerableAssets.find((a) => a.id === paramId);
       if (found) setSelectedAsset(found);
