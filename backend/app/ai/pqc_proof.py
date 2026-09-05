@@ -117,7 +117,7 @@ def run_pqc_demo() -> PQCProofResult:
             "India is quantum-ready with ECDAT. \U0001f1ee\U0001f1f3"
         )
 
-    except ImportError:
+    except (ImportError, SystemExit):
         result.kem_algorithm = "ML-KEM-768 (FIPS 203 / CRYSTALS-Kyber)"
         result.kem_public_key_size_bytes = 1184
         result.kem_secret_key_size_bytes = 2400
