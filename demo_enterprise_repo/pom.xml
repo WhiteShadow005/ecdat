@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- TODO (Sahil): Maven config with BouncyCastle dependency for Java scanning -->
+<project>
+  <dependencies>
+    <!-- BouncyCastle 1.70 - contains RSA/ECC crypto usage that ECDAT should detect -->
+    <!-- <dependency>
+      <groupId>org.bouncycastle</groupId>
+      <artifactId>bcprov-jdk15on</artifactId>
+      <version>1.70</version>
+    </dependency> -->
+  </dependencies>
+</project>
