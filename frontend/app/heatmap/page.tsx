@@ -5,7 +5,7 @@ import dynamic from "next/dynamic";
 import { useScan } from "@/context/ScanContext";
 import { CryptoAsset } from "@/lib/types";
 import { StatusBadge } from "@/components/ui/StatusBadge";
-import { Flame, Sparkles, ArrowRight } from "lucide-react";
+import { Flame, BrainCircuit, ArrowRight } from "lucide-react";
 import Link from "next/link";
 
 const Heatmap = dynamic(
@@ -142,7 +142,7 @@ export default function HeatmapPage() {
                       className="w-full btn-primary text-xs py-2.5 rounded-full justify-between px-4 shadow-sm"
                     >
                       <span className="flex items-center gap-1.5">
-                        <Sparkles className="w-3.5 h-3.5 text-[#C28E58]" />
+                        <BrainCircuit className="w-3.5 h-3.5 text-[#C28E58]" />
                         <span>Remediate Code Diff</span>
                       </span>
                       <ArrowRight className="w-3.5 h-3.5" />

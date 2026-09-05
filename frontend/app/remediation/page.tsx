@@ -9,7 +9,7 @@ import { getRemediation } from "@/lib/api";
 import { StatusBadge } from "@/components/ui/StatusBadge";
 import { DiffMethod } from "react-diff-viewer-continued";
 import {
-  Sparkles,
+  BrainCircuit,
   FileCode,
   Copy,
   Check,
@@ -120,7 +120,7 @@ function RemediationContent() {
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-[#E8E2D5] pb-3.5">
         <div>
           <div className="flex items-center gap-2">
-            <Sparkles className="w-5 h-5 text-[#C28E58]" />
+            <BrainCircuit className="w-5 h-5 text-[#C28E58]" />
             <h1 className="text-lg md:text-xl font-bold text-[#1C1917] tracking-tight font-display">
               AI Code Remediator
             </h1>
@@ -225,7 +225,7 @@ function RemediationContent() {
             {remediation && (
               <div className="p-3 bg-[#FAF7F2] rounded-2xl border border-[#E8E2D5] text-xs text-[#57534E] space-y-0.5">
                 <div className="font-bold text-[#8B5E34] flex items-center gap-1.5 font-mono">
-                  <Sparkles className="w-3.5 h-3.5 text-[#C28E58]" />
+                  <BrainCircuit className="w-3.5 h-3.5 text-[#C28E58]" />
                   Migration Rationale ({remediation.nist_standard}):
                 </div>
                 <p className="text-[#57534E] leading-relaxed text-[11px]">
@@ -303,7 +303,7 @@ function RemediationContent() {
                 </>
               ) : (
                 <>
-                  <Sparkles className="w-3.5 h-3.5" /> Apply Patch
+                  <BrainCircuit className="w-3.5 h-3.5" /> Apply Patch
                 </>
               )}
             </button>

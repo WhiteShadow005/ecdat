@@ -9,7 +9,7 @@ import {
   ShieldAlert,
   FileCode,
   ArrowRight,
-  Sparkles,
+  BrainCircuit,
   Zap,
   Download,
   Cpu,
@@ -221,7 +221,7 @@ export default function DashboardPage() {
         >
           <div className="flex items-center gap-3">
             <div className="w-9 h-9 rounded-full bg-[#FAF7F2] border border-[#E8E2D5] flex items-center justify-center text-[#1C1917] group-hover:border-[#D5CBB9] transition-all">
-              <Sparkles className="w-4 h-4 stroke-[1.75]" />
+              <BrainCircuit className="w-4 h-4 stroke-[1.75]" />
             </div>
             <div>
               <h4 className="text-xs font-bold text-[#1C1917]">AI Code Remediator</h4>
@@ -322,7 +322,7 @@ export default function DashboardPage() {
                           href={`/remediation?asset_id=${asset.id}`}
                           className="btn-pill-light text-[11px] py-1 px-3"
                         >
-                          <Sparkles className="w-3 h-3 text-[#C28E58]" />
+                          <BrainCircuit className="w-3 h-3 text-[#C28E58]" />
                           <span>Remediate</span>
                         </Link>
                       </td>

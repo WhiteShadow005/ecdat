@@ -8,7 +8,7 @@ import {
   Layers,
   Search,
   FileCode,
-  Sparkles,
+  BrainCircuit,
   ChevronDown,
   ChevronUp,
   Download,
@@ -219,7 +219,7 @@ export default function InventoryPage() {
                               onClick={(e) => e.stopPropagation()}
                               className="btn-pill-light text-[11px] py-1 px-2.5"
                             >
-                              <Sparkles className="w-3 h-3 text-[#C28E58]" />
+                              <BrainCircuit className="w-3 h-3 text-[#C28E58]" />
                               <span>Fix</span>
                             </Link>
                           )}
