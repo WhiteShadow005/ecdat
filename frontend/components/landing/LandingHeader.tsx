@@ -2,11 +2,12 @@
 
 import React, { useState } from "react";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { Shield } from "lucide-react";
 
 export function LandingHeader() {
   const pathname = usePathname();
+  const router = useRouter();
   const [menuOpen, setMenuOpen] = useState(false);
 
   const toggleMenu = () => {
@@ -50,6 +51,7 @@ export function LandingHeader() {
               <Link
                 key={link.name}
                 href={link.href}
+                prefetch={true}
                 className={`mobile-nav-link ${isActive ? "active" : ""}`}
                 onClick={closeMenu}
               >
@@ -58,7 +60,7 @@ export function LandingHeader() {
             );
           })}
         </nav>
-        <Link href="/dashboard" className="mobile-sign-in" onClick={closeMenu}>
+        <Link href="/dashboard" prefetch={true} className="mobile-sign-in" onClick={closeMenu}>
           Launch Console
         </Link>
       </div>
@@ -67,7 +69,7 @@ export function LandingHeader() {
       <div className="public-header-wrapper">
         <header className="header">
           {/* Logo Circle Button */}
-          <Link href="/" className="logo-btn" aria-label="Home">
+          <Link href="/" prefetch={true} className="logo-btn" aria-label="Home">
             <div className="w-full h-full flex items-center justify-center text-slate-950 font-black">
               <Shield className="w-5 h-5 text-slate-950 fill-slate-950" />
             </div>
@@ -82,6 +84,8 @@ export function LandingHeader() {
                   key={link.name}
                   href={link.href}
                   prefetch={true}
+                  onMouseEnter={() => router.prefetch(link.href)}
+                  onPointerDown={() => router.prefetch(link.href)}
                   className={`nav-link ${isActive ? "active" : ""}`}
                 >
                   {link.name}
@@ -91,7 +95,13 @@ export function LandingHeader() {
           </nav>
 
           {/* Dark Launch Console Pill */}
-          <Link href="/dashboard" prefetch={true} className="sign-in-btn">
+          <Link
+            href="/dashboard"
+            prefetch={true}
+            onMouseEnter={() => router.prefetch("/dashboard")}
+            onPointerDown={() => router.prefetch("/dashboard")}
+            className="sign-in-btn"
+          >
             Launch Console
           </Link>
 

@@ -139,6 +139,7 @@ export default function HeatmapPage() {
                   <div className="pt-1">
                     <Link
                       href={`/remediation?asset_id=${selectedAsset.id}`}
+                      prefetch={true}
                       className="w-full btn-primary text-xs py-2.5 rounded-full justify-between px-4 shadow-sm"
                     >
                       <span className="flex items-center gap-1.5">

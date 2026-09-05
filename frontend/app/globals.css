@@ -29,6 +29,7 @@
 }
 
 .logo-btn:hover { transform: scale(1.04); }
+.logo-btn:active { transform: scale(0.95); transition: transform 0.05s ease; }
 
 .nav-pill {
   background: #ffffff;
@@ -98,6 +99,11 @@
   background: #323234;
   color: #ffffff;
   transform: translateY(-1px);
+}
+
+.sign-in-btn:active {
+  transform: scale(0.97) translateY(1px);
+  transition: transform 0.05s ease;
 }
 
 
@@ -248,6 +254,11 @@ body {
   box-shadow: 0 3px 10px rgba(0, 0, 0, 0.15);
 }
 
+.btn-primary:active {
+  transform: scale(0.97) translateY(1px);
+  transition: transform 0.05s ease;
+}
+
 .btn-secondary {
   background-color: #FFFFFF;
   color: #1C1917;
@@ -270,6 +281,11 @@ body {
   transform: translateY(-1px);
 }
 
+.btn-secondary:active {
+  transform: scale(0.97) translateY(1px);
+  transition: transform 0.05s ease;
+}
+
 .btn-pill-light {
   background: #FFFFFF;
   color: #1C1917;
@@ -288,6 +304,11 @@ body {
 .btn-pill-light:hover {
   background: #FAF7F2;
   border-color: var(--border-medium);
+}
+
+.btn-pill-light:active {
+  transform: scale(0.97) translateY(1px);
+  transition: transform 0.05s ease;
 }
 
 .btn-pill-dark {
@@ -310,6 +331,11 @@ body {
   border-color: var(--border-medium);
 }
 
+.btn-pill-dark:active {
+  transform: scale(0.97) translateY(1px);
+  transition: transform 0.05s ease;
+}
+
 .btn-accent {
   background-color: #7c3aed;
   color: #ffffff;
@@ -330,6 +356,11 @@ body {
   background-color: #6d28d9;
   transform: translateY(-1px);
   box-shadow: 0 0 20px rgba(124, 58, 237, 0.45);
+}
+
+.btn-accent:active {
+  transform: scale(0.97) translateY(1px);
+  transition: transform 0.05s ease;
 }
 
 /* Diff Viewer Clean Theme */
@@ -562,6 +593,11 @@ body {
   transform: translateY(-1px);
 }
 
+.sign-in-btn:active {
+  transform: scale(0.97) translateY(1px);
+  transition: transform 0.05s ease;
+}
+
 .burger-btn {
   display: none;
 }
@@ -734,6 +770,11 @@ body {
   transform: translateY(-2px) scale(1.02);
   box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.25),
     0 0 28px rgba(255, 255, 255, 0.45), 0 0 54px rgba(255, 255, 255, 0.2);
+}
+
+.cta-btn:active {
+  transform: scale(0.97) translateY(1px);
+  transition: transform 0.05s ease;
 }
 
 @keyframes revealPulse {

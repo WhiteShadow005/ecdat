@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import {
   LayoutDashboard,
   ScanLine,
@@ -48,6 +48,7 @@ const PUBLIC_ROUTES = ["/", "/features", "/architecture", "/standards", "/about"
 
 export function AppShell({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
+  const router = useRouter();
   const [backendOnline, setBackendOnline] = useState<boolean | null>(null);
 
   useEffect(() => {
@@ -135,6 +136,8 @@ export function AppShell({ children }: { children: React.ReactNode }) {
                         key={item.name}
                         href={item.href}
                         prefetch={true}
+                        onMouseEnter={() => router.prefetch(item.href)}
+                        onPointerDown={() => router.prefetch(item.href)}
                         className={`flex items-center gap-2.5 px-3 py-2 text-xs font-medium transition-all ${
                           isActive
                             ? "bg-white text-[#1C1917] border border-[#E8E2D5] font-semibold shadow-[0_1px_4px_rgba(0,0,0,0.03)] rounded-2xl"

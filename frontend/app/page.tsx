@@ -2,9 +2,11 @@
 
 import React, { useEffect, useState, useRef } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { LandingHeader } from "@/components/landing/LandingHeader";
 
 export default function Home() {
+  const router = useRouter();
   const [stats, setStats] = useState([
     { target: 120, suffix: "ms", decimals: 0, current: "0ms", label: "AST Scan Latency", icon: "<" },
     { target: 99.99, suffix: "%", decimals: 2, current: "0.00%", label: "Detection Accuracy", icon: "%" },
@@ -15,6 +17,26 @@ export default function Home() {
   const animatedRef = useRef(false);
 
   useEffect(() => {
+    // Eagerly prefetch all main destination routes into browser memory
+    const prefetchRoutes = [
+      "/dashboard",
+      "/scan",
+      "/inventory",
+      "/heatmap",
+      "/mosca",
+      "/remediation",
+      "/reports",
+      "/features",
+      "/architecture",
+      "/standards",
+      "/about",
+    ];
+    prefetchRoutes.forEach((route) => {
+      try {
+        router.prefetch(route);
+      } catch {}
+    });
+
     const easeOutCubic = (x: number) => 1 - Math.pow(1 - x, 3);
 
     const animateCountUp = (index: number) => {
@@ -71,13 +93,13 @@ export default function Home() {
     } else {
       stats.forEach((_, i) => animateCountUp(i));
     }
-  }, []);
+  }, [router]);
 
   return (
     <>
       {/* Full-Viewport Universal Video Background */}
       <div className="bg">
-        <video className="bg-video" autoPlay muted loop playsInline>
+        <video className="bg-video" autoPlay muted loop playsInline preload="metadata">
           <source
             src="https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260809_012548_ef22562c-c0ae-4816-ad9d-f8922af4e6a7.mp4"
             type="video/mp4"
@@ -129,6 +151,9 @@ export default function Home() {
           {/* CTA Button */}
           <Link
             href="/dashboard"
+            prefetch={true}
+            onMouseEnter={() => router.prefetch("/dashboard")}
+            onPointerDown={() => router.prefetch("/dashboard")}
             className="cta-btn anim"
             style={{ "--d": "0.4s" } as React.CSSProperties}
           >

@@ -216,6 +216,7 @@ export default function InventoryPage() {
                           {asset.remediation && (
                             <Link
                               href={`/remediation?asset_id=${asset.id}`}
+                              prefetch={true}
                               onClick={(e) => e.stopPropagation()}
                               className="btn-pill-light text-[11px] py-1 px-2.5"
                             >

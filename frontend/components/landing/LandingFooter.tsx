@@ -28,6 +28,7 @@ export function LandingFooter({
       {/* Center CTA Button */}
       <Link
         href={buttonHref}
+        prefetch={true}
         className="cta-btn text-xs font-bold"
         style={{ marginTop: 0 }}
       >
