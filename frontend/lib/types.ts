@@ -89,6 +89,20 @@ export interface PQCProofResult {
   status: string;
 }
 
+/** Lightweight summary row returned by GET /api/scans (list endpoint) */
+export interface ScanListItem {
+  scan_id: string;
+  timestamp: string;
+  target_name: string;
+  total_assets: number;
+  critical_count: number;
+  high_count: number;
+  readiness_pct: number;
+  mosca_status: string;
+  data_category: string;
+  exposure_context: string;
+}
+
 export interface MoscaPreset {
   name: string;
   label: string;

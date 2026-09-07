@@ -1,4 +1,4 @@
-import { ScanResult, RemediationResult, PQCProofResult } from "./types";
+import { ScanResult, ScanListItem, RemediationResult, PQCProofResult } from "./types";
 import { mockScanResult, mockPqcProof } from "./mock_data";
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000";
@@ -285,5 +285,35 @@ export async function getPQCProof(): Promise<PQCProofResult> {
     return await res.json();
   } catch {
     return mockPqcProof;
+  }
+}
+
+// List all historical scan summaries (lightweight rows, no full assets)
+export async function listAllScans(limit = 50): Promise<ScanListItem[]> {
+  try {
+    const res = await fetch(`${API_BASE_URL}/api/scans?limit=${limit}`, {
+      method: "GET",
+      cache: "no-store",
+    });
+    if (!res.ok) throw new Error(`List scans failed: ${res.status}`);
+    const data = await res.json();
+    return Array.isArray(data) ? data : [];
+  } catch {
+    return [];
+  }
+}
+
+// Fetch one full ScanResult by its ID
+export async function getScanById(scanId: string): Promise<ScanResult | null> {
+  try {
+    const res = await fetch(`${API_BASE_URL}/api/scans/${scanId}`, {
+      method: "GET",
+      cache: "no-store",
+    });
+    if (!res.ok) throw new Error(`Get scan by ID failed: ${res.status}`);
+    const data = await res.json();
+    return normalizeScanResult(data);
+  } catch {
+    return null;
   }
 }

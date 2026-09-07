@@ -14,6 +14,7 @@ import {
   Shield,
   ExternalLink,
   ChevronRight,
+  History,
 } from "lucide-react";
 import { checkBackendHealth } from "@/lib/api";
 import { LandingHeader } from "@/components/landing/LandingHeader";
@@ -40,6 +41,7 @@ const NAV_GROUPS = [
     items: [
       { name: "AI Code Remediator", href: "/remediation", icon: BrainCircuit },
       { name: "Compliance Reports", href: "/reports", icon: FileSpreadsheet },
+      { name: "Audit History", href: "/history", icon: History },
     ],
   },
 ];

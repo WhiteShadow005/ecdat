@@ -26,6 +26,7 @@ export default function Home() {
       "/mosca",
       "/remediation",
       "/reports",
+      "/history",
       "/features",
       "/architecture",
       "/standards",

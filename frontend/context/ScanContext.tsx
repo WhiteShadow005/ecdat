@@ -1,9 +1,9 @@
 "use client";
 
 import React, { createContext, useContext, useState, useEffect, useMemo, ReactNode } from "react";
-import { ScanResult, CryptoAsset, PQCProofResult } from "@/lib/types";
+import { ScanResult, CryptoAsset, PQCProofResult, ScanListItem } from "@/lib/types";
 import { mockScanResult, mockPqcProof } from "@/lib/mock_data";
-import { getScanResult, getPQCProof, uploadScanZip, checkBackendHealth } from "@/lib/api";
+import { getScanResult, getPQCProof, uploadScanZip, checkBackendHealth, listAllScans, getScanById } from "@/lib/api";
 
 interface ScanContextType {
   scanData: ScanResult;
@@ -24,8 +24,12 @@ interface ScanContextType {
   currentYear: number;
   qDayYear: number;
   breachYears: number;
+  allScans: ScanListItem[];
+  isHistoryLoading: boolean;
   refreshScanData: () => Promise<void>;
   runScan: (file?: File) => Promise<ScanResult>;
+  loadHistoricalScan: (scanId: string) => Promise<void>;
+  refreshHistory: () => Promise<void>;
 }
 
 const ScanContext = createContext<ScanContextType | null>(null);
@@ -35,8 +39,22 @@ export const ScanProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
   const [pqcProof, setPqcProof] = useState<PQCProofResult>(mockPqcProof);
   const [isBackendLive, setIsBackendLive] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [allScans, setAllScans] = useState<ScanListItem[]>([]);
+  const [isHistoryLoading, setIsHistoryLoading] = useState<boolean>(false);
 
   const currentYear = new Date().getFullYear();
+
+  const refreshHistory = async () => {
+    setIsHistoryLoading(true);
+    try {
+      const scans = await listAllScans(50);
+      setAllScans(scans);
+    } catch {
+      // keep existing list on error
+    } finally {
+      setIsHistoryLoading(false);
+    }
+  };
 
   const refreshScanData = async () => {
     try {
@@ -49,6 +67,8 @@ export const ScanProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
         ]);
         if (liveData && liveData.assets) setScanData(liveData);
         if (liveProof) setPqcProof(liveProof);
+        // Also refresh history when backend comes up
+        refreshHistory();
       }
     } catch (err) {
       console.warn("ScanContext: Using default offline scan state", err);
@@ -74,7 +94,19 @@ export const ScanProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
         };
       }
       setScanData(result);
+      // Refresh history so the new scan appears immediately
+      refreshHistory();
       return result;
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const loadHistoricalScan = async (scanId: string): Promise<void> => {
+    setIsLoading(true);
+    try {
+      const result = await getScanById(scanId);
+      if (result) setScanData(result);
     } finally {
       setIsLoading(false);
     }
@@ -151,8 +183,12 @@ export const ScanProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     currentYear,
     qDayYear,
     breachYears,
+    allScans,
+    isHistoryLoading,
     refreshScanData,
     runScan,
+    loadHistoricalScan,
+    refreshHistory,
   };
 
   return <ScanContext.Provider value={value}>{children}</ScanContext.Provider>;
