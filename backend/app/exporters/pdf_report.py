@@ -122,6 +122,19 @@ def _render_html(result: ScanResult) -> str:
         "SAFE": "badge-safe",
     }.get(s, "badge-unknown")
 
+    def _fmt_timestamp(ts: str) -> str:
+        if not ts:
+            return "N/A"
+        try:
+            from datetime import datetime
+            clean_ts = ts.replace("Z", "+00:00")
+            dt = datetime.fromisoformat(clean_ts)
+            return dt.strftime("%d %b %Y, %H:%M UTC")
+        except Exception:
+            return str(ts)
+
+    env.filters["format_timestamp"] = _fmt_timestamp
+
     template = env.get_template(TEMPLATE_PATH.name)
 
     return template.render(
@@ -351,7 +364,7 @@ def export_to_pdf(scan_id: str):
     try:
         pdf_bytes = build_pdf_bytes(result)
         is_pdf = (pdf_bytes[:4] == b"%PDF")
-        media = "application/pdf" if is_pdf else "text/html"
+        media = "application/pdf" if is_pdf else "text/html; charset=utf-8"
         filename = f"{scan_id}_audit_report.pdf" if is_pdf else f"{scan_id}_audit_report.html"
         return Response(
             content=pdf_bytes,
