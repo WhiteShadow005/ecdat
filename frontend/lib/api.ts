@@ -16,11 +16,21 @@ export async function checkBackendHealth(): Promise<boolean> {
   }
 }
 
+function cleanFilePath(p?: string): string {
+  if (!p) return "Unknown";
+  return p
+    .replace(/^.*\/extracted\/[^\/]+\//, "")
+    .replace(/^.*\/tmp[^\/]+\/extracted\//, "")
+    .replace(/^.*\/tmp[^\/]+\//, "")
+    .replace(/^.*\\extracted\\[^\\]+\\/, "")
+    .replace(/^.*\\tmp[^\\]+\\/, "");
+}
+
 function normalizeScanResult(raw: any): ScanResult {
   if (!raw) return mockScanResult;
   const assets = (raw.assets || []).map((a: any) => ({
     ...a,
-    file: a.file || a.file_path || "Unknown",
+    file: cleanFilePath(a.file || a.file_path),
     line: a.line ?? a.line_number ?? 0,
     replacement: a.replacement || a.recommended_replacement || "NIST PQC Replacement",
     attack_vector: a.attack_vector || (a.quantum_status === "BROKEN" ? "Shor's Algorithm" : a.quantum_status === "WEAKENED" ? "Grover's Algorithm" : "None"),
@@ -107,11 +117,19 @@ export async function getRemediation(
       body: JSON.stringify({ scan_id: scanId, asset_id: assetId }),
     });
 
-    if (!res.ok) {
-      throw new Error(`Remediation API returned ${res.status}`);
-    }
+    const data = await res.json();
+    const dataPool = fallbackScanData || mockScanResult;
+    const asset = dataPool.assets?.find((a) => a.id === assetId);
 
-    return await res.json();
+    return {
+      asset_id: data.asset_id || assetId,
+      original_code: data.original_code || asset?.code_snippet || "// Code snippet not available",
+      remediated_code: data.remediated_code || "// NIST PQC replacement algorithm\n// Recommended: ML-KEM-768 / ML-DSA-65",
+      diff: data.diff || "- Legacy Algorithm\n+ NIST PQC Algorithm",
+      explanation: data.explanation || "Migrated to NIST Post-Quantum Standard (FIPS 203 / 204).",
+      nist_standard: data.nist_standard || "NIST FIPS 203/204",
+      library_recommendation: data.library_recommendation || "liboqs / Bouncy Castle PQC",
+    };
   } catch {
     const dataPool = fallbackScanData || mockScanResult;
     const asset = dataPool.assets.find((a) => a.id === assetId);

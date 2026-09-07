@@ -139,9 +139,9 @@ export default function AuditHistoryPage() {
   const totalCritical = visible.filter((s) => (s.mosca_status || "").toUpperCase() === "CRITICAL").length;
   const avgReadiness =
     visible.length
-      ? (visible.reduce((s, r) => s + r.readiness_pct, 0) / visible.length).toFixed(1)
+      ? (visible.reduce((s, r) => s + (r.readiness_pct || 0), 0) / visible.length).toFixed(1)
       : null;
-  const totalAssets = visible.reduce((s, r) => s + r.total_assets, 0);
+  const totalAssets = visible.reduce((s, r) => s + (r.total_assets || 0), 0);
 
   return (
     <div className="space-y-6">

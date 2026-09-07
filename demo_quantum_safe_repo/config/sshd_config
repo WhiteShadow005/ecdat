@@ -1,0 +1,3 @@
+Port 22
+# Quantum-safe hybrid key exchange
+KexAlgorithms sntrup761x25519-sha512@openssh.com

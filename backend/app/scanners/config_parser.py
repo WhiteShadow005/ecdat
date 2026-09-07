@@ -100,7 +100,7 @@ def _scan_nginx_content(lines: List[str], file_path: str) -> List[CryptoAsset]:
         # ssl_protocols
         if re.search(r"\bssl_protocols\b", stripped, re.IGNORECASE):
             for tls_ver, (name, status, replacement) in WEAK_TLS_VERSIONS.items():
-                if tls_ver in stripped:
+                if re.search(rf"\b{re.escape(tls_ver)}(?![.\d])", stripped):
                     assets.append(_make_asset(
                         f"TLS Protocol: {name}", status, replacement,
                         file_path, i, stripped, "nginx"

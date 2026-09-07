@@ -135,6 +135,15 @@ Output format (strict):
                     diff_text = stripped.removeprefix("diff").strip()
                     break
 
+        # Extract original and remediated lines from diff_text for side-by-side view
+        orig_lines = [
+            ln[1:] for ln in diff_text.split("\n")
+            if ln.startswith("-") and not ln.startswith("---")
+        ]
+        new_lines = [
+            ln[1:] for ln in diff_text.split("\n")
+            if ln.startswith("+") and not ln.startswith("+++")
+        ]
         return RemediationResult(
             asset_id=asset_id,
             original_algorithm=asset.algorithm,
@@ -146,6 +155,10 @@ Output format (strict):
                 f"{asset.algorithm} with {replacement} per NIST FIPS 203/204."
             ),
             confidence=0.88,
+            original_code="\n".join(orig_lines) if orig_lines else code.strip(),
+            remediated_code="\n".join(new_lines) if new_lines else f"# TODO: {replacement}",
+            nist_standard="NIST FIPS 203/204",
+            library_recommendation="liboqs-python (import oqs)",
         )
 
     except Exception as e:
@@ -243,4 +256,8 @@ def _template_diff(asset: CryptoAsset, replacement: str, error: str = None) -> R
         diff=diff,
         explanation=explanation,
         confidence=0.65,
+        original_code=code.strip() if code else old_line,
+        remediated_code="\n".join(added_lines),
+        nist_standard="NIST FIPS 203/204",
+        library_recommendation="liboqs / Bouncy Castle PQC",
     )

@@ -4,6 +4,7 @@ All API routes for the Enterprise Cryptographic Discovery & Analysis Tool.
 Owner: Shaurya Pratap Singh
 """
 
+import json
 import logging
 import os
 import shutil
@@ -233,6 +234,12 @@ async def scan_upload(
         # ─── 4. Build Unified Inventory ────────────────────────────────────────
         inventory = build_inventory(raw_assets)
 
+        # Strip temporary extraction prefix for clean, repository-relative file paths
+        prefix = str(extract_dir).rstrip("/\\") + os.sep
+        for a in inventory:
+            if a.file_path and a.file_path.startswith(prefix):
+                a.file_path = a.file_path[len(prefix):]
+
         # ─── 5. Classify (BROKEN/WEAKENED/SAFE) ───────────────────────────────
         inventory = classify_inventory(inventory)
 
@@ -394,8 +401,11 @@ def pqc_proof():
 # ─── Export Endpoints (Owner: Aujasya) ────────────────────────────────────────
 
 @app.get("/api/export/cbom", tags=["Export"])
-def export_cbom(scan_id: str = Query(...)):
+@app.get("/api/export/cbom/{scan_id}", tags=["Export"])
+def export_cbom(scan_id: Optional[str] = None):
     """Export scan results as CycloneDX 1.6 CBOM JSON. (Owner: Aujasya)"""
+    if not scan_id:
+        raise HTTPException(status_code=400, detail="scan_id is required")
     try:
         from .exporters.cbom_exporter import export_to_cbom
         from fastapi.responses import Response
@@ -412,8 +422,11 @@ def export_cbom(scan_id: str = Query(...)):
 
 
 @app.get("/api/export/csv", tags=["Export"])
-def export_csv(scan_id: str = Query(...)):
+@app.get("/api/export/csv/{scan_id}", tags=["Export"])
+def export_csv(scan_id: Optional[str] = None):
     """Export scan results as CSV. (Owner: Aujasya)"""
+    if not scan_id:
+        raise HTTPException(status_code=400, detail="scan_id is required")
     try:
         from .exporters.csv_exporter import export_to_csv
         return export_to_csv(scan_id)
@@ -424,8 +437,11 @@ def export_csv(scan_id: str = Query(...)):
 
 
 @app.get("/api/export/pdf", tags=["Export"])
-def export_pdf(scan_id: str = Query(...)):
+@app.get("/api/export/pdf/{scan_id}", tags=["Export"])
+def export_pdf(scan_id: Optional[str] = None):
     """Export scan results as PDF audit report. (Owner: Aujasya)"""
+    if not scan_id:
+        raise HTTPException(status_code=400, detail="scan_id is required")
     try:
         from .exporters.pdf_report import export_to_pdf
         return export_to_pdf(scan_id)

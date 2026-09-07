@@ -101,6 +101,17 @@ def list_scans(limit: int = 50) -> List[dict]:
         return [dict(row) for row in rows]
 
 
+import re
+
+def _clean_path(p: Optional[str]) -> str:
+    if not p:
+        return "Unknown"
+    p = re.sub(r"^.*[/\\\\]extracted[/\\\\][^/\\\\]+[/\\\\]", "", p)
+    p = re.sub(r"^.*[/\\\\]tmp[^/\\\\]+[/\\\\]extracted[/\\\\]", "", p)
+    p = re.sub(r"^.*[/\\\\]tmp[^/\\\\]+[/\\\\]", "", p)
+    return p
+
+
 def get_scan(scan_id: str) -> Optional[ScanResult]:
     """Retrieve full ScanResult from database by scan_id."""
     init_db()
@@ -113,6 +124,11 @@ def get_scan(scan_id: str) -> Optional[ScanResult]:
         if not row:
             return None
         data = json.loads(row["raw_json"])
+        for a in data.get("assets", []):
+            if "file_path" in a and a["file_path"]:
+                a["file_path"] = _clean_path(a["file_path"])
+            if "file" in a and a["file"]:
+                a["file"] = _clean_path(a["file"])
         return ScanResult(**data)
 
 

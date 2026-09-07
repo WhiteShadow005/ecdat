@@ -198,6 +198,10 @@ class RemediationResult(BaseModel):
     diff: str = ""
     explanation: str = ""
     confidence: float = 0.0
+    original_code: str = ""
+    remediated_code: str = ""
+    nist_standard: str = "NIST FIPS 203/204"
+    library_recommendation: str = "liboqs / Bouncy Castle PQC"
 
 
 class PQCProofResult(BaseModel):
