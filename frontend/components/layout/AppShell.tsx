@@ -12,7 +12,6 @@ import {
   BrainCircuit,
   FileSpreadsheet,
   Shield,
-  ExternalLink,
   ChevronRight,
   History,
 } from "lucide-react";
@@ -95,7 +94,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
             <span className="text-[10px] text-[#A8A29E] ml-0.5">▾</span>
           </div>
 
-          {/* Engine Status Pill */}
+          {/* Air-Gapped Sovereign Security Status Pill */}
           <div className="flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-white border border-[#E8E2D5] text-[#1C1917] text-[11px] shadow-2xs">
             <span
               className={`w-2 h-2 rounded-full ${
@@ -103,18 +102,9 @@ export function AppShell({ children }: { children: React.ReactNode }) {
               }`}
             />
             <span className="font-semibold text-[#1C1917]">
-              {backendOnline ? "API Live" : "Demo Engine"}
+              {backendOnline ? "Air-Gapped (Local)" : "Local Engine"}
             </span>
           </div>
-
-          {/* Public Portal Link */}
-          <Link
-            href="/"
-            className="flex items-center gap-1 px-3.5 py-1.5 rounded-full bg-white hover:bg-[#FAF7F2] border border-[#E8E2D5] text-[#57534E] hover:text-[#1C1917] transition-all text-[11px] font-medium shadow-2xs"
-          >
-            <span>Public Site</span>
-            <ExternalLink className="w-3 h-3 text-[#A8A29E]" />
-          </Link>
         </div>
       </header>
 
