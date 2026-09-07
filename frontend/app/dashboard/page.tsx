@@ -13,6 +13,7 @@ import {
   Zap,
   Download,
   Cpu,
+  History,
 } from "lucide-react";
 
 import { ThreatBannerVisual } from "@/components/ui/ThreatBannerVisual";
@@ -31,6 +32,7 @@ export default function DashboardPage() {
     vulnerablePct,
     qDayYear,
     breachYears,
+    allScans,
   } = useScan();
 
   const { mosca } = scanData;
@@ -199,7 +201,7 @@ export default function DashboardPage() {
       </div>
 
       {/* Quick Action Command Modules */}
-      <div className="grid grid-cols-1 sm:grid-cols-3 gap-3.5">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3.5">
         <Link
           href="/scan"
           prefetch={true}
@@ -211,7 +213,7 @@ export default function DashboardPage() {
             </div>
             <div>
               <h4 className="text-xs font-bold text-[#1C1917]">Run Codebase Scan</h4>
-              <p className="text-[11px] text-[#78716C]">Upload repository archive for analysis</p>
+              <p className="text-[11px] text-[#78716C]">Upload repository archive</p>
             </div>
           </div>
           <ArrowRight className="w-4 h-4 text-[#A8A29E] group-hover:text-[#1C1917] group-hover:translate-x-0.5 transition-all" />
@@ -228,7 +230,7 @@ export default function DashboardPage() {
             </div>
             <div>
               <h4 className="text-xs font-bold text-[#1C1917]">AI Code Remediator</h4>
-              <p className="text-[11px] text-[#78716C]">NIST PQC side-by-side Git diffs</p>
+              <p className="text-[11px] text-[#78716C]">NIST PQC Git diffs</p>
             </div>
           </div>
           <ArrowRight className="w-4 h-4 text-[#A8A29E] group-hover:text-[#1C1917] group-hover:translate-x-0.5 transition-all" />
@@ -245,7 +247,26 @@ export default function DashboardPage() {
             </div>
             <div>
               <h4 className="text-xs font-bold text-[#1C1917]">CycloneDX Reports</h4>
-              <p className="text-[11px] text-[#78716C]">ECMA-424 JSON + Executive PDF</p>
+              <p className="text-[11px] text-[#78716C]">ECMA-424 JSON + PDF</p>
+            </div>
+          </div>
+          <ArrowRight className="w-4 h-4 text-[#A8A29E] group-hover:text-[#1C1917] group-hover:translate-x-0.5 transition-all" />
+        </Link>
+
+        <Link
+          href="/history"
+          prefetch={true}
+          className="nexus-card p-4 flex items-center justify-between group hover:border-[#D5CBB9] transition-all shadow-2xs"
+        >
+          <div className="flex items-center gap-3">
+            <div className="w-9 h-9 rounded-full bg-[#FAF7F2] border border-[#E8E2D5] flex items-center justify-center text-[#1C1917] group-hover:border-[#D5CBB9] transition-all">
+              <History className="w-4 h-4 stroke-[1.75]" />
+            </div>
+            <div>
+              <h4 className="text-xs font-bold text-[#1C1917]">Audit History</h4>
+              <p className="text-[11px] text-[#78716C]">
+                {allScans && allScans.length > 0 ? `${allScans.length} scans saved` : "Past scans & repos"}
+              </p>
             </div>
           </div>
           <ArrowRight className="w-4 h-4 text-[#A8A29E] group-hover:text-[#1C1917] group-hover:translate-x-0.5 transition-all" />
