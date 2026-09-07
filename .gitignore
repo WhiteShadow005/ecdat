@@ -52,8 +52,9 @@ tmp/
 backend/tmp/
 core_banking_suite/
 backend/ecdat.db
-backend/ecdat.db-journalrectory
-backend/tmp/
+backend/ecdat.db-journal*
+backend/ecdat.db-wal
+backend/ecdat.db-shm
 
 # OS files
 .DS_Store
