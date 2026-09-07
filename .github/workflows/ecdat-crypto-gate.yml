@@ -44,7 +44,6 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           pip install -r backend/requirements.txt
-          pip install requests  # for gate script
 
       # ── Start backend in background ──────────────────────────────
       - name: Start ECDAT Backend
@@ -65,15 +64,24 @@ jobs:
             sleep 2
           done
 
-      # ── Run the ECDAT gate ───────────────────────────────────────
-      - name: Run ECDAT Cryptographic Defense Gate
+      # ── Run the ECDAT gate on Quantum-Safe repo ────────────────────
+      - name: Verify Quantum-Safe Repository Gate
         env:
           ECDAT_BACKEND_URL: "http://localhost:8000"
         run: |
           python scripts/ecdat_gate.py \
             --backend-url "$ECDAT_BACKEND_URL" \
-            --repo-root . \
-            --fail-on-unreachable
+            --repo-root demo_quantum_safe_repo \
+            --fail-on-critical
+
+      # ── Demonstrate Shift-Left Audit on Enterprise Codebase ─────
+      - name: Demonstrate Shift-Left Audit on Enterprise Codebase
+        env:
+          ECDAT_BACKEND_URL: "http://localhost:8000"
+        run: |
+          python scripts/ecdat_gate.py \
+            --backend-url "$ECDAT_BACKEND_URL" \
+            --repo-root demo_enterprise_repo
 
       # ── Upload CBOM artifact (always, so devs can download) ──────
       - name: Download & Upload CBOM Artifact

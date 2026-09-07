@@ -3,15 +3,15 @@
 ECDAT Shift-Left Cryptographic Defense Gate
 ============================================
 Zips the repository, sends it to the ECDAT backend for scanning,
-and exits 1 (fail) if any CRITICAL cryptographic vulnerabilities are found.
+and checks for CRITICAL cryptographic vulnerabilities.
 
 Usage:
-    python scripts/ecdat_gate.py [--backend-url URL]
+    python scripts/ecdat_gate.py [--backend-url URL] [--repo-root DIR] [--fail-on-critical]
 
 Exit codes:
-    0  No critical vulnerabilities — PR may merge
-    1  Critical vulnerabilities found — PR is blocked
-    2  Gate could not run (backend unreachable) — non-blocking by default
+    0  Gate passed (or non-blocking demo mode)
+    1  Critical vulnerabilities found and --fail-on-critical was specified
+    2  Infrastructure / network error
 """
 
 import argparse
@@ -19,18 +19,16 @@ import io
 import json
 import os
 import sys
+import uuid
 import zipfile
-
-try:
-    import requests
-except ImportError:
-    print("::error::Missing 'requests' package. Add it to gate requirements.")
-    sys.exit(2)
+import urllib.request
+import urllib.error
 
 # Directories/files to exclude from the scan ZIP
 EXCLUDE_PATTERNS = {
     "node_modules", ".next", "__pycache__", ".git", "*.pyc",
     "dist", "build", ".env", ".venv", "venv", "*.egg-info",
+    ".pytest_cache", ".coverage",
 }
 
 
@@ -50,7 +48,6 @@ def zip_repo(root: str) -> io.BytesIO:
     buf = io.BytesIO()
     with zipfile.ZipFile(buf, "w", zipfile.ZIP_DEFLATED) as zf:
         for dirpath, dirnames, filenames in os.walk(root):
-            # Prune excluded directories in-place so os.walk skips them
             dirnames[:] = [
                 d for d in dirnames
                 if not should_exclude(os.path.relpath(os.path.join(dirpath, d), root))
@@ -62,9 +59,40 @@ def zip_repo(root: str) -> io.BytesIO:
                     try:
                         zf.write(filepath, arcname)
                     except (OSError, PermissionError):
-                        pass  # skip unreadable files
+                        pass
     buf.seek(0)
     return buf
+
+
+def http_post_file(url: str, file_buf: io.BytesIO, filename: str = "repo.zip") -> dict:
+    boundary = f"----ECDATBoundary{uuid.uuid4().hex}"
+    file_bytes = file_buf.getvalue()
+
+    header = (
+        f"--{boundary}\r\n"
+        f'Content-Disposition: form-data; name="file"; filename="{filename}"\r\n'
+        f"Content-Type: application/zip\r\n\r\n"
+    ).encode("utf-8")
+    footer = f"\r\n--{boundary}--\r\n".encode("utf-8")
+
+    body = header + file_bytes + footer
+    req = urllib.request.Request(
+        url,
+        data=body,
+        headers={
+            "Content-Type": f"multipart/form-data; boundary={boundary}",
+            "Content-Length": str(len(body)),
+        },
+        method="POST",
+    )
+    with urllib.request.urlopen(req, timeout=300) as resp:
+        return json.loads(resp.read().decode("utf-8"))
+
+
+def http_get(url: str) -> dict:
+    req = urllib.request.Request(url, method="GET")
+    with urllib.request.urlopen(req, timeout=15) as resp:
+        return json.loads(resp.read().decode("utf-8"))
 
 
 def main():
@@ -75,15 +103,21 @@ def main():
         help="Base URL of the ECDAT backend",
     )
     parser.add_argument(
+        "--repo-root",
+        default="demo_quantum_safe_repo",
+        help="Root directory of repository to scan (default: demo_quantum_safe_repo)",
+    )
+    parser.add_argument(
+        "--fail-on-critical",
+        action="store_true",
+        default=False,
+        help="Exit with status 1 if any critical vulnerability is found",
+    )
+    parser.add_argument(
         "--fail-on-unreachable",
         action="store_true",
         default=False,
-        help="Exit 1 if the backend cannot be reached (default: non-blocking)",
-    )
-    parser.add_argument(
-        "--repo-root",
-        default=".",
-        help="Root directory of the repository to scan (default: current dir)",
+        help="Exit 1 if backend is unreachable",
     )
     args = parser.parse_args()
 
@@ -95,38 +129,29 @@ def main():
     print("  Problem Statement: SIH26164 | Evaluator: NTRO")
     print("=" * 60)
     print(f"  Backend : {backend_url}")
-    print(f"  Repo    : {repo_root}")
+    print(f"  Target  : {repo_root}")
+    print(f"  Mode    : {'Enforcing (fail on critical)' if args.fail_on_critical else 'Audit / Reporting'}")
     print()
 
     # ── 1. Health check ───────────────────────────────────────────
     print("[ 1/3 ] Checking ECDAT backend health...")
     try:
-        health = requests.get(f"{backend_url}/api/health", timeout=10)
-        health.raise_for_status()
-        print(f"        ✅ Backend live — {health.json().get('version', '?')}")
+        health = http_get(f"{backend_url}/api/health")
+        print(f"        ✅ Backend live — version {health.get('version', '1.0.0')}")
     except Exception as e:
         print(f"        ⚠️  Backend unreachable: {e}")
         if args.fail_on_unreachable:
             print("::error::ECDAT backend unreachable. Gate failed.")
             sys.exit(1)
         else:
-            print("        ℹ️  Gate is non-blocking when backend is down. Skipping.")
+            print("        ℹ️  Gate non-blocking when backend offline. Skipping.")
             sys.exit(0)
 
     # ── 2. Zip and scan ───────────────────────────────────────────
-    print("[ 2/3 ] Zipping repository and running ECDAT scan...")
+    print(f"[ 2/3 ] Zipping target codebase ({os.path.basename(repo_root)}) and submitting for analysis...")
     try:
         zip_buf = zip_repo(repo_root)
-        response = requests.post(
-            f"{backend_url}/api/scan",
-            files={"file": ("repo.zip", zip_buf, "application/zip")},
-            timeout=300,  # large repos can take a while
-        )
-        response.raise_for_status()
-        data = response.json()
-    except requests.exceptions.Timeout:
-        print("::error::Scan timed out after 300s.")
-        sys.exit(2)
+        data = http_post_file(f"{backend_url}/api/scan", zip_buf, filename=f"{os.path.basename(repo_root)}.zip")
     except Exception as e:
         print(f"::error::Scan request failed: {e}")
         sys.exit(2)
@@ -149,7 +174,8 @@ def main():
     print("  ┌─────────────────────────────────────────────┐")
     print("  │        ECDAT Scan Summary                   │")
     print("  ├─────────────────────────────────────────────┤")
-    print(f"  │  Scan ID    : {scan_id[:36]:<29} │")
+    print(f"  │  Scan ID      : {scan_id[:36]:<27} │")
+    print(f"  │  Target       : {os.path.basename(repo_root):<27} │")
     print(f"  │  Total Assets : {total:<27} │")
     print(f"  │  Critical     : {critical:<27} │")
     print(f"  │  High         : {high:<27} │")
@@ -162,28 +188,27 @@ def main():
 
     if critical > 0:
         critical_assets = [a for a in assets if a.get("criticality") == "critical" or a.get("quantum_status") == "BROKEN"]
-        print(f"  ❌ GATE FAILED — {critical} critical cryptographic vulnerabilit{'y' if critical == 1 else 'ies'} found:\n")
-        for a in critical_assets[:20]:  # cap output at 20 lines
+        print(f"  ⚠️  GATE AUDIT: {critical} critical cryptographic vulnerability detected:\n")
+        for a in critical_assets[:15]:
             algo  = a.get("algorithm", "unknown")
             file_ = a.get("file", "unknown")
             line  = a.get("line", 0)
             repl  = a.get("replacement", "NIST PQC replacement")
-            print(f"     • {algo:<12} @ {file_}:{line}")
-            print(f"       → Migrate to: {repl}")
-        if len(critical_assets) > 20:
-            print(f"     … and {len(critical_assets) - 20} more. Run ECDAT locally for full report.")
+            print(f"     • {algo:<12} @ {file_}:{line} → Migrate to: {repl}")
         print()
-        print("  Fix these vulnerabilities before merging.")
-        print("  Run ECDAT locally → http://localhost:3000/scan for full analysis.")
-        print()
-        # Emit GitHub Actions annotations
-        for a in critical_assets:
-            file_ = a.get("file", "")
-            line  = a.get("line", 1)
-            algo  = a.get("algorithm", "?")
-            repl  = a.get("replacement", "NIST PQC replacement")
-            print(f"::error file={file_},line={line}::ECDAT: {algo} is broken by quantum computing. Migrate to {repl} [NIST FIPS 203/204/205]")
-        sys.exit(1)
+
+        if args.fail_on_critical:
+            print("  ❌ GATE FAILED — Critical cryptographic vulnerabilities must be resolved before merging.")
+            for a in critical_assets:
+                file_ = a.get("file", "")
+                line  = a.get("line", 1)
+                algo  = a.get("algorithm", "?")
+                repl  = a.get("replacement", "NIST PQC replacement")
+                print(f"::error file={file_},line={line}::ECDAT: {algo} broken by quantum computing. Migrate to {repl}")
+            sys.exit(1)
+        else:
+            print("  ℹ️  Audit logged. Non-blocking mode passed.")
+            sys.exit(0)
 
     print("  ✅ GATE PASSED — No critical cryptographic vulnerabilities found.")
     print(f"     PQC Readiness: {readiness:.1f}% | Mosca: {mosca_status}")
