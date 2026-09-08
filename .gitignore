@@ -50,6 +50,7 @@ tmp/
 *.zip
 !demo_enterprise_repo.zip
 !demo_quantum_safe.zip
+!demo_legacy_vulnerable.zip
 !official_test_codebases/*.zip
 official_test_codebases/*/
 backend/tmp/
