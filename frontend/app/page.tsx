@@ -1,20 +1,12 @@
 "use client";
 
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { LandingHeader } from "@/components/landing/LandingHeader";
 
 export default function Home() {
   const router = useRouter();
-  const [stats, setStats] = useState([
-    { target: 120, suffix: "ms", decimals: 0, current: "0ms", label: "AST Scan Latency", icon: "<" },
-    { target: 99.99, suffix: "%", decimals: 2, current: "0.00%", label: "Detection Accuracy", icon: "%" },
-    { target: 2033, suffix: "", decimals: 0, current: "0", label: "Mosca Q-Day Horizon", icon: "*" },
-    { target: 15, suffix: "+", decimals: 0, current: "0+", label: "NIST PQC Standards", icon: "#" },
-  ]);
-  const statsRef = useRef<HTMLElement>(null);
-  const animatedRef = useRef(false);
 
   useEffect(() => {
     // Eagerly prefetch all main destination routes into browser memory
@@ -37,63 +29,6 @@ export default function Home() {
         router.prefetch(route);
       } catch {}
     });
-
-    const easeOutCubic = (x: number) => 1 - Math.pow(1 - x, 3);
-
-    const animateCountUp = (index: number) => {
-      const { target, suffix, decimals } = stats[index];
-      const duration = 1500 + index * 80;
-      const startDelay = 480 + index * 90;
-
-      setTimeout(() => {
-        let startTimestamp: number | null = null;
-
-        const step = (timestamp: number) => {
-          if (!startTimestamp) startTimestamp = timestamp;
-          const elapsed = timestamp - startTimestamp;
-          const progress = Math.min(elapsed / duration, 1);
-          const easedProgress = easeOutCubic(progress);
-          const currentValue = easedProgress * target;
-
-          setStats((prev) => {
-            const next = [...prev];
-            next[index].current = currentValue.toFixed(decimals) + suffix;
-            return next;
-          });
-
-          if (progress < 1) {
-            window.requestAnimationFrame(step);
-          } else {
-            setStats((prev) => {
-              const next = [...prev];
-              next[index].current = target.toFixed(decimals) + suffix;
-              return next;
-            });
-          }
-        };
-
-        window.requestAnimationFrame(step);
-      }, startDelay);
-    };
-
-    if ("IntersectionObserver" in window && statsRef.current) {
-      const observer = new IntersectionObserver(
-        (entries) => {
-          entries.forEach((entry) => {
-            if (entry.isIntersecting && !animatedRef.current) {
-              animatedRef.current = true;
-              stats.forEach((_, i) => animateCountUp(i));
-              observer.unobserve(entry.target);
-            }
-          });
-        },
-        { threshold: 0.25 }
-      );
-      observer.observe(statsRef.current);
-      return () => observer.disconnect();
-    } else {
-      stats.forEach((_, i) => animateCountUp(i));
-    }
   }, [router]);
 
   return (
@@ -161,23 +96,6 @@ export default function Home() {
             Launch Dashboard
           </Link>
         </main>
-
-        {/* 3) Stats Footer */}
-        <footer ref={statsRef} className="stats">
-          {stats.map((stat, idx) => (
-            <div
-              key={stat.label}
-              className="stat-item anim"
-              style={{ "--d": `${0.5 + idx * 0.08}s` } as React.CSSProperties}
-            >
-              <div className="stat-icon">{stat.icon}</div>
-              <div className="stat-content">
-                <div className="stat-value">{stat.current}</div>
-                <div className="stat-label">{stat.label}</div>
-              </div>
-            </div>
-          ))}
-        </footer>
       </div>
     </>
   );
