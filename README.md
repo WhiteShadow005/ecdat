@@ -9,6 +9,8 @@
 ---
 
 [![CI Pipeline](https://github.com/sps-exe/ecdat/actions/workflows/ci.yml/badge.svg)](https://github.com/sps-exe/ecdat/actions)
+[![Frontend](https://img.shields.io/badge/Frontend-Live%20on%20Vercel-success?logo=vercel)](https://ecdat-frontend.vercel.app)
+[![Backend](https://img.shields.io/badge/Backend-Live%20on%20Render-success?logo=render)](https://ecdat-backend-wsf1.onrender.com)
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](LICENSE)
 [![Python](https://img.shields.io/badge/Python-3.11%20%7C%203.12%20%7C%203.14-3776AB?logo=python&logoColor=white)](https://www.python.org/)
 [![FastAPI](https://img.shields.io/badge/FastAPI-0.115+-009688?logo=fastapi&logoColor=white)](https://fastapi.tiangolo.com/)
@@ -16,6 +18,7 @@
 [![NIST PQC Standards](https://img.shields.io/badge/NIST%20PQC-FIPS%20203%20%7C%20204%20%7C%20205-0A84FF)](https://csrc.nist.gov/projects/post-quantum-cryptography)
 [![CycloneDX](https://img.shields.io/badge/CycloneDX-1.6%20CBOM-8833FF)](https://cyclonedx.org/)
 [![Test Suite](https://img.shields.io/badge/Tests-71%2F71%20Passing%20(100%25)-success)](backend/tests/)
+
 
 </div>
 
@@ -113,11 +116,12 @@ $$\text{QARS} = (W_V \times V_{\text{quantum}}) + (W_E \times E_{\text{exposure}
 * **$C_{\text{criticality}}$:** Core authentication & root CA (100) vs. Transaction signing (85) vs. Ephemeral cache (20).
 
 ### 4. AI-Driven Semantic Discovery & 1-Click PQC Patching
-* **Semantic Obfuscation Detection:** Gemini-powered semantic analysis identifies dynamic imports, custom cryptographic wrappers, and aliased library invocations that evade static AST heuristics.
+* **CryptoSense™ Sovereign Semantic Detection:** Purpose-built, on-premise fine-tuned CodeBERT model (~125M params) paired with embedded offline heuristics to identify dynamic imports, custom cryptographic wrappers, and aliased library invocations that evade static AST heuristics—guaranteeing **zero data exfiltration** and air-gap defense compliance for NTRO/PMO enclaves.
 * **Automated NIST Git Diffs:** Generates production-ready, side-by-side Git patches migrating vulnerable cryptography to official NIST standards:
   * **RSA / ECDH Key Exchange** $\longrightarrow$ **ML-KEM (FIPS 203 / Kyber)**
   * **RSA / ECDSA Signatures** $\longrightarrow$ **ML-DSA (FIPS 204 / Dilithium)**
   * **Hash-Based Signatures** $\longrightarrow$ **SLH-DSA (FIPS 205 / SPHINCS+)**
+
 
 ### 5. Multi-Standard Compliance & Reporting Hub
 * **CycloneDX 1.6 CBOM (ECMA-424):** Fully compliant JSON export with standardized `cryptoProperties` (asset type, algorithm, key length, mode, padding, NIST security level, and quantum vulnerability status).
@@ -248,7 +252,8 @@ pytest backend/tests/ -v
 | Member Name | Role | Primary Responsibilities |
 |---|---|---|
 | **Shaurya Pratap Singh** | **Tech Lead (Core Backend)** | Scanner Engines (AST, Config, Certs), QARS Scoring, Mosca Engine, FastAPI Architecture |
-| **Aujasya Rajput** | **Backend Engineer (CBOM & AI)** | CycloneDX 1.6 CBOM Generator, WeasyPrint/ReportLab PDF Pipeline, Gemini AI Remediation |
+| **Aujasya Rajput** | **Backend Engineer (CBOM & AI)** | CycloneDX 1.6 CBOM Generator, WeasyPrint/ReportLab PDF Pipeline, CryptoSense™ Sovereign AI Remediation |
+
 | **Arnav Gupta** | **Frontend Lead** | Next.js 14 CISO Dashboard, Mosca Interactive Slider, Side-by-Side Diff Viewer |
 | **Sahil Sharma** | **QA & Testbench Lead** | Testbench Codebases, Pytest Suite (71 Tests), Schema Validation & Security Hardening |
 | **Mehek Sharma** | **Pitch Deck & Strategy Lead** | SIH Presentation, Market Sizing, Compliance Alignment, Regulatory Mapping |

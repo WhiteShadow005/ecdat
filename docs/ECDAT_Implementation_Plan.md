@@ -53,15 +53,20 @@ After deep research, here is the honest assessment of every relevant open-source
 > [!IMPORTANT]
 > These are the features that make us different from every existing open-source tool. This is what wins.
 
-### USP 1: AI-Powered Semantic Crypto Detection 🧠
+### USP 1: CryptoSense™ Sovereign AI Semantic Crypto Detection 🛡️
 **The Gap:** Every existing scanner (cryptoscan, cdxgen, sonar-cryptography) uses pattern matching — regex or AST rules. They detect `RSA.generate(2048)` but completely miss:
 - Custom wrapper classes: `class SecurityManager: def encrypt_payload(data)` that internally calls RSA
 - Dynamic crypto selection: `algorithm = config.get("crypto_algo")` → `Cipher.getInstance(algorithm)`
 - Obfuscated/vendored libraries where crypto names don't appear in import statements
+- Cloud-based LLMs leak sensitive/classified source code across network boundaries to foreign servers, which violates defense compliance.
 
-**Our Solution:** After the static scan completes, our AI agent (Gemini API / local Ollama) analyzes flagged suspicious functions and unresolved code paths. It reads function bodies and identifies hidden cryptographic operations that static patterns miss.
+**Our Solution:** **CryptoSense™** — a fine-tuned, on-premise CodeBERT model (~125M parameters) combined with an embedded offline heuristic analysis engine. It runs 100% locally within the customer's security boundary:
+1. Performs deep semantic comprehension of flagged suspicious function bodies without cloud connectivity.
+2. Identifies non-obvious crypto wrappers, dynamic KDF invocations, and custom cipher classes.
+3. Guarantees **zero data exfiltration** and full air-gap defense compliance for NTRO and sovereign installations.
 
-**Why judges care:** We can demonstrate: *"Here is a function that cryptoscan missed. Our AI agent identified it as RSA-based encryption by reading the function logic."*
+**Why judges care:** *"Zero classified source code leaves the sovereign perimeter. We catch obfuscated cryptography that AST and regex scanners miss, fully on-premise and air-gap compatible."*
+
 
 ---
 
