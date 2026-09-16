@@ -35,14 +35,38 @@ interface ScanContextType {
 const ScanContext = createContext<ScanContextType | null>(null);
 
 export const ScanProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
-  const [scanData, setScanData] = useState<ScanResult>(mockScanResult);
-  const [pqcProof, setPqcProof] = useState<PQCProofResult>(mockPqcProof);
+  const [scanData, setScanDataState] = useState<ScanResult>(mockScanResult);
+  const [pqcProof, setPqcProofState] = useState<PQCProofResult>(mockPqcProof);
   const [isBackendLive, setIsBackendLive] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [allScans, setAllScans] = useState<ScanListItem[]>([]);
   const [isHistoryLoading, setIsHistoryLoading] = useState<boolean>(false);
 
   const currentYear = new Date().getFullYear();
+
+  // Helper to update scanData in both React state and localStorage
+  const setScanData = (data: ScanResult) => {
+    setScanDataState(data);
+    if (typeof window !== "undefined") {
+      try {
+        localStorage.setItem("ecdat_active_scan", JSON.stringify(data));
+      } catch (e) {
+        console.warn("ScanContext: Failed to persist scan to localStorage", e);
+      }
+    }
+  };
+
+  // Helper to update pqcProof in both React state and localStorage
+  const setPqcProof = (proof: PQCProofResult) => {
+    setPqcProofState(proof);
+    if (typeof window !== "undefined") {
+      try {
+        localStorage.setItem("ecdat_pqc_proof", JSON.stringify(proof));
+      } catch (e) {
+        console.warn("ScanContext: Failed to persist PQC proof to localStorage", e);
+      }
+    }
+  };
 
   const refreshHistory = async () => {
     setIsHistoryLoading(true);
@@ -61,13 +85,25 @@ export const ScanProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
       const isLive = await checkBackendHealth();
       setIsBackendLive(isLive);
       if (isLive) {
-        const [liveData, liveProof] = await Promise.all([
-          getScanResult(),
-          getPQCProof(),
-        ]);
-        if (liveData && liveData.assets) setScanData(liveData);
-        if (liveProof) setPqcProof(liveProof);
-        // Also refresh history when backend comes up
+        // 1. Fetch latest scan independently without blocking (fast ~200ms)
+        getScanResult()
+          .then((liveData) => {
+            if (liveData && liveData.assets && liveData.assets.length > 0) {
+              setScanData(liveData);
+            }
+          })
+          .catch((err) => console.warn("ScanContext: Failed to fetch latest scan", err));
+
+        // 2. Fetch PQC proof in the background without blocking UI
+        getPQCProof()
+          .then((liveProof) => {
+            if (liveProof && liveProof.kem_algo) {
+              setPqcProof(liveProof);
+            }
+          })
+          .catch((err) => console.warn("ScanContext: Failed to fetch live PQC proof", err));
+
+        // 3. Refresh audit history
         refreshHistory();
       }
     } catch (err) {
@@ -76,6 +112,28 @@ export const ScanProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
   };
 
   useEffect(() => {
+    // Immediately restore the last active scan from localStorage on page load / refresh (0ms delay)
+    if (typeof window !== "undefined") {
+      try {
+        const savedScan = localStorage.getItem("ecdat_active_scan");
+        if (savedScan) {
+          const parsed = JSON.parse(savedScan);
+          if (parsed && parsed.assets && parsed.assets.length > 0) {
+            setScanDataState(parsed);
+          }
+        }
+        const savedProof = localStorage.getItem("ecdat_pqc_proof");
+        if (savedProof) {
+          const parsedProof = JSON.parse(savedProof);
+          if (parsedProof && parsedProof.kem_algo) {
+            setPqcProofState(parsedProof);
+          }
+        }
+      } catch (e) {
+        console.warn("ScanContext: Failed to restore scan from localStorage", e);
+      }
+    }
+
     refreshScanData();
   }, []);
 
