@@ -5,6 +5,32 @@ import { ScanResult, CryptoAsset, PQCProofResult, ScanListItem } from "@/lib/typ
 import { mockScanResult, mockPqcProof } from "@/lib/mock_data";
 import { getScanResult, getPQCProof, uploadScanZip, checkBackendHealth, listAllScans, getScanById } from "@/lib/api";
 
+export const emptyScanResult: ScanResult = {
+  scan_id: "",
+  timestamp: new Date().toISOString(),
+  repo_name: "Awaiting Codebase Archive",
+  summary: {
+    total_assets: 0,
+    critical: 0,
+    high: 0,
+    medium: 0,
+    safe: 0,
+    quantum_readiness_pct: 0,
+    scanned_files_count: 0,
+    duration_ms: 0,
+  },
+  mosca: {
+    x: 0,
+    y: 0,
+    z: 7,
+    status: "SAFE",
+    message: "No active scan loaded",
+    breach_year: 0,
+    safety_margin_years: 0,
+  },
+  assets: [],
+};
+
 interface ScanContextType {
   scanData: ScanResult;
   pqcProof: PQCProofResult;
@@ -30,6 +56,7 @@ interface ScanContextType {
   runScan: (file?: File) => Promise<ScanResult>;
   loadHistoricalScan: (scanId: string) => Promise<void>;
   refreshHistory: () => Promise<void>;
+  resetScanData: () => void;
 }
 
 const ScanContext = createContext<ScanContextType | null>(null);
@@ -85,14 +112,26 @@ export const ScanProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
       const isLive = await checkBackendHealth();
       setIsBackendLive(isLive);
       if (isLive) {
-        // 1. Fetch latest scan independently without blocking (fast ~200ms)
-        getScanResult()
-          .then((liveData) => {
-            if (liveData && liveData.assets && liveData.assets.length > 0) {
-              setScanData(liveData);
-            }
-          })
-          .catch((err) => console.warn("ScanContext: Failed to fetch latest scan", err));
+        const isReset =
+          typeof window !== "undefined" &&
+          localStorage.getItem("ecdat_is_reset") === "true";
+
+        if (!isReset) {
+          // 1. Fetch latest scan independently without blocking (fast ~200ms)
+          getScanResult()
+            .then((liveData) => {
+              if (
+                typeof window !== "undefined" &&
+                localStorage.getItem("ecdat_is_reset") === "true"
+              ) {
+                return;
+              }
+              if (liveData && liveData.assets && liveData.assets.length > 0) {
+                setScanData(liveData);
+              }
+            })
+            .catch((err) => console.warn("ScanContext: Failed to fetch latest scan", err));
+        }
 
         // 2. Fetch PQC proof in the background without blocking UI
         getPQCProof()
@@ -111,15 +150,32 @@ export const ScanProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     }
   };
 
+  const resetScanData = () => {
+    if (typeof window !== "undefined") {
+      try {
+        localStorage.setItem("ecdat_is_reset", "true");
+        localStorage.removeItem("ecdat_active_scan");
+      } catch (e) {
+        console.warn("ScanContext: Failed to reset localStorage", e);
+      }
+    }
+    setScanDataState(emptyScanResult);
+  };
+
   useEffect(() => {
     // Immediately restore the last active scan from localStorage on page load / refresh (0ms delay)
     if (typeof window !== "undefined") {
       try {
-        const savedScan = localStorage.getItem("ecdat_active_scan");
-        if (savedScan) {
-          const parsed = JSON.parse(savedScan);
-          if (parsed && parsed.assets && parsed.assets.length > 0) {
-            setScanDataState(parsed);
+        const isReset = localStorage.getItem("ecdat_is_reset") === "true";
+        if (isReset) {
+          setScanDataState(emptyScanResult);
+        } else {
+          const savedScan = localStorage.getItem("ecdat_active_scan");
+          if (savedScan) {
+            const parsed = JSON.parse(savedScan);
+            if (parsed && parsed.assets && parsed.assets.length > 0) {
+              setScanDataState(parsed);
+            }
           }
         }
         const savedProof = localStorage.getItem("ecdat_pqc_proof");
@@ -140,6 +196,11 @@ export const ScanProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
   const runScan = async (file?: File): Promise<ScanResult> => {
     setIsLoading(true);
     try {
+      if (typeof window !== "undefined") {
+        try {
+          localStorage.removeItem("ecdat_is_reset");
+        } catch (e) {}
+      }
       let result: ScanResult;
       if (file) {
         result = await uploadScanZip(file);
@@ -163,6 +224,11 @@ export const ScanProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
   const loadHistoricalScan = async (scanId: string): Promise<void> => {
     setIsLoading(true);
     try {
+      if (typeof window !== "undefined") {
+        try {
+          localStorage.removeItem("ecdat_is_reset");
+        } catch (e) {}
+      }
       const result = await getScanById(scanId);
       if (result) setScanData(result);
     } finally {
@@ -207,20 +273,21 @@ export const ScanProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
   );
 
   const readinessPct = useMemo(() => {
+    if (totalAssets === 0) return 0;
     if (summary.quantum_readiness_pct !== undefined) {
       return Number(summary.quantum_readiness_pct.toFixed(1));
     }
-    if (totalAssets === 0) return 0;
     return Number(((safeCount / totalAssets) * 100).toFixed(1));
   }, [summary.quantum_readiness_pct, safeCount, totalAssets]);
 
   const vulnerablePct = useMemo(() => {
+    if (totalAssets === 0) return 0;
     return Number((100 - readinessPct).toFixed(1));
-  }, [readinessPct]);
+  }, [readinessPct, totalAssets]);
 
   const { x = 15, y = 4, z = 7 } = scanData.mosca || {};
   const qDayYear = currentYear + z;
-  const breachYears = Math.max(0, x + y - z);
+  const breachYears = totalAssets === 0 ? 0 : Math.max(0, x + y - z);
 
   const value: ScanContextType = {
     scanData,
@@ -247,6 +314,7 @@ export const ScanProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     runScan,
     loadHistoricalScan,
     refreshHistory,
+    resetScanData,
   };
 
   return <ScanContext.Provider value={value}>{children}</ScanContext.Provider>;

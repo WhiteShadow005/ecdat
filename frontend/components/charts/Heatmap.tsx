@@ -129,7 +129,7 @@ export const Heatmap: React.FC<HeatmapProps> = ({ assets, onSelectAsset }) => {
                     {item.name}
                   </p>
                   <p className="text-[11px] text-[#78716C] mt-0.5 font-mono">
-                    {((item.value / assets.length) * 100).toFixed(1)}% of total
+                    {assets.length > 0 ? ((item.value / assets.length) * 100).toFixed(1) : "0.0"}% of total
                   </p>
                 </button>
               );
@@ -149,8 +149,13 @@ export const Heatmap: React.FC<HeatmapProps> = ({ assets, onSelectAsset }) => {
           </span>
         </div>
 
-        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3">
-          {filteredAssets.map((asset) => {
+        {filteredAssets.length === 0 ? (
+          <div className="py-8 text-center text-xs text-[#78716C]">
+            No cryptographic assets available in matrix.
+          </div>
+        ) : (
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3">
+            {filteredAssets.map((asset) => {
             const isBroken = asset.quantum_status === "BROKEN";
             const isWeakened = asset.quantum_status === "WEAKENED";
             return (
@@ -193,6 +198,7 @@ export const Heatmap: React.FC<HeatmapProps> = ({ assets, onSelectAsset }) => {
             );
           })}
         </div>
+        )}
       </div>
     </div>
   );

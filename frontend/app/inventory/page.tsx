@@ -162,7 +162,14 @@ export default function InventoryPage() {
               </tr>
             </thead>
             <tbody className="divide-y divide-[#E8E2D5]/80 text-[#57534E]">
-              {filteredAssets.map((asset) => {
+              {filteredAssets.length === 0 ? (
+                <tr>
+                  <td colSpan={6} className="py-12 text-center text-xs text-[#78716C]">
+                    No cryptographic components found. Upload a repository archive to populate inventory.
+                  </td>
+                </tr>
+              ) : (
+                filteredAssets.map((asset) => {
                 const isExpanded = expandedRow === asset.id;
                 return (
                   <React.Fragment key={asset.id}>
@@ -285,7 +292,7 @@ export default function InventoryPage() {
                     )}
                   </React.Fragment>
                 );
-              })}
+              }))}
             </tbody>
           </table>
         </div>

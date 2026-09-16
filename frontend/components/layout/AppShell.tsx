@@ -14,8 +14,12 @@ import {
   Shield,
   ChevronRight,
   History,
+  RotateCcw,
+  Globe,
+  ArrowUpRight,
 } from "lucide-react";
 import { checkBackendHealth } from "@/lib/api";
+import { useScan } from "@/context/ScanContext";
 import { LandingHeader } from "@/components/landing/LandingHeader";
 import { CyberBackground } from "@/components/ui/CyberBackground";
 
@@ -50,6 +54,7 @@ const PUBLIC_ROUTES = ["/", "/features", "/architecture", "/standards", "/about"
 export function AppShell({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
   const router = useRouter();
+  const { resetScanData } = useScan();
   const [backendOnline, setBackendOnline] = useState<boolean | null>(null);
 
   useEffect(() => {
@@ -87,6 +92,22 @@ export function AppShell({ children }: { children: React.ReactNode }) {
 
         {/* Right Header Controls & Status */}
         <div className="flex items-center gap-2.5 text-xs">
+          {/* Reset Button: Matched with Warm Luxury Theme, Placed Directly Left of Evaluator */}
+          <button
+            type="button"
+            onClick={() => {
+              resetScanData();
+              if (pathname !== "/dashboard") {
+                router.push("/dashboard");
+              }
+            }}
+            title="Reset active dashboard and metrics to 0"
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white hover:bg-[#FAF7F2] border border-[#E8E2D5] hover:border-[#D5CBB9] text-[#57534E] hover:text-[#991B1B] text-[11px] font-medium transition-all shadow-2xs cursor-pointer active:scale-95"
+          >
+            <RotateCcw className="w-3.5 h-3.5" />
+            <span>Reset</span>
+          </button>
+
           {/* Evaluator Pill */}
           <div className="hidden lg:flex items-center gap-1 px-3.5 py-1.5 rounded-full bg-white border border-[#E8E2D5] text-[#57534E] font-medium text-[11px] shadow-2xs">
             <span>Evaluator:</span>
@@ -111,7 +132,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
       <div className="flex flex-1 overflow-hidden relative z-10">
         {/* Left Sidebar Navigation: Warm Ivory Console */}
         <aside className="w-60 bg-[#F5F0E8] border-r border-[#E8E2D5] p-4 flex flex-col justify-between hidden md:flex shrink-0 z-20">
-          <div className="space-y-6">
+          <div className="space-y-6 overflow-y-auto">
             {NAV_GROUPS.map((group) => (
               <div key={group.group} className="space-y-1">
                 <p className="text-[10px] font-bold text-[#78716C] px-2.5 uppercase tracking-wider mb-2">
@@ -148,6 +169,21 @@ export function AppShell({ children }: { children: React.ReactNode }) {
                 </nav>
               </div>
             ))}
+
+            {/* Main-Front Portal Navigation Button - Placed at the bottom of Audit History */}
+            <div className="pt-2 border-t border-[#E8E2D5]/80">
+              <Link
+                href="/"
+                prefetch={true}
+                className="flex items-center justify-between px-3 py-2 text-xs font-semibold text-[#1C1917] bg-white hover:bg-[#FAF7F2] border border-[#E8E2D5] hover:border-[#D5CBB9] rounded-2xl transition-all shadow-2xs group cursor-pointer"
+              >
+                <div className="flex items-center gap-2.5">
+                  <Globe className="w-4 h-4 text-[#8B5E34] group-hover:text-[#1C1917] transition-colors shrink-0" />
+                  <span>Main-Front</span>
+                </div>
+                <ArrowUpRight className="w-3.5 h-3.5 text-[#A8A29E] group-hover:text-[#1C1917] group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all" />
+              </Link>
+            </div>
           </div>
 
           {/* Sidebar Footer Info Card matching screenshot */}

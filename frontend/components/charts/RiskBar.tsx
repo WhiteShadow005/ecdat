@@ -49,12 +49,17 @@ export const RiskBar: React.FC<RiskBarProps> = ({ assets }) => {
         </span>
       </div>
 
-      <div className="h-72 w-full">
-        <ResponsiveContainer width="100%" height="100%">
-          <BarChart
-            data={chartData}
-            margin={{ top: 10, right: 20, left: -10, bottom: 20 }}
-          >
+      {chartData.length === 0 ? (
+        <div className="h-72 w-full flex items-center justify-center text-xs text-[#78716C]">
+          No language vulnerability distribution data available.
+        </div>
+      ) : (
+        <div className="h-72 w-full">
+          <ResponsiveContainer width="100%" height="100%">
+            <BarChart
+              data={chartData}
+              margin={{ top: 10, right: 20, left: -10, bottom: 20 }}
+            >
             <CartesianGrid strokeDasharray="3 3" stroke="#E8E2D5" vertical={false} />
             <XAxis
               dataKey="language"
@@ -122,9 +127,10 @@ export const RiskBar: React.FC<RiskBarProps> = ({ assets }) => {
               fill="#15803D"
               radius={[4, 4, 0, 0]}
             />
-          </BarChart>
-        </ResponsiveContainer>
-      </div>
+            </BarChart>
+          </ResponsiveContainer>
+        </div>
+      )}
     </div>
   );
 };
