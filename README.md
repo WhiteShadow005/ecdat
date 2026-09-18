@@ -37,7 +37,7 @@ Modern nation-state adversaries are actively executing **Harvest Now, Decrypt La
   │   1. INGEST   │    2. ANALYZE     │    3. QUANTIFY      │   4. REMEDIATE  │
   │  Source code  │ Python/Java AST   │ Mosca: X + Y > Z    │ 1-Click Patches │
   │  X.509 Certs  │ Active TLS Probe  │ QARS Score (0-100)  │ CycloneDX 1.6   │
-  │  Nginx/SSH    │ Heuristic AI LLM  │ Quantum Status      │ CISO PDF Report │
+  │  Nginx/SSH    │ CryptoSense™ AI   │ Quantum Status      │ CISO PDF Report │
   └───────────────┴───────────────────┴─────────────────────┴─────────────────┘
 ```
 
@@ -247,7 +247,7 @@ pytest backend/tests/ -v
 
 ---
 
-## 👥 Team ECDAT (Smart India Hackathon 2026)
+## 👥 Team ASTARR (Smart India Hackathon 2026)
 
 | Member Name | Role | Primary Responsibilities |
 |---|---|---|

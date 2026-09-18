@@ -11,6 +11,7 @@
 | Aug 31, 2026 (Session 3) | Team task files created for all 6 members, Git workflow defined |
 | Aug 31, 2026 (Session 4) | Full folder structure scaffolded (60 files), Git repo initialized, 4 dev branches created, all module stubs written |
 | Sep 16, 2026 (Session 5) | 🏆 **SIH 2026 Round 1 QUALIFIED!** Round 2 Pitch Deck Architecture finalized. Architectural shift to **CryptoSense™** (fine-tuned on-premise CodeBERT model) for zero data exfiltration and air-gapped sovereign defense (NTRO/PMO). Live production deployments verified on Vercel & Render with SQLite persistent store, Reset state & Main-Front navigation controls. |
+| Sep 18, 2026 (Session 6) | 🚀 **SIH 2026 Round 2 Final Submission Deck Synchronized.** Master 6-slide deck locked and archived (`docs/presentation/ECDAT_SIH2026_Submission_Deck.pdf`). Integrated full 4-tier system architecture, 6-stage sovereign national rollout (SIH prototype to NTRO pilot, CERT-In empanelment & GeM listing), 4-column feasibility & risk mitigation matrix (1MB chunked streams, hybrid PQC pairs), ₹6,003 Cr National Quantum Mission alignment, and 5-repo cryptographic benchmarking. |
 
 
 ---
@@ -585,4 +586,110 @@ The core technical pitch is structured across 4 modular tiers and a sequential 5
 - **UI State Management Controls:**
   - **Reset Button:** Top navigation bar (left of Evaluator) enables resetting UI telemetry to clean initial state without altering backend zip data.
   - **Main-Front Button:** Bottom-left navigation control allows instant single-click return to hero/landing frontend view.
+
+---
+
+## 20. SIH 2026 Round 2 Final Submission Deck & Architectural Blueprint — 2026-09-18
+
+### 🎯 Official Deck Overview
+- **File Archived:** `docs/presentation/ECDAT_SIH2026_Submission_Deck.pdf` (Original: `/Users/arnavgupta/Desktop/ECDAT - Submission PPT.pdf`)
+- **Team:** **ASTARR**
+- **Problem Statement:** `SIH26164` (NTRO / PMO India)
+- **Theme:** Blockchain & Cybersecurity (Software Category)
+
+### 📊 Master Slide-by-Slide Specification
+
+#### Slide 1: Title & Identification
+- **Title:** Enterprise Cryptographic Discovery & Analysis Tool (ECDAT)
+- **Problem Statement ID:** `SIH26164`
+- **Ministry / Evaluator:** National Technical Research Organisation (NTRO, Prime Minister's Office)
+- **Team Name:** ASTARR
+
+#### Slide 2: Proposed Solution
+- **Tagline:** *"India's critical systems run on RSA & ECDSA. Quantum computers will break them by 2031. ECDAT finds every vulnerability — before it's too late."*
+- **The Problem:**
+  - *Shor's Threat:* Collapses RSA-2048 & ECC powering defense, banking, and government PKI.
+  - *Harvest Now, Decrypt Later (HNDL):* Adversaries are archiving encrypted Indian data today to decrypt post-Q-Day.
+- **Our Solution:**
+  - *Multi-Vector Discovery:* Scans source code (Python, Java), X.509 certificates, server configs, and live TLS 443 endpoints.
+  - *Mathematical Threat Scoring:* QARS (0–100) + Mosca's Theorem ($X+Y > Z$) establishes exact breach urgency.
+  - *1-Click Sovereign Fix:* Generates NIST FIPS 203/204 replacement code and a full CBOM audit report.
+- **Target Stakeholders:** NTRO Analyst, Enterprise CISO / Security Lead, DevSecOps Engineer.
+- **End-to-End Pipeline:** `INGEST (ZIP, Certs, Configs)` ➔ `DISCOVER (Static AST + CryptoSense™ AI)` ➔ `QUANTIFY (QARS + Mosca X+Y>Z)` ➔ `REMEDIATE (1-Click ML-KEM patch + CBOM export)`.
+- **Urgency Warning Banner:** *"Migration takes 4–7 years. Under Mosca's Theorem (X+Y>Z), India's critical data is already inside the HNDL breach window."*
+- **Core Innovation:**
+  - *CryptoSense™ AI:* Local CodeBERT finds hidden wrappers; 100% air-gapped with zero cloud leaks.
+  - *1-Click Patch:* Automated Git diffs migrating RSA/ECC ➔ ML-KEM-768 / ML-DSA-65 (NIST FIPS 203/204 compliant).
+  - *Mosca Urgency Engine:* Real-time timeline mapping active HNDL breach deadlines.
+- **Strategic Pillars:** Minutes Not Weeks · AI + AST Hybrid · NIST FIPS 203/204/205 · Built For India.
+
+#### Slide 3: Technical Approach
+- **Header:** 4-Tier System Architecture & End-to-End Implementation Pipeline
+- **4-Tier Ingestion & Discovery Framework:**
+  - *Tier 01 (Multi-Vector Ingestion):* Source Code (ZIP), X.509 Certificates (PEM, CRT, DER, PFX), Server Configs (Nginx, OpenSSH, Apache), Live Endpoints (TLS Port 443).
+  - *Tier 02 (Static & AI Discovery Engines):* Python AST (`ast.NodeVisitor`), Java JCA/JCE Detection, CryptoSense™ Sovereign AI, Cert & TLS Inspector.
+  - *Tier 03 (Inventory & Risk Intelligence):* CycloneDX 1.6 CBOM (ECMA-424) + Mosca & QARS Scoring:
+    $$\text{QARS (0–100)} = \text{Weakness (0–40)} + \text{Exposure (0–25)} + \text{Criticality (0–20)} + \text{Mosca HNDL (0–15)}$$
+  - *Tier 04 (Remediation & Deliverables):* 1-Click Remediator (ML-KEM / ML-DSA), Git Diff Patches, CBOM JSON, CISO PDF, live PQC proofs, and continuous audit feedback loop.
+- **7-Stage Tech Stack Workflow:**
+  $$\text{Input Layer} \xrightarrow{} \text{Backend Layer} \xrightarrow{} \text{Processing Engines} \xrightarrow{} \text{Data \& Standards} \xrightarrow{} \text{Risk \& AI Layer} \xrightarrow{} \text{Remediation Engine} \xrightarrow{} \text{Output Layer}$$
+- **6-Stage Sovereign National Rollout (Implementation Plan):**
+  1. *Prototype & Core Build (SIH Phase):* Scanners, AI engine, CBOM & CISO Dashboard operational.
+  2. *Security Audit & Hardening (Month 1–2):* VAPT, OWASP compliance & zero-trust architecture validation.
+  3. *CERT-In Empanelment (Month 3–5):* MeitY Trusted Product alignment, DPIIT Startup India recognition.
+  4. *NTRO Pilot Deployment (Month 6–8):* Closed-environment audit of real government codebases & infrastructure.
+  5. *GeM Portal & PSU Rollout (Month 9–11):* Government e-Marketplace listing, SaaS + air-gap packaging.
+  6. *National Scale Deployment (Month 12+):* Ministries, PSUs & NCIIPC critical infrastructure integration.
+- **Verified Deliverables:** Prototype (`https://ecdat-frontend.vercel.app`), Repo (`https://github.com/sps-exe/ecdat`), Report.
+
+#### Slide 4: Feasibility and Viability
+- **Header:** Operational Viability, National Defense Alignment & Technical Risk Mitigation
+- **4-Column Risk & Feasibility Architecture:**
+  - *Feasibility:*
+    - Technical Feasibility: Lightweight Python/FastAPI core; native AST static parsing runs 100% locally with zero external runtime dependencies.
+    - Operational & Air-Gap Ready: Executes 100% on-premise within classified defense networks; zero outbound telemetry or cloud data exfiltration.
+    - Standard Compliance: Strict compliance with NIST FIPS 203/204/205, CycloneDX 1.6 (ECMA-424 CBOM), and CERT-In quantum guidelines.
+    - Implementation Readiness: Production-grade prototype; 71/71 automated tests passing (100%), verified live on Vercel & Render.
+  - *Viability:*
+    - National Mission Alignment: Directly empowers India's National Quantum Mission; eliminates strategic dependency on foreign proprietary tools (IBM, SandboxAQ).
+    - Economic Viability: Open-core architecture with local AI eliminates millions in recurring enterprise per-seat and SaaS token licensing.
+    - Rapid 90-Day Deployment: Production-ready containerized pipeline ready for immediate pilot rollouts across critical defense and banking repositories.
+    - Enterprise Viability: Headless CLI + API seamlessly integrates into GitHub Actions, GitLab CI, and Jenkins as an automated PR security gate.
+  - *Challenges & Risks:*
+    - Obfuscated Cryptography: Static AST and regex tools miss dynamic runtime imports and nested custom wrapper classes.
+    - Monolith Scalability: Scanning 1M+ LOC enterprise repositories risks RAM exhaustion and system timeouts.
+    - System Breakage During PQC: Hard-swapping legacy RSA/ECC directly to PQC breaks backward compatibility with legacy clients.
+    - Alert Fatigue & Noise: Vague, unprioritized scanner reports flood security teams with hundreds of false-positive alerts.
+  - *Mitigation Strategies:*
+    - CryptoSense Sovereign AI: Fine-tuned on-premise CodeBERT inspects suspicious function semantics with zero cloud data exfiltration.
+    - Chunked Stream Buffers: 1MB chunked file streaming and async AST parsing ensure a flat <128MB RAM footprint even on massive repos.
+    - Hybrid Migration Guidance: Recommends transitional hybrid pairs (X25519 + ML-KEM-768) to ensure zero client downtime during migration.
+    - QARS Composite Scoring: 0–100 deterministic scoring with Mosca's Theorem ($X+Y > Z$) filters out noise, highlighting only urgent HNDL assets.
+
+#### Slide 5: Impact and Benefits
+- **Header:** Strategic National Defense, Critical Infrastructure Protection & Sovereign Economic Value
+- **1. Strategic National Impact:**
+  - *HNDL Threat Immunity:* Pre-empts nation-state adversaries harvesting encrypted defense data today for post-quantum decryption.
+  - *Cryptographic Supply Chain:* First verifiable national standard for India's sovereign software repositories.
+  - *₹6,003 CR NQM Alignment:* Direct operational alignment with India's National Quantum Mission 2023–2031 sovereign defense mandate.
+- **2. Who Benefits and How:**
+  - *Defense & NTRO:* 100% air-gapped execution; auto-inventories classified military crypto assets.
+  - *Banking & NPCI:* 14.4B+ monthly UPI shielded; one-click CycloneDX 1.6 CBOM audit export.
+  - *Critical Infrastructure:* Secures power grid SCADA control systems; protects satellite & space telemetry encryption.
+  - *DevSecOps & Engineers:* < 10s automated discovery; 1-Click NIST PQC Git patches.
+- **3. Sovereign Economic Value:**
+  - *Forex Retention (₹15 – 20 CR):* Eliminates IBM/Sonar/SandboxAQ foreign USD licensing dependency; eliminates recurring vendor licensing costs.
+  - *Zero-Cost National Rollout:* Free open-core for NTRO/PMO/Defense; paid enterprise license for regulated banks & PSUs; 100% sovereign — built in India, for India.
+  - *We Fix, They Only Flag:* 1-Click NIST PQC Git Diffs (IBM/Sonar give no patches); 100% Air-Gapped CryptoSense™ AI (zero cloud exfiltration).
+
+#### Slide 6: Research and References
+- **Applied & Cryptographic Field Research:**
+  - *Production Codebase Benchmarking:* Audited 5 production-grade open-source repositories (`liboqs-python`, `paramiko`, `pyjwt`, `oauthlib`, `tink-crypto`) to map active Harvest Now, Decrypt Later (HNDL) cryptographic debt across legacy RSA-2048 and ECC implementations.
+  - *Automated Testbench & Schema Validation:* Executed 71/71 passing unit and integration tests verifying Python/Java AST scanners, X.509 certificate parsers, and CycloneDX 1.6 CBOM schema compliance (`https://github.com/sps-exe/ecdat`).
+- **Academic & Government Sources:**
+  - *NIST Post-Quantum Cryptography Final Standards (August 13, 2024):* FIPS 203 (ML-KEM), FIPS 204 (ML-DSA), and FIPS 205 (SLH-DSA) specifying algorithms to replace quantum-vulnerable public-key cryptography (`https://csrc.nist.gov/projects/post-quantum-cryptography`).
+  - *National Quantum Mission (NQM, 2023–2031):* Department of Science & Technology, Govt. of India (`https://dst.gov.in/national-quantum-mission-nqm`).
+  - *Mosca's Theorem (X + Y > Z) Quantum Risk Framework:* Dr. Michele Mosca (Oxford / University of Waterloo) — *"Cybersecurity in an Era with Quantum Computers: Will We Be Ready?"* (`https://eprint.iacr.org/2015/1075.pdf`).
+  - *CycloneDX 1.6 Cryptographic Bill of Materials (CBOM) Standard (ECMA-424, 2024):* Standardized machine-readable specification defining `cryptoProperties` (`https://cyclonedx.org/capabilities/cbom/`).
+  - *CERT-In & NTRO Cyber Security Guidelines:* Adherence to NCIIPC Guidelines for Critical Information Infrastructure, CERT-In Cyber Security Directions, and National Cyber Security Policy standards (`https://www.cert-in.org.in/`).
 

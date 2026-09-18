@@ -80,4 +80,5 @@ coverage.xml
 # Generated exports (don't commit scan results)
 *.cbom.json
 *.pdf
+!docs/presentation/*.pdf
 exports/
