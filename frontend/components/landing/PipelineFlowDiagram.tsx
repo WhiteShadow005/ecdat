@@ -26,10 +26,10 @@ export function PipelineFlowDiagram() {
     },
     {
       step: 3,
-      title: "3. Gemini AI Remediator",
+      title: "3. CryptoSense™ Remediator",
       icon: Sparkles,
-      tag: "USP 1 & 2",
-      summary: "Semantic cipher detection + NIST FIPS 203/204 Git diff generation",
+      tag: "Sovereign AI",
+      summary: "On-premise CodeBERT detection + NIST FIPS 203/204 Git diff generation",
       output: "Quantum-Safe Lattice Patches",
     },
     {

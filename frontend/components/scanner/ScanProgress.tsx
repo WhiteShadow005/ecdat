@@ -13,7 +13,7 @@ const SCAN_STEPS = [
   { id: 2, label: "Abstract Syntax Tree (AST) & Code Parsing", tool: "Python AST & Java Bytecode Engine" },
   { id: 3, label: "X.509 Certificate & PKI Hierarchy Inspection", tool: "Cert Parser (OpenSSL / Cryptography)" },
   { id: 4, label: "Network Protocol & Server Config Auditing", tool: "Config Parser (TLS / SSH / Nginx)" },
-  { id: 5, label: "AI Semantic Wrapper & Dynamic Discovery", tool: "Gemini 2.0 Flash Semantic Analyzer" },
+  { id: 5, label: "Sovereign AI Wrapper & Dynamic Discovery", tool: "CryptoSense™ On-Premise CodeBERT Engine" },
   { id: 6, label: "QARS Risk Scoring & Mosca HNDL Assessment", tool: "QARS Composite & Mosca Inequality" },
   { id: 7, label: "CycloneDX 1.6 CBOM Synthesis (ECMA-424)", tool: "CBOM Exporter Engine" },
 ];
@@ -29,7 +29,7 @@ export const ScanProgress: React.FC<ScanProgressProps> = ({ fileName = "codebase
     `[CRYPTO-SCAN] Analyzing key generation calls, symmetric ciphers, and hash functions...`,
     `[CERT-PARSER] Parsing X.509 certificate chains, public key algorithms, and signature algorithms...`,
     `[CONFIG-AUDIT] Inspecting TLS/SSL, SSH, and VPN configuration directives...`,
-    `[SEMANTIC-AI] Running semantic discovery heuristics and Gemini 2.0 wrapper analysis...`,
+    `[CRYPTO-SENSE] CryptoSense™ Sovereign AI inspecting obfuscated wrappers and dynamic imports...`,
     `[QARS-ENGINE] Computing Quantum Asset Risk Scores (0–100) per identified primitive...`,
     `[MOSCA-ENGINE] Calculating Michele Mosca's HNDL inequality (X shelf-life + Y migration vs Z Q-Day)...`,
     `[CBOM-SYNTH] Compiling CycloneDX 1.6 Cryptographic Bill of Materials (ECMA-424)...`,

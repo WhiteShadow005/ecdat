@@ -9,7 +9,7 @@ import { Shield } from "lucide-react";
 export default function AboutPage() {
   const teamMembers = [
     { name: "Shaurya Pratap Singh", role: "Tech Lead — Core Backend", focus: "Python AST, cryptoscan, QARS scoring & Mosca engine" },
-    { name: "Aujasya Rajput", role: "Backend Dev 2 — Exports & AI", focus: "CycloneDX 1.6 CBOM, Gemini LLM & PDF reports" },
+    { name: "Aujasya Rajput", role: "Backend Dev 2 — Exports & AI", focus: "CycloneDX 1.6 CBOM, CryptoSense™ AI & PDF reports" },
     { name: "Arnav Gupta", role: "Frontend Lead", focus: "Next.js 14 SOC dashboard, Mosca timeline & diff viewer" },
     { name: "Mehek Sharma", role: "Pitch Deck & Strategy Lead", focus: "Problem framing, evaluator Q&A & national security impact" },
     { name: "Jashanpreet Singh", role: "Pitch Deck Technical Lead", focus: "System architecture, NIST PQC standards & Q&A defense" },
