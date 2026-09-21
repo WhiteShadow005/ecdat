@@ -24,10 +24,10 @@ export default function FeaturesPage() {
       link: "/scan",
     },
     {
-      title: "Gemini AI Semantic Detection",
-      desc: "LLM semantic scanner detects hidden crypto wrappers, custom primitives and dynamic cipher instances.",
+      title: "CryptoSense™ Sovereign AI",
+      desc: "Fine-tuned on-premise CodeBERT detects hidden crypto wrappers, custom primitives, and dynamic ciphers with zero cloud exfiltration.",
       icon: Sparkles,
-      badge: "Gemini AI",
+      badge: "Local AI",
       link: "/remediation",
     },
     {
@@ -45,7 +45,7 @@ export default function FeaturesPage() {
       link: "/mosca",
     },
     {
-      title: "1-Click AI Code Remediator",
+      title: "1-Click Sovereign Remediator",
       desc: "Generates production-ready side-by-side Git diff patches upgrading RSA/ECDSA to NIST FIPS 203/204.",
       icon: Zap,
       badge: "1-Click Fix",

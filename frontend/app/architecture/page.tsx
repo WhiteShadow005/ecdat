@@ -21,8 +21,8 @@ export default function ArchitecturePage() {
     },
     {
       num: "03",
-      name: "AI Semantic Engine",
-      desc: "Gemini LLM wrapper detection & 1-click NIST PQC Git diff remediator.",
+      name: "CryptoSense™ AI Engine",
+      desc: "On-premise CodeBERT wrapper detection & 1-click NIST PQC Git diff remediator.",
       bullets: ["Dynamic Cipher AST", "FIPS 203/204 Diffs", "liboqs Test Vectors"],
     },
     {
