@@ -27,7 +27,10 @@ def _match_rule(algorithm: str) -> Optional[dict]:
     Avoids false matches like SHA-1 matching SHA-256.
     """
     rules = _get_rules()
-    algo_upper = algorithm.upper().strip()
+    raw_algo = algorithm.strip()
+    # Strip common scanner prefixes like "SSH HostKey: ", "SSH KexAlgorithm: ", etc.
+    clean_algo = re.sub(r'^(SSH\s+(?:HostKey|KexAlgorithm|Cipher)|TLS\s+(?:Protocol|Cipher)):\s*', '', raw_algo, flags=re.IGNORECASE)
+    algo_upper = clean_algo.upper().strip()
 
     # Pass 1 — exact name match
     for rule in rules["algorithms"]:
@@ -56,6 +59,13 @@ def _match_rule(algorithm: str) -> Optional[dict]:
                 if not rest or not rest[0].isalpha():
                     return rule
 
+    # Pass 4 — substring match for composite ciphers (e.g., RC4, 3DES, DH)
+    for rule in rules["algorithms"]:
+        rule_algo = rule["algorithm"].upper()
+        if rule_algo in ("RC4", "3DES", "DES", "RSA", "DH"):
+            if rule_algo in algo_upper:
+                return rule
+
     return None
 
 
@@ -78,6 +88,11 @@ def classify_asset(asset: CryptoAsset) -> CryptoAsset:
         if not asset.notes:
             asset.notes = rule.get("notes")
         asset.remediation_ready = asset.quantum_status in ("BROKEN", "WEAKENED")
+    elif asset.quantum_status in ("BROKEN", "WEAKENED", "SAFE"):
+        # The scanner (e.g. config_parser) already accurately classified it
+        asset.remediation_ready = asset.quantum_status in ("BROKEN", "WEAKENED")
+        if not asset.recommended_replacement or asset.recommended_replacement.startswith("Manual review"):
+            asset.recommended_replacement = "NIST FIPS 203/204 Upgrade"
     else:
         asset.quantum_status = "UNKNOWN"
         asset.recommended_replacement = "Manual review required — algorithm not in database"

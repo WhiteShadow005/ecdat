@@ -703,3 +703,5 @@ export const mockPqcProof: PQCProofResult = {
   sig_size_bytes: 3309,
   status: "VERIFIED_LIVE",
 };
+
+export { mockBankingScanResult, mockDefenseScanResult, mockScadaScanResult } from "./demo_mock_scans";

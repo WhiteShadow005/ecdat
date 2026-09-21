@@ -70,7 +70,16 @@ export default function ScanPage() {
               {/* Scenario 1: Banking */}
               <button
                 type="button"
-                onClick={() => {
+                onClick={async () => {
+                  try {
+                    const res = await fetch("/demos/banking_upi_gateway.zip");
+                    if (res.ok) {
+                      const blob = await res.blob();
+                      const file = new File([blob], "banking_upi_gateway.zip", { type: "application/zip" });
+                      handleFileSelect(file);
+                      return;
+                    }
+                  } catch {}
                   const demoFile = new File(["dummy"], "banking_upi_gateway.zip", { type: "application/zip" });
                   handleFileSelect(demoFile);
                 }}
@@ -81,7 +90,7 @@ export default function ScanPage() {
                     🏦 Banking & NPCI Gateway
                   </span>
                   <span className="text-[10px] font-mono text-rose-700 bg-rose-50 px-1.5 py-0.5 rounded font-bold">
-                    QARS 88
+                    QARS 80
                   </span>
                 </div>
                 <p className="text-[11px] text-[#78716C] leading-snug">
@@ -96,7 +105,16 @@ export default function ScanPage() {
               {/* Scenario 2: Defense */}
               <button
                 type="button"
-                onClick={() => {
+                onClick={async () => {
+                  try {
+                    const res = await fetch("/demos/c4i_defense_telemetry.zip");
+                    if (res.ok) {
+                      const blob = await res.blob();
+                      const file = new File([blob], "c4i_defense_telemetry.zip", { type: "application/zip" });
+                      handleFileSelect(file);
+                      return;
+                    }
+                  } catch {}
                   const demoFile = new File(["dummy"], "c4i_defense_telemetry.zip", { type: "application/zip" });
                   handleFileSelect(demoFile);
                 }}
@@ -122,7 +140,16 @@ export default function ScanPage() {
               {/* Scenario 3: SCADA Power Grid */}
               <button
                 type="button"
-                onClick={() => {
+                onClick={async () => {
+                  try {
+                    const res = await fetch("/demos/scada_powergrid_configs.zip");
+                    if (res.ok) {
+                      const blob = await res.blob();
+                      const file = new File([blob], "scada_powergrid_configs.zip", { type: "application/zip" });
+                      handleFileSelect(file);
+                      return;
+                    }
+                  } catch {}
                   const demoFile = new File(["dummy"], "scada_powergrid_configs.zip", { type: "application/zip" });
                   handleFileSelect(demoFile);
                 }}

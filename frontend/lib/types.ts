@@ -1,8 +1,8 @@
 export type QuantumStatus = "BROKEN" | "WEAKENED" | "SAFE";
 
-export type CriticalityTier = "critical" | "high" | "medium" | "safe";
+export type CriticalityTier = "critical" | "high" | "medium" | "low" | "safe";
 
-export type AssetType = "algorithm" | "certificate" | "key" | "protocol";
+export type AssetType = "algorithm" | "certificate" | "key" | "protocol" | "config";
 
 export type LanguageType = "python" | "java" | "config" | "certificate" | "go" | "c" | "rust" | "other";
 

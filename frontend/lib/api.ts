@@ -1,5 +1,11 @@
 import { ScanResult, ScanListItem, RemediationResult, PQCProofResult } from "./types";
-import { mockScanResult, mockPqcProof } from "./mock_data";
+import {
+  mockScanResult,
+  mockPqcProof,
+  mockBankingScanResult,
+  mockDefenseScanResult,
+  mockScadaScanResult,
+} from "./mock_data";
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000";
 
@@ -71,9 +77,33 @@ export async function uploadScanZip(file: File): Promise<ScanResult> {
     const data = await res.json();
     return normalizeScanResult(data);
   } catch (err) {
-    console.warn("Backend unavailable or scan error, returning high-fidelity mock scan result:", err);
+    console.warn("Backend unavailable or scan error, returning scenario-specific scan result:", err);
     // Simulate slight processing delay for realistic UX
     await new Promise((resolve) => setTimeout(resolve, 800));
+
+    const fn = (file.name || "").toLowerCase();
+    if (fn.includes("banking")) {
+      return {
+        ...mockBankingScanResult,
+        scan_id: `scan-${Date.now().toString(36)}`,
+        timestamp: new Date().toISOString(),
+      };
+    }
+    if (fn.includes("defense") || fn.includes("c4i")) {
+      return {
+        ...mockDefenseScanResult,
+        scan_id: `scan-${Date.now().toString(36)}`,
+        timestamp: new Date().toISOString(),
+      };
+    }
+    if (fn.includes("scada") || fn.includes("powergrid")) {
+      return {
+        ...mockScadaScanResult,
+        scan_id: `scan-${Date.now().toString(36)}`,
+        timestamp: new Date().toISOString(),
+      };
+    }
+
     return {
       ...mockScanResult,
       scan_id: `scan-${Date.now().toString(36)}`,
@@ -98,6 +128,10 @@ export async function getScanResult(scanId?: string): Promise<ScanResult> {
     const data = await res.json();
     return normalizeScanResult(data);
   } catch {
+    const id = (scanId || "").toLowerCase();
+    if (id.includes("banking")) return mockBankingScanResult;
+    if (id.includes("defense") || id.includes("c4i")) return mockDefenseScanResult;
+    if (id.includes("scada") || id.includes("powergrid")) return mockScadaScanResult;
     return mockScanResult;
   }
 }
@@ -317,7 +351,44 @@ export async function listAllScans(limit = 50): Promise<ScanListItem[]> {
     const data = await res.json();
     return Array.isArray(data) ? data : [];
   } catch {
-    return [];
+    return [
+      {
+        scan_id: "scan-banking-upi-audit",
+        timestamp: new Date().toISOString(),
+        target_name: "banking_upi_gateway.zip",
+        total_assets: mockBankingScanResult.summary.total_assets,
+        critical_count: mockBankingScanResult.summary.critical,
+        high_count: mockBankingScanResult.summary.high,
+        readiness_pct: mockBankingScanResult.summary.quantum_readiness_pct,
+        mosca_status: mockBankingScanResult.mosca.status,
+        data_category: "financial",
+        exposure_context: "internal",
+      },
+      {
+        scan_id: "scan-defense-c4i-audit",
+        timestamp: new Date(Date.now() - 3600000).toISOString(),
+        target_name: "c4i_defense_telemetry.zip",
+        total_assets: mockDefenseScanResult.summary.total_assets,
+        critical_count: mockDefenseScanResult.summary.critical,
+        high_count: mockDefenseScanResult.summary.high,
+        readiness_pct: mockDefenseScanResult.summary.quantum_readiness_pct,
+        mosca_status: mockDefenseScanResult.mosca.status,
+        data_category: "defense",
+        exposure_context: "internal",
+      },
+      {
+        scan_id: "scan-scada-powergrid-audit",
+        timestamp: new Date(Date.now() - 7200000).toISOString(),
+        target_name: "scada_powergrid_configs.zip",
+        total_assets: mockScadaScanResult.summary.total_assets,
+        critical_count: mockScadaScanResult.summary.critical,
+        high_count: mockScadaScanResult.summary.high,
+        readiness_pct: mockScadaScanResult.summary.quantum_readiness_pct,
+        mosca_status: mockScadaScanResult.mosca.status,
+        data_category: "infrastructure",
+        exposure_context: "public_api",
+      },
+    ];
   }
 }
 
@@ -332,6 +403,10 @@ export async function getScanById(scanId: string): Promise<ScanResult | null> {
     const data = await res.json();
     return normalizeScanResult(data);
   } catch {
+    const id = (scanId || "").toLowerCase();
+    if (id.includes("banking")) return mockBankingScanResult;
+    if (id.includes("defense") || id.includes("c4i")) return mockDefenseScanResult;
+    if (id.includes("scada") || id.includes("powergrid")) return mockScadaScanResult;
     return null;
   }
 }

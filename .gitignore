@@ -51,7 +51,12 @@ tmp/
 !demo_enterprise_repo.zip
 !demo_quantum_safe.zip
 !demo_legacy_vulnerable.zip
+!banking_upi_gateway.zip
+!c4i_defense_telemetry.zip
+!scada_powergrid_configs.zip
 !official_test_codebases/*.zip
+!backend/app/data/demos/*.zip
+!frontend/public/demos/*.zip
 official_test_codebases/*/
 backend/tmp/
 core_banking_suite/
