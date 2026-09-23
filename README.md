@@ -148,17 +148,6 @@ ECDAT strictly maps all findings to the **NIST PQC Final Standards (released Aug
 
 ---
 
-## 📑 Executive Audit Report Preview
-
-ECDAT compiles deep technical scan telemetry into an executive-ready, high-resolution multi-page PDF audit report:
-
-<div align="center">
-  <img src="docs/images/ecdat_audit_preview.png" alt="ECDAT Executive Audit Report Preview" width="550" style="border-radius: 8px; box-shadow: 0 4px 20px rgba(0,0,0,0.15);" />
-  <p><em>Official CISO Executive Audit Report generated dynamically by ECDAT</em></p>
-</div>
-
----
-
 ## 🧪 Validated Enterprise Testbench
 
 The repository includes 5 production-grade open-source codebases in [`official_test_codebases/`](official_test_codebases/) for immediate, zero-friction evaluation:
